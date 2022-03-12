@@ -13,7 +13,7 @@ try
     builder.Host.AddCrmLogging();
 
     builder.Services.AddCrmAuthentication(configuration);
-    builder.Services.AddCrmCors("LinearityCorsPolicyName");
+    builder.Services.AddCrmCors("CorsPolicyName");
     builder.Services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
