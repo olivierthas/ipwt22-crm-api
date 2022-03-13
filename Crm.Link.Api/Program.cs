@@ -12,7 +12,7 @@ try
     
     builder.Host.AddCrmLogging();
 
-    builder.Services.AddCrmAuthentication(configuration);
+    // builder.Services.AddCrmAuthentication(configuration);
     builder.Services.AddCrmCors("CorsPolicyName");
     builder.Services.AddControllers()
                     .AddNewtonsoftJson(options =>
@@ -36,7 +36,7 @@ try
     app.UseCors(ConfigureCORS.PolicyName);
 
     app.UseAuthentication();
-    app.UseAuthorization();
+    // app.UseAuthorization();
 
     app.MapControllers();
 
