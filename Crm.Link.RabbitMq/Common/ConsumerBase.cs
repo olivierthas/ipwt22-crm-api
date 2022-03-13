@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public class ConsumerBase : RabbitMqClientBase
+    public abstract class ConsumerBase : RabbitMqClientBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<ConsumerBase> _logger;

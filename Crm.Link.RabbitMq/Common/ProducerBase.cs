@@ -9,7 +9,7 @@ namespace Crm.Link.RabbitMq.Common
     {
         void Publish(T @event);
     }
-    public class ProducerBase<T> : RabbitMqClientBase, IRabbitMqProducer<T>
+    public abstract class ProducerBase<T> : RabbitMqClientBase, IRabbitMqProducer<T>
     {
         private readonly ILogger<ProducerBase<T>> _logger;
         protected abstract string ExchangeName { get; }
