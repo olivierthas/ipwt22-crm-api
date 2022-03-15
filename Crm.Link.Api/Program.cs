@@ -1,6 +1,7 @@
 using Crm.Link.Api;
 using Crm.Link.RabbitMq.Consumer;
 using Newtonsoft.Json.Converters;
+using RabbitMQ.Client;
 using Serilog;
 
 Log.Logger = ConfigureLogging.Bootstrap();
@@ -21,7 +22,15 @@ try
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     });
     builder.Services.AddOpenApi();
-    builder.Services.AddHostedService<LogConsumer>();
+    builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
+    {
+        var uri = new Uri("");
+        return new ConnectionFactory
+        {
+            Uri = uri,
+            DispatchConsumersAsync = true,
+        };
+    });
 
     var app = builder.Build();
 
