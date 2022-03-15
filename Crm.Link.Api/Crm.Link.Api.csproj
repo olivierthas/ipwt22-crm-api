@@ -21,4 +21,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Crm.Link.RabbitMq\Crm.Link.RabbitMq.csproj" />
+  </ItemGroup>
+
 </Project>

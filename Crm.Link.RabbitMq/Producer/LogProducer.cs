@@ -4,12 +4,12 @@ using RabbitMQ.Client;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class LogProducer : ProducerBase<LogIntegrationEvent>
+    public class LogProducer : ProducerBase<IntegrationEvent>
     {
         public LogProducer(
             ConnectionFactory connectionFactory,
             ILogger<RabbitMqClientBase> logger,
-            ILogger<ProducerBase<LogIntegrationEvent>> producerBaseLogger) :
+            ILogger<ProducerBase<IntegrationEvent>> producerBaseLogger) :
             base(connectionFactory, logger, producerBaseLogger)
         {
         }

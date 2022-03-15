@@ -1,10 +1,9 @@
-﻿using MediatR;
-
-namespace Crm.Link.RabbitMq.Consumer
+﻿namespace Crm.Link.RabbitMq.Consumer
 {
-    public class LogCommand : IRequest<Unit>
+    public class LogCommand
     {
         public Guid Id { get; set; }
         public string Message { get; set; }
+        public byte[] Data { get; set; }
     }
 }

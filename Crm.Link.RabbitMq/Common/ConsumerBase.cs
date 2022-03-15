@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -9,18 +8,16 @@ namespace Crm.Link.RabbitMq.Common
 {
     public abstract class ConsumerBase : RabbitMqClientBase
     {
-        private readonly IMediator _mediator;
         private readonly ILogger<ConsumerBase> _logger;
         protected abstract string QueueName { get; }
 
         public ConsumerBase(
-            IMediator mediator,
             ConnectionFactory connectionFactory,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
             base(connectionFactory, logger)
         {
-            _mediator = mediator;
+
             _logger = consumerLogger;
         }
 
@@ -31,7 +28,6 @@ namespace Crm.Link.RabbitMq.Common
                 var body = Encoding.UTF8.GetString(@event.Body.ToArray());
                 var message = JsonConvert.DeserializeObject<T>(body);
 
-                await _mediator.Send(message);
             }
             catch (Exception ex)
             {

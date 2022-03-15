@@ -1,4 +1,5 @@
 using Crm.Link.Api;
+using Crm.Link.RabbitMq.Consumer;
 using Newtonsoft.Json.Converters;
 using Serilog;
 
@@ -20,6 +21,7 @@ try
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     });
     builder.Services.AddOpenApi();
+    builder.Services.AddHostedService<LogConsumer>();
 
     var app = builder.Build();
 

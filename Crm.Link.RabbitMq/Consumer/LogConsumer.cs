@@ -1,5 +1,4 @@
 ﻿using Crm.Link.RabbitMq.Common;
-using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -12,12 +11,11 @@ namespace Crm.Link.RabbitMq.Consumer
         protected override string QueueName => "CUSTOM_HOST.log.message";
 
         public LogConsumer(
-            IMediator mediator,
             ConnectionFactory connectionFactory,
             ILogger<LogConsumer> logConsumerLogger,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
-            base(mediator, connectionFactory, consumerLogger, logger)
+            base(connectionFactory, consumerLogger, logger)
         {
             try
             {

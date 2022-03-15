@@ -1,8 +1,9 @@
 ﻿namespace Crm.Link.RabbitMq.Producer
 {
-    public class LogIntegrationEvent
+    public class IntegrationEvent
     {
         public Guid Id { get; set; }
         public string Message { get; set; }
+        public byte[] Data { get; set; }
     }
 }
