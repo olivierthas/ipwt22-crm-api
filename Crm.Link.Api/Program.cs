@@ -24,7 +24,7 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
     {
-        var uri = new Uri("");
+        var uri = new Uri("amqp://guest:guest@some-rabbit:5672/CUSTOM_HOST");
         return new ConnectionFactory
         {
             Uri = uri,
