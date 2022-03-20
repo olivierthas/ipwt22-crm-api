@@ -5,7 +5,13 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crm.Link.Api", "Crm.Link.Api\Crm.Link.Api.csproj", "{8D9E7A62-3423-4307-A08E-FE90E29EC890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crm.Link.RabbitMq", "Crm.Link.RabbitMq\Crm.Link.RabbitMq.csproj", "{28B66190-60C9-4DAD-A904-4D50EF547D5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crm.Link.RabbitMq", "Crm.Link.RabbitMq\Crm.Link.RabbitMq.csproj", "{28B66190-60C9-4DAD-A904-4D50EF547D5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "opensslKeys", "opensslKeys", "{19D6D5DF-F913-4C70-B36C-3ABCF5AB7F66}"
+	ProjectSection(SolutionItems) = preProject
+		private.key = private.key
+		public.key = public.key
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
