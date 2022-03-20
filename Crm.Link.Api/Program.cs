@@ -28,10 +28,10 @@ try
         return new ConnectionFactory
         {
             Uri = uri,
-            DispatchConsumersAsync = true,
+            DispatchConsumersAsync = true,            
         };
     });
-
+   
     var app = builder.Build();
 
     app.UseCrmLoggng();

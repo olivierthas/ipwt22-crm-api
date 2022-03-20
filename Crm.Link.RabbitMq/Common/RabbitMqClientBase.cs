@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
 
 namespace Crm.Link.RabbitMq.Common
 {
@@ -28,7 +29,17 @@ namespace Crm.Link.RabbitMq.Common
         {
             if (_connection == null || _connection.IsOpen == false)
             {
-                _connection = _connectionFactory.CreateConnection();
+                do
+                {
+                    try
+                    {
+                        _connection = _connectionFactory.CreateConnection();
+                    }
+                    catch (BrokerUnreachableException bex)
+                    {
+                        _logger.LogError(bex, "RabbitMq not reachable: ");                    
+                    }
+                } while (_connection is null);
             }
 
             if (Channel == null || Channel.IsOpen == false)
