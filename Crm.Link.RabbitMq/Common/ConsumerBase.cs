@@ -12,7 +12,7 @@ namespace Crm.Link.RabbitMq.Common
         protected abstract string QueueName { get; }
 
         public ConsumerBase(
-            ConnectionFactory connectionFactory,
+            IConnectionFactory connectionFactory,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
             base(connectionFactory, logger)

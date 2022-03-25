@@ -6,21 +6,21 @@ namespace Crm.Link.RabbitMq.Common
 {
     public class RabbitMqClientBase : IDisposable
     {
-        protected const string VirtualHost = "CUSTOM_HOST";
-        protected readonly string LoggerExchange = $"{VirtualHost}.LoggerExchange";
-        protected readonly string LoggerQueue = $"{VirtualHost}.log.message";
-        protected const string LoggerQueueAndExchangeRoutingKey = "log.message";
+        protected const string VirtualHost = "INTEGRATION_HOST";
+        protected readonly string LoggerExchange = $"{VirtualHost}.Exchange";
+        protected readonly string LoggerQueue = $"{VirtualHost}.message";
+        protected const string LoggerQueueAndExchangeRoutingKey = "message";
 
         protected IModel Channel { get; private set; }
         private IConnection _connection;
-        private readonly ConnectionFactory _connectionFactory;
+        private readonly IConnectionFactory connectionFactory;
         private readonly ILogger<RabbitMqClientBase> _logger;
 
         protected RabbitMqClientBase(
-            ConnectionFactory connectionFactory,
+            IConnectionFactory connectionFactory,
             ILogger<RabbitMqClientBase> logger)
         {
-            _connectionFactory = connectionFactory;
+            this.connectionFactory = connectionFactory;
             _logger = logger;
             ConnectToRabbitMq();
         }
@@ -33,19 +33,22 @@ namespace Crm.Link.RabbitMq.Common
                 {
                     try
                     {
-                        _connection = _connectionFactory.CreateConnection();
+                        _connection = connectionFactory.CreateConnection();
                     }
                     catch (BrokerUnreachableException bex)
                     {
                         _logger.LogError(bex, "RabbitMq not reachable: ");                    
                     }
+
+                    Thread.Sleep(1000);
+
                 } while (_connection is null);
             }
 
             if (Channel == null || Channel.IsOpen == false)
             {
                 Channel = _connection.CreateModel();
-                Channel.ExchangeDeclare(exchange: LoggerExchange, type: "direct", durable: true, autoDelete: false);
+                Channel.ExchangeDeclare(exchange: LoggerExchange, type: ExchangeType.Direct, durable: true, autoDelete: false);
                 Channel.QueueDeclare(queue: LoggerQueue, durable: false, exclusive: false, autoDelete: false);
                 Channel.QueueBind(queue: LoggerQueue, exchange: LoggerExchange, routingKey: LoggerQueueAndExchangeRoutingKey);
             }

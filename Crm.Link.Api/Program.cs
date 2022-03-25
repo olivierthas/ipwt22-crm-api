@@ -24,7 +24,7 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
     {
-        var uri = new Uri("amqp://guest:guest@some-rabbit:5672/CUSTOM_HOST");
+        var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
         return new ConnectionFactory
         {
             Uri = uri,
