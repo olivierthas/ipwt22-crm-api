@@ -2,11 +2,34 @@
 
 namespace Crm.Link.Api.Controllers
 {
-    public class SessionController : Controller
+    [ApiController]
+    [Route("api/session")]
+    public class SessionController : ControllerBase
     {
-        public IActionResult Index()
+        public SessionController()
         {
-            return View();
+
+        }
+
+        [HttpPost]
+        [Route(nameof(Create))]
+        public async Task<IActionResult> Create()
+        {
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route(nameof(Delete) + "{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route(nameof(Update))]
+        public async Task<IActionResult> Update()
+        {
+            return Ok();
         }
     }
 }

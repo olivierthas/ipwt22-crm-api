@@ -6,22 +6,20 @@ using RabbitMQ.Client.Events;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
-    public class SessionConsumer : ConsumerBase, IHostedService
+    public class AccountConsumer : ConsumerBase, IHostedService
     {
-        private readonly ILogger<SessionConsumer> sessionLogger;
+        protected override string QueueName => "Accounts";
+        private readonly ILogger<AccountConsumer> accountLogger;
 
-        protected override string QueueName => "Session";
-
-        public SessionConsumer(
+        public AccountConsumer(
             IConnectionFactory connectionFactory,
-            ILogger<SessionConsumer> sessionLogger,
+            ILogger<AccountConsumer> accountLogger,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
             base(connectionFactory, consumerLogger, logger)
         {
-            this.sessionLogger = sessionLogger;
+            this.accountLogger = accountLogger;
         }
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             try
@@ -32,7 +30,7 @@ namespace Crm.Link.RabbitMq.Consumer
             }
             catch (Exception ex)
             {
-                sessionLogger.LogCritical(ex, "Error while consuming message");
+                accountLogger.LogCritical(ex, "Error while consuming message");
             }
 
             return Task.CompletedTask;
@@ -40,8 +38,6 @@ namespace Crm.Link.RabbitMq.Consumer
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            Channel.Dispose();
-
             return Task.CompletedTask;
         }
     }

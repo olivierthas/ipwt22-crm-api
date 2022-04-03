@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
 {
@@ -26,10 +27,11 @@ namespace Crm.Link.RabbitMq.Common
         {
             try
             {
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                var body = serializer.Serialize();
                 var properties = Channel.CreateBasicProperties();
                 properties.AppId = AppId;
-                properties.ContentType = "application/json";
+                properties.ContentType = "application/xml";
                 properties.DeliveryMode = 1; // Doesn't persist to disk
                 properties.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                 Channel.BasicPublish(exchange: ExchangeName, routingKey: RoutingKeyName, body: body, basicProperties: properties);

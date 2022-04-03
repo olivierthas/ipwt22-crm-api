@@ -9,14 +9,8 @@ namespace Crm.Link.RabbitMq.Producer
         public Publisher(IRabbitMqProducer<IntegrationEvent> producer) => _producer = producer;
         protected async Task Publish(IntegrationEvent message, CancellationToken stoppingToken)
         {
-            
-                var @event = new IntegrationEvent
-                {
-                    Id = Guid.NewGuid(),
-                    Message = $"Hello! Message generated at {DateTime.UtcNow.ToString("O")}"
-                };
 
-                _producer.Publish(@event);            
+            _producer.Publish(message);            
 
             await Task.CompletedTask;
         }

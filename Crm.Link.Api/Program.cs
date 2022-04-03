@@ -1,4 +1,5 @@
 using Crm.Link.Api;
+using Crm.Link.Api.Configuration.Httpclient;
 using Crm.Link.RabbitMq.Consumer;
 using Newtonsoft.Json.Converters;
 using RabbitMQ.Client;
@@ -15,14 +16,17 @@ try
     builder.Host.AddCrmLogging();
 
     // builder.Services.AddCrmAuthentication(configuration);
-    builder.Services.AddCrmCors("CorsPolicyName");
+    // builder.Services.AddCrmCors("CorsPolicyName");
     builder.Services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     });
+    builder.Services.AddHttpClientFactory(configuration);
     builder.Services.AddOpenApi();
-    builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
+    builder.Services.UsePersistence(configuration);
+    /*builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
     {
         var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
         return new ConnectionFactory
@@ -30,23 +34,25 @@ try
             Uri = uri,
             DispatchConsumersAsync = true,            
         };
-    });
-   
+    });*/
+       
     var app = builder.Build();
 
     app.UseCrmLoggng();
+    
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
+        Log.Information("OpenApi active");
         app.UseOpenApi();
     }
 
-    app.UseHttpsRedirection();
+    // app.UseHttpsRedirection();
 
     app.UseRouting();
-    app.UseCors(ConfigureCORS.PolicyName);
+    // app.UseCors(ConfigureCORS.PolicyName);
 
-    app.UseAuthentication();
+    // app.UseAuthentication();
     // app.UseAuthorization();
 
     app.MapControllers();

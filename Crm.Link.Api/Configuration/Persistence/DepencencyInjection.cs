@@ -1,13 +1,12 @@
-﻿using Microsoft.IdentityModel.Protocols;
-using RabbitMQ.Client;
+﻿using Crm.Link.Api.GateAway;
 
 namespace Crm.Link.Api
 {
     public static class DepencencyInjection
     {
-        public static IServiceCollection UsePersistence(this IServiceCollection services, IConfigurationManager configuration)
+        public static IServiceCollection UsePersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(serviceProvider =>
+            /*services.AddSingleton(serviceProvider =>
             {
                 var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
                 return new ConnectionFactory
@@ -15,7 +14,11 @@ namespace Crm.Link.Api
                     Uri = uri,
                     DispatchConsumersAsync = true,
                 };
-            });
+            });*/
+            services.AddSingleton<TokenProvider>();
+
+            services.AddTransient<IAccountGateAway, AccountGateAway>();
+            services.AddTransient<ISessionGateAway, SessionGateAway>();
             return services;
         }
     }
