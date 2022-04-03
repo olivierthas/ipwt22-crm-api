@@ -28,7 +28,8 @@ namespace Crm.Link.RabbitMq.Common
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
-                var body = serializer.Serialize();
+                var body = new MemoryStream();
+                
                 var properties = Channel.CreateBasicProperties();
                 properties.AppId = AppId;
                 properties.ContentType = "application/xml";

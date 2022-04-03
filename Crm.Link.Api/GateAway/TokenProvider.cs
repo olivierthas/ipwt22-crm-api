@@ -1,5 +1,4 @@
 ﻿using Crm.Link.Api.Models;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -8,7 +7,7 @@ namespace Crm.Link.Api.GateAway
     public class TokenProvider
     {
         private static Token token = new();
-        
+
         private readonly ILogger<TokenProvider> logger;
         private readonly HttpClient client;
         private readonly Credentials credentials;
@@ -27,7 +26,7 @@ namespace Crm.Link.Api.GateAway
         {
             if (token.ValidTillDate != null && token.ValidTillDate > DateTime.UtcNow)
                 return token.TokenValue;
-            
+
             _ = credentials ?? throw new ArgumentNullException(nameof(credentials));
             var json = JsonConvert.SerializeObject(credentials);
 

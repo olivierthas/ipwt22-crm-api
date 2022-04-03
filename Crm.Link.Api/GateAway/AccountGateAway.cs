@@ -1,7 +1,4 @@
 ﻿using Crm.Link.Api.Models;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using System.Text;
 
 namespace Crm.Link.Api.GateAway
 {
@@ -20,9 +17,9 @@ namespace Crm.Link.Api.GateAway
             var data = new ModuleModel
             {
                 Data = new BaseModel
-                        {
-                            Type = "Accounts",
-                            Attributes = 
+                {
+                    Type = "Accounts",
+                    Attributes =
                             new AccountModel
                             {
                                 Name = "Test user",
@@ -31,8 +28,8 @@ namespace Crm.Link.Api.GateAway
                                 PostalCode = "3111",
                                 Country = "Belgium",
                                 PhoneOffice = "+32 475 444 444",
-                            }                                          
-                        }
+                            }
+                }
             };
             var content = await CreateContent(moduleModel);
             return await httpClient.PostAsync($"/api/v8/modules/{module}", content);

@@ -1,13 +1,12 @@
 ﻿using Crm.Link.RabbitMq.Common;
-using Microsoft.Extensions.Hosting;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class Publisher
+    public class Publisher<T> // hummm moet nog afgewerkt worden
     {
-        private readonly IRabbitMqProducer<IntegrationEvent> _producer;
-        public Publisher(IRabbitMqProducer<IntegrationEvent> producer) => _producer = producer;
-        protected async Task Publish(IntegrationEvent message, CancellationToken stoppingToken)
+        private readonly IRabbitMqProducer<T> _producer;
+        public Publisher(IRabbitMqProducer<T> producer) => _producer = producer;
+        protected async Task Publish(T message, CancellationToken stoppingToken)
         {
 
             _producer.Publish(message);            
