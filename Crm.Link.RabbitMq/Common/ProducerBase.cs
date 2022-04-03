@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
@@ -25,11 +23,18 @@ namespace Crm.Link.RabbitMq.Common
 
         public virtual void Publish(T @event)
         {
+            _ = @event ?? throw new ArgumentNullException(nameof(@event));
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                var body = new MemoryStream();
-                
+                ReadOnlyMemory<byte> body;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(ms, @event);
+
+                    body = new ReadOnlyMemory<byte>(ms.ToArray());
+                }
+
                 var properties = Channel.CreateBasicProperties();
                 properties.AppId = AppId;
                 properties.ContentType = "application/xml";
