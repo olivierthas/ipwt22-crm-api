@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Toolkit.HighPerformance;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace Crm.Link.RabbitMq.Common
 {
@@ -26,6 +29,19 @@ namespace Crm.Link.RabbitMq.Common
             try
             {
                 var body = Encoding.UTF8.GetString(@event.Body.ToArray());
+                XmlReader reader = new XmlTextReader(@event.Body.AsStream());
+                XmlDocument document = new();
+                document.Load(reader);
+
+                // xsd for validation
+                XmlSchemaSet xmlSchemaSet = new();
+                xmlSchemaSet.Add("", "/path to file xsd");
+
+                document.Schemas.Add(xmlSchemaSet);
+                ValidationEventHandler eventHandler = new (ValidationEventHandler);
+
+                document.Validate(eventHandler);
+                
                 var message = JsonConvert.DeserializeObject<T>(body);
 
             }
@@ -36,6 +52,19 @@ namespace Crm.Link.RabbitMq.Common
             finally
             {
                 Channel.BasicAck(@event.DeliveryTag, false);
+            }
+        }
+
+        private void ValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            switch (e.Severity)
+            {
+                case XmlSeverityType.Error:
+                    Console.WriteLine("Error: {0}", e.Message);
+                    break;
+                case XmlSeverityType.Warning:
+                    Console.WriteLine("Warning {0}", e.Message);
+                    break;
             }
         }
     }
