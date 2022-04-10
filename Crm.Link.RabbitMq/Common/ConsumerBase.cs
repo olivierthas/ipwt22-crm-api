@@ -28,7 +28,6 @@ namespace Crm.Link.RabbitMq.Common
         {
             try
             {
-                var body = Encoding.UTF8.GetString(@event.Body.ToArray());
                 XmlReader reader = new XmlTextReader(@event.Body.AsStream());
                 XmlDocument document = new();
                 document.Load(reader);
@@ -42,7 +41,8 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Validate(eventHandler);
                 
-                var message = JsonConvert.DeserializeObject<T>(body);
+                var body = Encoding.UTF8.GetString(@event.Body.ToArray());
+                var message = JsonConvert.DeserializeObject<T>(body); // still need to do something with this message send to crm after mapping.
 
             }
             catch (Exception ex)

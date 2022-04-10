@@ -1,4 +1,6 @@
-﻿namespace Crm.Link.RabbitMq.Producer
+﻿using Crm.Link.RabbitMq.Messages;
+
+namespace Crm.Link.RabbitMq.Producer
 {
     public class SessionEvent
     {
@@ -9,17 +11,18 @@
         /// <summary>
         /// Create, Update, Delete
         /// </summary>
-        public string CrudMethode { get; set; }
+        public MethodeEnum CrudMethode { get; set; }
         public int Version { get; set; }
         public string Title { get; set; }
 
         /// <summary>
         /// UTC !!!!!!!!!
         /// </summary>
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime StartDateUTC { get; set; }
+        public DateTime EndDateUTC { get; set; }
         public string Description { get; set; }
-        public string OrganiserId { get; set; }
+        public string? OrganiserUUId { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

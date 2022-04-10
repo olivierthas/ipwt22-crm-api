@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crm.Link.RabbitMq.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class AccountEvent
+    public class AttendeeEvent
     {
         /// <summary>
         /// UUID from UUIDMaster
@@ -15,11 +16,11 @@ namespace Crm.Link.RabbitMq.Producer
         /// <summary>
         /// Create, Update, Delete
         /// </summary>
-        public string CrudMethode { get; set; }
+        public MethodeEnum CrudMethode { get; set; }
         public int Version { get; set; }
         public string Name { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public IEnumerable<string> SessionEventIds { get; set; } // tocheck
-        public IEnumerable<string> OrganiserForSessionIds { get; set; } // tocheck
+        public string? VatNumber { get; set; } = null;        
     }
 }

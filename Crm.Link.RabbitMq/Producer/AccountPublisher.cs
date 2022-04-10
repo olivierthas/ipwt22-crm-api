@@ -4,12 +4,12 @@ using RabbitMQ.Client;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class AccountPublisher : ProducerBase<AccountEvent>
+    public class AccountPublisher : ProducerBase<AttendeeEvent>
     {
         public AccountPublisher(
             ConnectionFactory connectionFactory,
             ILogger<RabbitMqClientBase> logger,
-            ILogger<ProducerBase<AccountEvent>> producerBaseLogger)
+            ILogger<ProducerBase<AttendeeEvent>> producerBaseLogger)
             : base(connectionFactory, logger, producerBaseLogger)
         {
         }
