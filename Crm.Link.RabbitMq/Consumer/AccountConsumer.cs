@@ -19,6 +19,7 @@ namespace Crm.Link.RabbitMq.Consumer
             base(connectionFactory, consumerLogger, logger)
         {
             this.accountLogger = accountLogger;
+            StartAsync(new CancellationToken(false));
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {

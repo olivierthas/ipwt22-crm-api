@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class SessionProducer : ProducerBase<SessionEvent>
+    public class SessionPublisher : ProducerBase<SessionEvent>
     {
-        public SessionProducer(
-            ConnectionFactory connectionFactory,
+        public SessionPublisher(
+            IConnectionFactory connectionFactory,
             ILogger<RabbitMqClientBase> logger,
             ILogger<ProducerBase<SessionEvent>> producerBaseLogger)
             : base(connectionFactory, logger, producerBaseLogger)

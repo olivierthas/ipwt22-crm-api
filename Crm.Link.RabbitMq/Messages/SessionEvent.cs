@@ -18,8 +18,8 @@ namespace Crm.Link.RabbitMq.Producer
         /// <summary>
         /// UTC !!!!!!!!!
         /// </summary>
-        public DateTime StartDateUTC { get; set; }
-        public DateTime EndDateUTC { get; set; }
+        public DateTime StartDateUTC { get; set; } // in toekomst
+        public DateTime EndDateUTC { get; set; } // niet voor startdate in toekomst
         public string Description { get; set; }
         public string? OrganiserUUId { get; set; }
         public bool IsActive { get; set; }

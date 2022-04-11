@@ -16,7 +16,7 @@ namespace Crm.Link.RabbitMq.Common
         protected abstract string AppId { get; }
 
         protected ProducerBase(
-            ConnectionFactory connectionFactory,
+            IConnectionFactory connectionFactory,
             ILogger<RabbitMqClientBase> logger,
             ILogger<ProducerBase<T>> producerBaseLogger) :
             base(connectionFactory, logger) => _logger = producerBaseLogger;

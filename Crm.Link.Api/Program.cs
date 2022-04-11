@@ -26,16 +26,16 @@ try
     builder.Services.AddHttpClientFactory(configuration);
     builder.Services.AddOpenApi();
     builder.Services.UsePersistence(configuration);
-    /*builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
+    builder.Services.AddHostedService<AccountConsumer>();/*.AddSingleton<IConnectionFactory>(serviceProvider =>
     {
         var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
         return new ConnectionFactory
         {
             Uri = uri,
-            DispatchConsumersAsync = true,            
+            DispatchConsumersAsync = true,
         };
     });*/
-       
+
     var app = builder.Build();
 
     app.UseCrmLoggng();
