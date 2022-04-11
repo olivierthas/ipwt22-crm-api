@@ -26,15 +26,8 @@ try
     builder.Services.AddHttpClientFactory(configuration);
     builder.Services.AddOpenApi();
     builder.Services.UsePersistence(configuration);
-    builder.Services.AddHostedService<AccountConsumer>();/*.AddSingleton<IConnectionFactory>(serviceProvider =>
-    {
-        var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
-        return new ConnectionFactory
-        {
-            Uri = uri,
-            DispatchConsumersAsync = true,
-        };
-    });*/
+
+    builder.Services.AddHostedService<AccountConsumer>();
 
     var app = builder.Build();
 
