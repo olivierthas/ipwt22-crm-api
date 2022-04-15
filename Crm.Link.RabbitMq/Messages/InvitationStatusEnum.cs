@@ -4,6 +4,6 @@
     {
         Pending,
         Accepted,
-        Diclined,
+        Declined,
     }
 }
