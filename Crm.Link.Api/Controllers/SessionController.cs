@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Crm.Link.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Link.Api.Controllers
 {
@@ -13,7 +14,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPost]
         [Route(nameof(Create))]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(MeetingModel meeting)
         {
             return Ok();
         }
@@ -27,7 +28,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPut]
         [Route(nameof(Update))]
-        public async Task<IActionResult> Update()
+        public async Task<IActionResult> Update(MeetingModel meeting)
         {
             return Ok();
         }

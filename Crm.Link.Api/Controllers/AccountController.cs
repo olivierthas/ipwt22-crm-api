@@ -57,7 +57,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPut]
         [Route(nameof(Update))]
-        public async Task<IActionResult> Update()
+        public async Task<IActionResult> Update(AccountModel account)
         {
             return Ok();
         }
