@@ -17,6 +17,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=guest
 
   api:
+    image: api_crm    
     build:
         context: .
         dockerfile: ./Dockerfile 
