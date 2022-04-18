@@ -13,26 +13,34 @@ namespace Crm.Link.RabbitMq.Consumer
         protected override string QueueName => "Session";
 
         public SessionConsumer(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<SessionConsumer> sessionLogger,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
-            base(connectionFactory, consumerLogger, logger)
+            base(connectionProvider, consumerLogger, logger)
         {
             this.sessionLogger = sessionLogger;
+            TimerMethode += async () => await StartAsync(new CancellationToken(false)); 
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            try
+            if (Channel is not null)
             {
-                var consumer = new AsyncEventingBasicConsumer(Channel);
-                consumer.Received += OnEventReceived<LogCommand>;
-                Channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                    try
+                {
+                    var consumer = new AsyncEventingBasicConsumer(Channel);
+                    consumer.Received += OnEventReceived<LogCommand>;
+                    Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                }
+                catch (Exception ex)
+                {
+                    sessionLogger.LogCritical(ex, "Error while consuming message");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                sessionLogger.LogCritical(ex, "Error while consuming message");
+                SetTimer();
             }
 
             return Task.CompletedTask;

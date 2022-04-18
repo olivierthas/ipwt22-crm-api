@@ -27,7 +27,8 @@ try
     builder.Services.AddOpenApi();
     builder.Services.UsePersistence(configuration);
 
-    // builder.Services.AddHostedService<AccountConsumer>();
+    builder.Services.AddHostedService<AccountConsumer>();
+    builder.Services.AddHostedService<SessionConsumer>();
 
     var app = builder.Build();
 

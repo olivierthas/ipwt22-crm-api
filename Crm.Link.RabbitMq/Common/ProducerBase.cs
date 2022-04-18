@@ -15,36 +15,46 @@ namespace Crm.Link.RabbitMq.Common
         protected abstract string RoutingKeyName { get; }
         protected abstract string AppId { get; }
 
+        protected List<T> MessageQueue { get; set; }
+
         protected ProducerBase(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<RabbitMqClientBase> logger,
             ILogger<ProducerBase<T>> producerBaseLogger) :
-            base(connectionFactory, logger) => _logger = producerBaseLogger;
+            base(connectionProvider, logger) => _logger = producerBaseLogger;
 
         public virtual void Publish(T @event)
         {
             _ = @event ?? throw new ArgumentNullException(nameof(@event));
-            try
+
+            MessageQueue.Add(@event);
+            if (Channel is not null)
             {
-                ReadOnlyMemory<byte> body;
-                using (MemoryStream ms = new MemoryStream())
+                foreach (var message in MessageQueue)
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(T));
-                    serializer.Serialize(ms, @event);
+                    try
+                    {
+                        ReadOnlyMemory<byte> body;
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            XmlSerializer serializer = new XmlSerializer(typeof(T));
+                            serializer.Serialize(ms, @event);
 
-                    body = new ReadOnlyMemory<byte>(ms.ToArray());
+                            body = new ReadOnlyMemory<byte>(ms.ToArray());
+                        }
+
+                        var properties = Channel.CreateBasicProperties();
+                        properties.AppId = AppId;
+                        properties.ContentType = "application/xml";
+                        properties.DeliveryMode = 1; // Doesn't persist to disk
+                        properties.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                        Channel.BasicPublish(exchange: ExchangeName, routingKey: RoutingKeyName, body: body, basicProperties: properties);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogCritical(ex, "Error while publishing");
+                    }
                 }
-
-                var properties = Channel.CreateBasicProperties();
-                properties.AppId = AppId;
-                properties.ContentType = "application/xml";
-                properties.DeliveryMode = 1; // Doesn't persist to disk
-                properties.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-                Channel.BasicPublish(exchange: ExchangeName, routingKey: RoutingKeyName, body: body, basicProperties: properties);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex, "Error while publishing");
             }
         }
     }

@@ -7,10 +7,10 @@ namespace Crm.Link.RabbitMq.Producer
     public class AccountPublisher : ProducerBase<AttendeeEvent>
     {
         public AccountPublisher(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<RabbitMqClientBase> logger,
             ILogger<ProducerBase<AttendeeEvent>> producerBaseLogger)
-            : base(connectionFactory, logger, producerBaseLogger)
+            : base(connectionProvider, logger, producerBaseLogger)
         {
         }
 

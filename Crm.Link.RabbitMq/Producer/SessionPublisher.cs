@@ -12,10 +12,10 @@ namespace Crm.Link.RabbitMq.Producer
     public class SessionPublisher : ProducerBase<SessionEvent>
     {
         public SessionPublisher(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<RabbitMqClientBase> logger,
             ILogger<ProducerBase<SessionEvent>> producerBaseLogger)
-            : base(connectionFactory, logger, producerBaseLogger)
+            : base(connectionProvider, logger, producerBaseLogger)
         {
         }
 

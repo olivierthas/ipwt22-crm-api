@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -11,14 +12,16 @@ namespace Crm.Link.RabbitMq.Common
 {
     public abstract class ConsumerBase : RabbitMqClientBase
     {
+        private System.Timers.Timer _timer;
         private readonly ILogger<ConsumerBase> _logger;
         protected abstract string QueueName { get; }
+        protected Func<Task> TimerMethode { get; set; }
 
         public ConsumerBase(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
-            base(connectionFactory, logger)
+            base(connectionProvider, logger)
         {
 
             _logger = consumerLogger;
@@ -65,6 +68,26 @@ namespace Crm.Link.RabbitMq.Common
                 case XmlSeverityType.Warning:
                     Console.WriteLine("Warning {0}", e.Message);
                     break;
+            }
+        }
+
+        protected void SetTimer()
+        {
+            _timer = new System.Timers.Timer(10000);
+
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+
+            if (Channel is not null)
+            {
+                TimerMethode().GetAwaiter().GetResult();
+                _timer?.Stop();
+                _timer?.Dispose();
             }
         }
     }

@@ -8,30 +8,39 @@ namespace Crm.Link.RabbitMq.Consumer
 {
     public class AccountConsumer : ConsumerBase, IHostedService
     {
+        
         protected override string QueueName => "Accounts";
         private readonly ILogger<AccountConsumer> accountLogger;
 
         public AccountConsumer(
-            IConnectionFactory connectionFactory,
+            ConnectionProvider connectionProvider,
             ILogger<AccountConsumer> accountLogger,
             ILogger<ConsumerBase> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
-            base(connectionFactory, consumerLogger, logger)
+            base(connectionProvider, consumerLogger, logger)
         {
             this.accountLogger = accountLogger;
-            StartAsync(new CancellationToken(false));
+            TimerMethode += async () => await StartAsync(new CancellationToken(false));  
         }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            try
+            if (Channel is not null)
             {
-                var consumer = new AsyncEventingBasicConsumer(Channel);
-                consumer.Received += OnEventReceived<LogCommand>;
-                Channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                try
+                {
+                    var consumer = new AsyncEventingBasicConsumer(Channel);
+                    consumer.Received += OnEventReceived<LogCommand>;
+                    Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                }
+                catch (Exception ex)
+                {
+                    accountLogger.LogCritical(ex, "Error while consuming message");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                accountLogger.LogCritical(ex, "Error while consuming message");
+                SetTimer();
             }
 
             return Task.CompletedTask;

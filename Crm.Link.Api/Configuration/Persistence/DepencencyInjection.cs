@@ -1,4 +1,5 @@
 ﻿using Crm.Link.Api.GateAway;
+using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Producer;
 using RabbitMQ.Client;
 
@@ -21,6 +22,7 @@ namespace Crm.Link.Api
             services.AddSingleton<TokenProvider>();
             services.AddSingleton<AccountPublisher>();
             services.AddSingleton<SessionPublisher>();
+            services.AddSingleton<ConnectionProvider>();
 
             services.AddTransient<IAccountGateAway, AccountGateAway>();
             services.AddTransient<ISessionGateAway, SessionGateAway>();
