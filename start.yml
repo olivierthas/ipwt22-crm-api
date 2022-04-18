@@ -12,11 +12,11 @@ services:
       timeout: 10s
       retries: 5
     environment:
-      - RABBITMQ_DEFAULT_VHOST=CUSTOM_HOST
+      - RABBITMQ_DEFAULT_VHOST=INTEGRATION_HOST
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
-  rmq.application.producer:
+  api:
     build:
         context: .
         dockerfile: ./Dockerfile 

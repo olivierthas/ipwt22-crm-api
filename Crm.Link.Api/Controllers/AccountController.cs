@@ -2,7 +2,6 @@
 using Crm.Link.Api.Models;
 using Crm.Link.RabbitMq.Producer;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace Crm.Link.Api.Controllers
 {
@@ -24,9 +23,6 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Test))]
         public async Task<IActionResult> Test()
         {
-            // var response = await accountGateAway.Create();
-
-            // var text = await response.Content.ReadAsStringAsync();
             return Ok();
         }
 
@@ -53,7 +49,7 @@ namespace Crm.Link.Api.Controllers
         }
 
         [HttpDelete]
-        [Route(nameof(Delete))]
+        [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             return Ok();

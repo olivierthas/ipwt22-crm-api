@@ -1,8 +1,8 @@
 using Crm.Link.Api;
 using Crm.Link.Api.Configuration.Httpclient;
+using Crm.Link.RabbitMq.Configuration;
 using Crm.Link.RabbitMq.Consumer;
 using Newtonsoft.Json.Converters;
-using RabbitMQ.Client;
 using Serilog;
 
 Log.Logger = ConfigureLogging.Bootstrap();
@@ -27,8 +27,9 @@ try
     builder.Services.AddOpenApi();
     builder.Services.UsePersistence(configuration);
 
-    builder.Services.AddHostedService<AccountConsumer>();
-    builder.Services.AddHostedService<SessionConsumer>();
+    // configuration rabbitmq
+    builder.Services.StartConsumers(configuration.GetConnectionString("RabbitMq"));
+    builder.Services.AddPublisher();
 
     var app = builder.Build();
 

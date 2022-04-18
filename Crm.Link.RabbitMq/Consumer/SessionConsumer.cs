@@ -1,4 +1,5 @@
 ﻿using Crm.Link.RabbitMq.Common;
+using Crm.Link.RabbitMq.Producer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -30,7 +31,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     try
                 {
                     var consumer = new AsyncEventingBasicConsumer(Channel);
-                    consumer.Received += OnEventReceived<LogCommand>;
+                    consumer.Received += OnEventReceived<SessionEvent>;
                     Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
                 }
                 catch (Exception ex)

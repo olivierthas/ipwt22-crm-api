@@ -1,6 +1,5 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
 
 namespace Crm.Link.RabbitMq.Producer
 {

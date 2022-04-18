@@ -14,8 +14,4 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
-
 </Project>
