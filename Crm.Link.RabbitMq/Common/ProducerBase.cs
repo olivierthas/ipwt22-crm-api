@@ -15,7 +15,7 @@ namespace Crm.Link.RabbitMq.Common
         protected abstract string RoutingKeyName { get; }
         protected abstract string AppId { get; }
 
-        protected List<T> MessageQueue { get; set; }
+        protected List<T> MessageQueue { get; set; } = new();
 
         protected ProducerBase(
             ConnectionProvider connectionProvider,
@@ -49,6 +49,8 @@ namespace Crm.Link.RabbitMq.Common
                         properties.DeliveryMode = 1; // Doesn't persist to disk
                         properties.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                         Channel.BasicPublish(exchange: ExchangeName, routingKey: RoutingKeyName, body: body, basicProperties: properties);
+
+                        MessageQueue.Remove(message);
                     }
                     catch (Exception ex)
                     {

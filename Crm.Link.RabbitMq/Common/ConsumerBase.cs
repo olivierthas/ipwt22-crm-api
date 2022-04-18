@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
 using Newtonsoft.Json;
-using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Timers;
@@ -12,10 +11,10 @@ namespace Crm.Link.RabbitMq.Common
 {
     public abstract class ConsumerBase : RabbitMqClientBase
     {
-        private System.Timers.Timer _timer;
+        private System.Timers.Timer? _timer;
         private readonly ILogger<ConsumerBase> _logger;
         protected abstract string QueueName { get; }
-        protected Func<Task> TimerMethode { get; set; }
+        protected Func<Task>? TimerMethode { get; set; }
 
         public ConsumerBase(
             ConnectionProvider connectionProvider,
@@ -23,7 +22,6 @@ namespace Crm.Link.RabbitMq.Common
             ILogger<RabbitMqClientBase> logger) :
             base(connectionProvider, logger)
         {
-
             _logger = consumerLogger;
         }
 
@@ -47,6 +45,7 @@ namespace Crm.Link.RabbitMq.Common
                 var body = Encoding.UTF8.GetString(@event.Body.ToArray());
                 var message = JsonConvert.DeserializeObject<T>(body); // still need to do something with this message send to crm after mapping.
 
+
             }
             catch (Exception ex)
             {
@@ -54,11 +53,11 @@ namespace Crm.Link.RabbitMq.Common
             }
             finally
             {
-                Channel.BasicAck(@event.DeliveryTag, false);
+                Channel!.BasicAck(@event.DeliveryTag, false);
             }
         }
 
-        private void ValidationEventHandler(object sender, ValidationEventArgs e)
+        private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)
             {
@@ -73,17 +72,20 @@ namespace Crm.Link.RabbitMq.Common
 
         protected void SetTimer()
         {
-            _timer = new System.Timers.Timer(10000);
+            if (_timer == null)
+            {
+                _timer = new System.Timers.Timer(10000);
 
-            _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
+                _timer.Elapsed += OnTimedEvent;
+                _timer.AutoReset = true;
+                _timer.Enabled = true;
+            }
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object? source, ElapsedEventArgs e)
         {
 
-            if (Channel is not null)
+            if (Channel is not null && TimerMethode is not null)
             {
                 TimerMethode().GetAwaiter().GetResult();
                 _timer?.Stop();

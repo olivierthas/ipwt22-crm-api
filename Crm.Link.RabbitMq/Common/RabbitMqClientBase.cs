@@ -12,9 +12,9 @@ namespace Crm.Link.RabbitMq.Common
         protected readonly string LoggerQueue = $"{VirtualHost}.message";
         protected const string LoggerQueueAndExchangeRoutingKey = "message";
 
-        protected IModel Channel { get; private set; }
-        private System.Timers.Timer _timer;
-        private IConnection _connection;
+        protected IModel? Channel { get; private set; }
+        private System.Timers.Timer? _timer;
+        private IConnection? _connection;
         private readonly ConnectionProvider connectionProvider;
         private readonly ILogger<RabbitMqClientBase> _logger;
 
@@ -53,21 +53,24 @@ namespace Crm.Link.RabbitMq.Common
 
         private void SetTimer()
         {
-            _timer = new System.Timers.Timer(10000);
+            if (_timer == null)
+            {
+                _timer = new System.Timers.Timer(10000);
 
-            _timer.Elapsed += OnTimedEvent;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
+                _timer.Elapsed += OnTimedEvent;
+                _timer.AutoReset = true;
+                _timer.Enabled = true;
+            }
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object? source, ElapsedEventArgs e)
         {
              ConnectToRabbitMq();
 
             if (_connection is not null)
             {
                 _logger.LogError("RabbitMq is reachable: Timer stop and disposed");
-                _timer.Stop();
+                _timer!.Stop();
                 _timer.Dispose();
             }
         }

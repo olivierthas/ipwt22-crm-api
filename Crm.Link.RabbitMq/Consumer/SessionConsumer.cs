@@ -48,7 +48,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            Channel.Dispose();
+            Channel?.Dispose();
 
             return Task.CompletedTask;
         }
