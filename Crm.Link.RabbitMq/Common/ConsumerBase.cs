@@ -6,6 +6,7 @@ using System.Text;
 using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
 {
@@ -47,12 +48,10 @@ namespace Crm.Link.RabbitMq.Common
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new (ValidationEventHandler);
 
-                document.Validate(eventHandler);
-                
-                var body = Encoding.UTF8.GetString(@event.Body.ToArray());
-                Console.WriteLine(body);
-                var message = JsonConvert.DeserializeObject<T>(body); // still need to do something with this message send to crm after mapping.
-
+                document.Validate(eventHandler);                
+               
+                var serializer = new XmlSerializer(typeof(T));
+                var test = serializer.Deserialize(@event.Body.AsStream());
 
             }
             catch (Exception ex)
