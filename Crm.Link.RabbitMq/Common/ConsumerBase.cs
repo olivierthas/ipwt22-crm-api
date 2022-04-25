@@ -38,10 +38,10 @@ namespace Crm.Link.RabbitMq.Common
 
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
-                xmlSchemaSet.Add("", $"{basePath}/publish/Resources/AttendeeEvent.xsd");
-                xmlSchemaSet.Add("", $"{basePath}/publish/Resources/SessionEvent.xsd");
-                xmlSchemaSet.Add("", $"{basePath}/publish/Resources/SessionAttendeeEvent.xsd");
-                xmlSchemaSet.Add("", $"{basePath}/publish/Resources/UUID.xsd");
+                xmlSchemaSet.Add("", $"{basePath}/Resources/AttendeeEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}/Resources/SessionEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}/Resources/SessionAttendeeEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}/Resources/UUID.xsd");
 
 
                 document.Schemas.Add(xmlSchemaSet);
