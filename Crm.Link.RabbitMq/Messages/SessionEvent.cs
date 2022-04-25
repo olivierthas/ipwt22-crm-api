@@ -11,7 +11,7 @@ namespace Crm.Link.RabbitMq.Producer
         /// <summary>
         /// Create, Update, Delete
         /// </summary>
-        public MethodeEnum CrudMethode { get; set; }
+        public MethodeEnum Methode { get; set; }
         public int Version { get; set; }
         public string Title { get; set; }
 

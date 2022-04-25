@@ -3,15 +3,24 @@
     <xs:element name="AttendeeEvent">
         <xs:complexType>
             <xs:sequence>
-				<xs:element name="UUID" >
+                <xs:element name="UUID" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="0" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+				<!-- Methode kan enkel create, update of delete zijn -->
+				<xs:element name="Methode">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:minLength value="0" />
+							<xs:pattern value="CREATE|UPDATE|DELETE"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
 
-                <!-- Version moet hoger dan 0 zijn -->
+				<!-- Version moet hoger dan 0 zijn -->
                 <xs:element name="Version" >
                     <xs:simpleType>
                         <xs:restriction base="xs:decimal">
