@@ -3,6 +3,13 @@
     <xs:element name="AttendeeEvent">
         <xs:complexType>
             <xs:sequence>
+				<xs:element name="UUID" >
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="0" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
 
                 <!-- Version moet hoger dan 0 zijn -->
                 <xs:element name="Version" >
@@ -44,7 +51,7 @@
                 <xs:element name="VatNumber">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="12"/> 
+                            <xs:minLength value="0"/> 
                             <xs:whiteSpace value="collapse"/>
                         </xs:restriction>
                     </xs:simpleType>
