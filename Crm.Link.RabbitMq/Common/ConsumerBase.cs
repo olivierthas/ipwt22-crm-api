@@ -50,6 +50,7 @@ namespace Crm.Link.RabbitMq.Common
                 document.Validate(eventHandler);
                 
                 var body = Encoding.UTF8.GetString(@event.Body.ToArray());
+                Console.WriteLine(body);
                 var message = JsonConvert.DeserializeObject<T>(body); // still need to do something with this message send to crm after mapping.
 
 
