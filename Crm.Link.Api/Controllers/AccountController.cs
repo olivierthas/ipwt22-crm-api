@@ -40,7 +40,7 @@ namespace Crm.Link.Api.Controllers
                 Name = account.Name,
                 LastName = account.Name,
                 Email = account.Email,
-                VatNumber = null,
+                VatNumber = "",
                 Version = 1,
             };
 
