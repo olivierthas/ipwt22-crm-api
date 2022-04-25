@@ -35,7 +35,7 @@ namespace Crm.Link.RabbitMq.Common
                     try
                     {
                         Console.WriteLine("start");
-
+                        Console.WriteLine(message);
                         ReadOnlyMemory<byte> body;
                         using (MemoryStream ms = new MemoryStream())
                         {
