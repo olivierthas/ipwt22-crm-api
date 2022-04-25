@@ -50,13 +50,13 @@ namespace Crm.Link.RabbitMq.Common
                         properties.Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
                         Channel.BasicPublish(exchange: ExchangeName, routingKey: RoutingKeyName, body: body, basicProperties: properties);
 
-                        MessageQueue.Remove(message);
                     }
                     catch (Exception ex)
                     {
                         _logger.LogCritical(ex, "Error while publishing");
                     }
                 }
+                        MessageQueue.Clear();
             }
         }
     }
