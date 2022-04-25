@@ -35,7 +35,7 @@ namespace Crm.Link.Api.Controllers
 
             var @event = new AttendeeEvent
             {
-                UUId = Guid.NewGuid().ToString(), // get uuid from uuidmaster
+                UUID = Guid.NewGuid().ToString(), // get uuid from uuidmaster
                 CrudMethode = RabbitMq.Messages.MethodeEnum.CREATE,
                 Name = account.Name,
                 LastName = account.Name,
