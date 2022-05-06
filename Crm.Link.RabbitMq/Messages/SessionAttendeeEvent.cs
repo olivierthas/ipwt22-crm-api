@@ -12,8 +12,8 @@ namespace Crm.Link.RabbitMq.Messages
     public class SessionAttendeeEvent
     {
         public MethodeEnum Method { get; set; }
-        public string AccountUUId { get; set; }
-        public string SessionUUId { get; set; }
+        public string? AccountUUId { get; set; }
+        public string? SessionUUId { get; set; }
         public InvitationStatusEnum InvitationStatus { get; set; }
     }
 }

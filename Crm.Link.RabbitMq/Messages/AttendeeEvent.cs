@@ -7,7 +7,7 @@ namespace Crm.Link.RabbitMq.Producer
         /// <summary>
         /// UUID from UUIDMaster
         /// </summary>
-        public string UUID { get; set; }
+        public string? UUID { get; set; }
         /// <summary>
         /// Create, Update, Delete
         /// </summary>

@@ -4,12 +4,12 @@ namespace Crm.Link.Api.GateAway
 {
     public class SessionGateAway : GateAwayBase, ISessionGateAway
     {
-        protected override string module => "Meetings";
+        protected override string Module => "Meetings";
         
         public SessionGateAway(HttpClient httpClient, TokenProvider tokenProvider)
         {
-            this.httpClient = httpClient;
-            token = tokenProvider.GetToken();
+            this.HttpClient = httpClient;
+            Token = tokenProvider.GetToken();
         }
         
     }

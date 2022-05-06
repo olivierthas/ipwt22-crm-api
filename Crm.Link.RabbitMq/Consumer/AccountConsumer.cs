@@ -51,5 +51,12 @@ namespace Crm.Link.RabbitMq.Consumer
         {
             return Task.CompletedTask;
         }
+
+        /// need to inject methode from top level class
+        /// 
+        protected override void HandelMessage<AttendeeEvent>(AttendeeEvent messageObject)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Crm.Link.Api.Models
         public string? PhoneOffice { get; set; }
 
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         // public List<EmailAddress> Emails { get; set; }
     }

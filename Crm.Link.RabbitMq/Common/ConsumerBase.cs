@@ -28,7 +28,7 @@ namespace Crm.Link.RabbitMq.Common
 
         protected virtual async Task OnEventReceived<T>(object sender, BasicDeliverEventArgs @event)
         {
-            var basePath = System.AppDomain.CurrentDomain.BaseDirectory;
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
             {
                 Console.WriteLine(basePath);
@@ -51,8 +51,9 @@ namespace Crm.Link.RabbitMq.Common
                 document.Validate(eventHandler);                
                
                 var serializer = new XmlSerializer(typeof(T));
-                var test = serializer.Deserialize(@event.Body.AsStream());
+                T test = (T)serializer.Deserialize(@event.Body.AsStream());
 
+                HandelMessage(test);
             }
             catch (Exception ex)
             {
@@ -64,6 +65,7 @@ namespace Crm.Link.RabbitMq.Common
             }
         }
 
+        protected abstract void HandelMessage<T>(T messageObject);
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)
