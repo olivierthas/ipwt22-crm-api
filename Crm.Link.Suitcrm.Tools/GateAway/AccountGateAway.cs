@@ -9,12 +9,6 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         {
             HttpClient = httpClientFactory.CreateClient("Crm");
             Token = tokenProvider.GetToken();
-        }
-
-        public async override Task<HttpResponseMessage> CreateOrUpdate(ModuleModel moduleModel)
-        {
-            var content = await CreateContent(moduleModel);
-            return await HttpClient!.PostAsync($"/api/v8/modules/{Module}", content);
-        }
+        }               
     }
 }

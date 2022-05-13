@@ -10,23 +10,23 @@ using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public abstract class ConsumerBase : RabbitMqClientBase
+    public abstract class ConsumerBase<T> : RabbitMqClientBase
     {
         private System.Timers.Timer? _timer;
-        private readonly ILogger<ConsumerBase> _logger;
+        private readonly ILogger<ConsumerBase<T>> _logger;
         protected abstract string QueueName { get; }
         protected Func<Task>? TimerMethode { get; set; }
 
         public ConsumerBase(
             ConnectionProvider connectionProvider,
-            ILogger<ConsumerBase> consumerLogger,
+            ILogger<ConsumerBase<T>> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
             base(connectionProvider, logger)
         {
             _logger = consumerLogger;
         }
 
-        protected virtual async Task OnEventReceived<T>(object sender, BasicDeliverEventArgs @event)
+        protected virtual async Task OnEventReceived(object sender, BasicDeliverEventArgs @event)
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
@@ -65,7 +65,7 @@ namespace Crm.Link.RabbitMq.Common
             }
         }
 
-        protected abstract void HandelMessage<T>(T messageObject);
+        protected abstract void HandelMessage(T messageObject); 
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)

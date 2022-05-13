@@ -1,6 +1,6 @@
 ﻿using Crm.Link.RabbitMq.Messages;
 
-namespace Crm.Link.RabbitMq.Producer
+namespace Crm.Link.RabbitMq.Messages
 {
     public class SessionEvent
     {

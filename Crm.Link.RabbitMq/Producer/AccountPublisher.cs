@@ -1,4 +1,5 @@
 ﻿using Crm.Link.RabbitMq.Common;
+using Crm.Link.RabbitMq.Messages;
 using Microsoft.Extensions.Logging;
 
 namespace Crm.Link.RabbitMq.Producer

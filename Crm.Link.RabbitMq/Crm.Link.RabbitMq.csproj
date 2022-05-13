@@ -14,4 +14,8 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Crm.Link.Suitcrm.Tools\Crm.Link.Suitcrm.Tools.csproj" />
+  </ItemGroup>
+
 </Project>

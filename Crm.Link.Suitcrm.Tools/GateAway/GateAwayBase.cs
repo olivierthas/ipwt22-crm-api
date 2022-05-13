@@ -5,14 +5,14 @@ using System.Text;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public abstract class GateAwayBase : IGateAwayBase
+    public abstract class GateAwayBase<T> : IGateAwayBase<T> where T : ModuleModel
     {
         protected abstract string Module { get; }
 
         protected HttpClient? HttpClient { get; set; }
         protected string? Token { get; set; }
 
-        protected async Task<HttpContent> CreateContent(ModuleModel moduleModel)
+        protected HttpContent CreateContent(T moduleModel)
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
@@ -22,9 +22,9 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             return stringContent;
         }
 
-        public virtual async Task<HttpResponseMessage> CreateOrUpdate(ModuleModel moduleModel)
+        public virtual async Task<HttpResponseMessage> CreateOrUpdate(T moduleModel)
         {
-            var content = await CreateContent(moduleModel);
+            var content = CreateContent(moduleModel);
             return await HttpClient!.PostAsync($"/api/v8/modules/{Module}", content);
         }
 

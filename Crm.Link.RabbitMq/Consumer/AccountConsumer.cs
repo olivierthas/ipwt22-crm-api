@@ -1,26 +1,32 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Producer;
+using Crm.Link.RabbitMq.Messages;
+using Crm.Link.Suitcrm.Tools.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Crm.Link.Suitcrm.Tools.GateAway;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
-    public class AccountConsumer : ConsumerBase, IHostedService
+    public class AccountConsumer : ConsumerBase<AttendeeEvent>, IHostedService
     {
         
         protected override string QueueName => "Accounts";
-        private readonly ILogger<AccountConsumer> accountLogger;
+        private readonly ILogger<AccountConsumer> _accountLogger;
+        private readonly IAccountGateAway _accountGateAway;
 
         public AccountConsumer(
             ConnectionProvider connectionProvider,
             ILogger<AccountConsumer> accountLogger,
-            ILogger<ConsumerBase> consumerLogger,
-            ILogger<RabbitMqClientBase> logger) :
+            ILogger<ConsumerBase<AttendeeEvent>> consumerLogger,
+            ILogger<RabbitMqClientBase> logger,
+            IAccountGateAway accountGateAway) :
             base(connectionProvider, consumerLogger, logger)
         {
-            this.accountLogger = accountLogger;
+            _accountLogger = accountLogger;
+            _accountGateAway = accountGateAway;
             TimerMethode += async () => await StartAsync(new CancellationToken(false));  
         }
 
@@ -31,12 +37,12 @@ namespace Crm.Link.RabbitMq.Consumer
                 try
                 {
                     var consumer = new AsyncEventingBasicConsumer(Channel);
-                    consumer.Received += OnEventReceived<AttendeeEvent>;
+                    consumer.Received += OnEventReceived;
                     Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
                 }
                 catch (Exception ex)
                 {
-                    accountLogger.LogCritical(ex, "Error while consuming message");
+                    _accountLogger.LogCritical(ex, "Error while consuming message");
                 }
             }
             else
@@ -54,9 +60,22 @@ namespace Crm.Link.RabbitMq.Consumer
 
         /// need to inject methode from top level class
         /// 
-        protected override void HandelMessage<AttendeeEvent>(AttendeeEvent messageObject)
+        protected override void HandelMessage(AttendeeEvent messageObject)
         {
-            throw new NotImplementedException();
+            // Call UUId Do Stuff
+            // 
+            // Map Data
+            //
+            var test = new AttendeeEvent();
+            var crmObject = new AccountModel
+            {
+                // if already exist add id for update
+                // Id = 
+                Name = $"{messageObject.Name} {messageObject.LastName}",
+                Email = messageObject.Email,
+            };
+            // Send To crm
+            _accountGateAway.CreateOrUpdate(crmObject);
         }
     }
 }

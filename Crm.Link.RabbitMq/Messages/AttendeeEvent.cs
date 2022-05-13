@@ -1,6 +1,4 @@
-﻿using Crm.Link.RabbitMq.Messages;
-
-namespace Crm.Link.RabbitMq.Producer
+﻿namespace Crm.Link.RabbitMq.Messages
 {
     public class AttendeeEvent
     {
@@ -16,6 +14,6 @@ namespace Crm.Link.RabbitMq.Producer
         public string? Name { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }
-        public string? VatNumber { get; set; } = "";        
+        public string? VatNumber { get; set; } = "";
     }
 }
