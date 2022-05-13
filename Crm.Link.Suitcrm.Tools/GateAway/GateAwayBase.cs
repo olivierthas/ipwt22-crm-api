@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public abstract class GateAwayBase<T> : IGateAwayBase<T> where T : ModuleModel
+    public abstract class GateAwayBase<T> : IGateAwayBase<T> where T : ICrmModel
     {
         protected abstract string Module { get; }
 

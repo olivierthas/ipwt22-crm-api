@@ -2,7 +2,7 @@
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public class AccountGateAway : GateAwayBase, IAccountGateAway
+    public class AccountGateAway : GateAwayBase<AccountModel>, IAccountGateAway
     {
         protected override string Module => "Accounts";
         public AccountGateAway(IHttpClientFactory httpClientFactory, TokenProvider tokenProvider)
