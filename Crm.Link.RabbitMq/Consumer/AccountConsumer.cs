@@ -62,11 +62,21 @@ namespace Crm.Link.RabbitMq.Consumer
         /// 
         protected override void HandelMessage(AttendeeEvent messageObject)
         {
+            switch (messageObject.Methode)
+            {
+                case MethodeEnum.CREATE:
+                    break;
+                case MethodeEnum.UPDATE:
+                    break;
+                case MethodeEnum.DELETE:
+                    break;
+                default:
+                    break;
+            }
+
             // Call UUId Do Stuff
             // 
-            // Map Data
-            //
-            var test = new AttendeeEvent();
+            // Map Data 
             var crmObject = new AccountModel
             {
                 // if already exist add id for update

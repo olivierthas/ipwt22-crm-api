@@ -1,4 +1,5 @@
 ﻿using Crm.Link.RabbitMq.Common;
+using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ using RabbitMQ.Client.Events;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
-    public class SessionConsumer : ConsumerBase, IHostedService
+    public class SessionConsumer : ConsumerBase<SessionEvent>, IHostedService
     {
         private readonly ILogger<SessionConsumer> sessionLogger;
 
@@ -16,7 +17,7 @@ namespace Crm.Link.RabbitMq.Consumer
         public SessionConsumer(
             ConnectionProvider connectionProvider,
             ILogger<SessionConsumer> sessionLogger,
-            ILogger<ConsumerBase> consumerLogger,
+            ILogger<ConsumerBase<SessionEvent>> consumerLogger,
             ILogger<RabbitMqClientBase> logger) :
             base(connectionProvider, consumerLogger, logger)
         {
@@ -31,7 +32,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     try
                 {
                     var consumer = new AsyncEventingBasicConsumer(Channel);
-                    consumer.Received += OnEventReceived<SessionEvent>;
+                    consumer.Received += OnEventReceived;
                     Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
                 }
                 catch (Exception ex)
@@ -54,9 +55,19 @@ namespace Crm.Link.RabbitMq.Consumer
             return Task.CompletedTask;
         }
 
-        protected override void HandelMessage<T>(T messageObject)
+        protected override void HandelMessage(SessionEvent messageObject)
         {
-            throw new NotImplementedException();
+            switch (messageObject.Methode)
+            {
+                case MethodeEnum.CREATE:
+                    break;
+                case MethodeEnum.UPDATE:
+                    break;
+                case MethodeEnum.DELETE:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

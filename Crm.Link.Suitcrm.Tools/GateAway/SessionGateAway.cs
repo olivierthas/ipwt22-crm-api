@@ -1,6 +1,8 @@
-﻿namespace Crm.Link.Suitcrm.Tools.GateAway
+﻿using Crm.Link.Suitcrm.Tools.Models;
+
+namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public class SessionGateAway : GateAwayBase, ISessionGateAway
+    public class SessionGateAway : GateAwayBase<MeetingModel>, ISessionGateAway
     {
         protected override string Module => "Meetings";
 
