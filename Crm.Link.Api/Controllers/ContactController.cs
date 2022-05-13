@@ -1,4 +1,4 @@
-﻿using Crm.Link.Api.GateAway;
+using Crm.Link.Api.GateAway;
 using Crm.Link.Api.Models;
 using Crm.Link.RabbitMq.Producer;
 using Microsoft.AspNetCore.Mvc;
@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crm.Link.Api.Controllers
 {
     [ApiController]
-    [Route("api/account")]
-    public class AccountController : ControllerBase
+    [Route("api/contact")]
+    public class ContactController : ControllerBase
     {
         private readonly IAccountGateAway accountGateAway;
         private readonly AccountPublisher accountPublisher;
 
-        public AccountController(IAccountGateAway accountGateAway, AccountPublisher accountPublisher)
+        public ContactController(IAccountGateAway accountGateAway, AccountPublisher accountPublisher)
         {
 
             this.accountGateAway = accountGateAway;
@@ -28,22 +28,21 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPost]
         [Route(nameof(Create))]
-        public async Task<IActionResult> Create(AccountModel account)
+        public async Task<IActionResult> Create(ContactModel contact)
         {
-            _ = account ?? throw new ArgumentNullException(nameof(account));
+            _ = contact ?? throw new ArgumentNullException(nameof(contact));
             // map data naar xml
 
-            var @event = new AttendeeEvent
+            var @event = new ContactEvent
             {
                 UUID = Guid.NewGuid().ToString(), // get uuid from uuidmaster
                 Methode = RabbitMq.Messages.MethodeEnum.CREATE,
-                Name = account.Name,
-                LastName = account.Name,
-                Email = account.Email,
-                VatNumber = "",
+                FirstName = contact.FirstName,
+                LastName = contact.LastName,
+                Email = contact.Email,
+                Phone = contact.Phone,
                 Version = 1,
-            };
-
+    };
             accountPublisher.Publish(@event);
             return Ok();
         }
@@ -52,10 +51,10 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _ = account ?? throw new ArgumentNullException(nameof(account));
+            _ = Contact ?? throw new ArgumentNullException(nameof(contact));
             // map data naar xml
 
-            var @event = new AccountEvent
+            var @event = new ContactEvent
             {
                 UUID = Guid.GetGuid(id).ToString(), // haal bijhorende UUID op
                 Methode = RabbitMq.Messages.MethodeEnum.DELETE,
