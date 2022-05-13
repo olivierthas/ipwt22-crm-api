@@ -1,11 +1,20 @@
-﻿namespace Crm.Link.Api.Configuration.Httpclient
+﻿using Crm.Link.Suitcrm.Tools.GateAway;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Crm.Link.Suitcrm.Tools
 {
-    public static class ConfigureHttpClient
+    public static class CrmToolsConfig
     {
-        /*public static IServiceCollection AddHttpClientFactory(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection UseCrmTools(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<TokenProvider>();
+
+            services.AddTransient<IAccountGateAway, AccountGateAway>();
+            services.AddTransient<ISessionGateAway, SessionGateAway>();
+
             var uri = configuration.GetConnectionString("crm_url");
-            service.AddHttpClient("Crm", client =>
+            services.AddHttpClient("Crm", client =>
             {
                 client.BaseAddress = new Uri(uri);
                 client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue { NoCache = true };
@@ -15,7 +24,7 @@
                 client.DefaultRequestHeaders.Add("Connection", "keep-alive");
             });
 
-            return service;
-        }*/
+            return services;
+        }
     }
 }

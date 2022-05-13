@@ -53,5 +53,10 @@ namespace Crm.Link.RabbitMq.Consumer
 
             return Task.CompletedTask;
         }
+
+        protected override void HandelMessage<T>(T messageObject)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

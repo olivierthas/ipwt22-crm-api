@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crm.Link.RabbitMq\Crm.Link.RabbitMq.csproj" />
+    <ProjectReference Include="..\Crm.Link.Suitcrm.Tools\Crm.Link.Suitcrm.Tools.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -46,9 +46,12 @@ namespace Crm.Link.RabbitMq.Common
             if (_connection is not null && (Channel == null || Channel.IsOpen == false))
             {
                 Channel = _connection.CreateModel();
-                Channel.ExchangeDeclare(exchange: LoggerExchange, type: ExchangeType.Direct, durable: true, autoDelete: false);
+
+                Channels.Create(Channel);
+
+                /*Channel.ExchangeDeclare(exchange: LoggerExchange, type: ExchangeType.Direct, durable: true, autoDelete: false);
                 Channel.QueueDeclare(queue: LoggerQueue, durable: false, exclusive: false, autoDelete: false);
-                Channel.QueueBind(queue: LoggerQueue, exchange: LoggerExchange, routingKey: LoggerQueueAndExchangeRoutingKey);
+                Channel.QueueBind(queue: LoggerQueue, exchange: LoggerExchange, routingKey: LoggerQueueAndExchangeRoutingKey);*/
             }
         }
 

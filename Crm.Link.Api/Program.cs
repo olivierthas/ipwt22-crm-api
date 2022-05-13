@@ -1,7 +1,7 @@
 using Crm.Link.Api;
 using Crm.Link.Api.Configuration.Httpclient;
 using Crm.Link.RabbitMq.Configuration;
-using Crm.Link.RabbitMq.Consumer;
+using Crm.Link.Suitcrm.Tools;
 using Newtonsoft.Json.Converters;
 using Serilog;
 
@@ -12,7 +12,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     var configuration = builder.Configuration;
-    
+
     builder.Host.AddCrmLogging();
 
     // builder.Services.AddCrmAuthentication(configuration);
@@ -23,9 +23,9 @@ try
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     });
-    builder.Services.AddHttpClientFactory(configuration);
+    // builder.Services.AddHttpClientFactory(configuration);
+    builder.Services.UseCrmTools(configuration);
     builder.Services.AddOpenApi();
-    builder.Services.UsePersistence(configuration);
 
     // configuration rabbitmq
     builder.Services.StartConsumers(configuration.GetConnectionString("RabbitMq"));
@@ -34,7 +34,7 @@ try
     var app = builder.Build();
 
     app.UseCrmLoggng();
-    
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment() || true)
     {

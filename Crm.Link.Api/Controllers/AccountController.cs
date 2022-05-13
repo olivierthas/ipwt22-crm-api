@@ -1,6 +1,6 @@
-﻿using Crm.Link.Api.GateAway;
-using Crm.Link.Api.Models;
-using Crm.Link.RabbitMq.Producer;
+﻿using Crm.Link.RabbitMq.Producer;
+using Crm.Link.Suitcrm.Tools.GateAway;
+using Crm.Link.Suitcrm.Tools.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Link.Api.Controllers
