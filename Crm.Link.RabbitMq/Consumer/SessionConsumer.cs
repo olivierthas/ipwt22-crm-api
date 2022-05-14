@@ -57,7 +57,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected override void HandelMessage(SessionEvent messageObject)
         {
-            switch (messageObject.Methode)
+            switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
                     break;

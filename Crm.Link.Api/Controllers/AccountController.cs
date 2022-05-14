@@ -1,4 +1,5 @@
-﻿using Crm.Link.RabbitMq.Producer;
+﻿using Crm.Link.RabbitMq.Messages;
+using Crm.Link.RabbitMq.Producer;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.Suitcrm.Tools.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,17 +34,21 @@ namespace Crm.Link.Api.Controllers
             _ = account ?? throw new ArgumentNullException(nameof(account));
             // map data naar xml
 
-            var @event = new AttendeeEvent
+            // call uuid and get uuid_nr
+            var @event = new AccountEvent
             {
-                UUID = Guid.NewGuid().ToString(), // get uuid from uuidmaster
-                Methode = RabbitMq.Messages.MethodEnum.CREATE,
-                Name = account.Name,
-                LastName = account.Name,
-                Email = account.Email,
-                VatNumber = "",
+                UUID_Nr = 0.ToString(),
+                EntityType = "",
+                EntityVersion = 1, // if uuid dint exist
                 Version = 1,
+                Name = account.Name,
+                LastName = "",
+                Email = account.Email,
+                Method = MethodEnum.CREATE, // if version is 1
+                Source = SourceEnum.CRM,
+                SourceEntityId = 0, // account.Id,
             };
-
+            
             accountPublisher.Publish(@event);
             return Ok();
         }
@@ -52,6 +57,16 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
+            // do a delete on uuid ? softDelete?
+            // 
+
+            var @event = new AccountEvent
+            {
+                UUID_Nr = "",
+                Method = MethodEnum.DELETE,
+            };
+
+            accountPublisher.Publish(@event);
             return Ok();
         }
 
@@ -59,6 +74,24 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Update))]
         public async Task<IActionResult> Update(AccountModel account)
         {
+            // call uuid 
+            // get version number
+            var @event = new AccountEvent
+            {
+                UUID_Nr = 0.ToString(),
+                EntityType = "",
+                EntityVersion = 20,
+                Version = 1,
+                Name = account.Name,
+                LastName = "",
+                Email = account.Email,
+                Method = MethodEnum.UPDATE,
+                Source = SourceEnum.CRM,
+                SourceEntityId = 0, // account.Id, WTF we dont need this
+            };
+
+            accountPublisher.Publish(@event);
+
             return Ok();
         }
     }
