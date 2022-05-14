@@ -10,7 +10,7 @@ using Crm.Link.Suitcrm.Tools.GateAway;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
-    public class AccountConsumer : ConsumerBase<AttendeeEvent>, IHostedService
+    public class AccountConsumer : ConsumerBase<AccountEvent>, IHostedService
     {
         
         protected override string QueueName => "Accounts";
@@ -20,7 +20,7 @@ namespace Crm.Link.RabbitMq.Consumer
         public AccountConsumer(
             ConnectionProvider connectionProvider,
             ILogger<AccountConsumer> accountLogger,
-            ILogger<ConsumerBase<AttendeeEvent>> consumerLogger,
+            ILogger<ConsumerBase<AccountEvent>> consumerLogger,
             ILogger<RabbitMqClientBase> logger,
             IAccountGateAway accountGateAway) :
             base(connectionProvider, consumerLogger, logger)
@@ -60,16 +60,10 @@ namespace Crm.Link.RabbitMq.Consumer
 
         /// need to inject methode from top level class
         /// 
-        protected override void HandelMessage(AttendeeEvent messageObject)
+        protected override void HandelMessage(AccountEvent messageObject)
         {
-            switch (messageObject.Methode)
+            switch (messageObject.Method)
             {
-                case MethodeEnum.CREATE:
-                    break;
-                case MethodeEnum.UPDATE:
-                    break;
-                case MethodeEnum.DELETE:
-                    break;
                 default:
                     break;
             }

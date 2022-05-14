@@ -2,10 +2,10 @@
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.210.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("AttendeeEvent", Namespace = "", AnonymousType = true)]
+    [System.Xml.Serialization.XmlTypeAttribute("AccountEvent", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlRootAttribute("AttendeeEvent", Namespace = "")]
-    public partial class AttendeeEvent
+    [System.Xml.Serialization.XmlRootAttribute("AccountEvent", Namespace = "")]
+    public partial class AccountEvent
     {
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
@@ -42,5 +42,9 @@
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[^@]+@[^\\.]+\\..+")]
         [System.Xml.Serialization.XmlElementAttribute("Email", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string Email { get; set; }
+
+        [System.ComponentModel.DataAnnotations.MinLengthAttribute(12)]
+        [System.Xml.Serialization.XmlElementAttribute("VatNumber", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = true)]
+        public string VatNumber { get; set; }
     }
 }

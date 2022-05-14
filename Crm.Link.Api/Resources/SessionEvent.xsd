@@ -4,6 +4,64 @@
         <xs:complexType>
             <xs:sequence>
 
+             <!-- GUID moet min bestaan uit 32 karakters -->
+                <xs:element name="UUID_nr" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="32"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- SourceEntityId moet hoger dan 0 zijn -->
+                <xs:element name="SourceEntityId">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minExclusive value="0" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- EntityType max toegelaten karakters = 30 -->
+                <xs:element name="EntityType" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="30"></xs:maxLength>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- EntityVersion moet hoger zijn dan 0 -->
+                <xs:element name="EntityVersion" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minExclusive value="0" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Source kan enkel frontend, crm of planning bevatten -->
+                <xs:element name="Source">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+							<xs:enumeration value="FRONTEND" />
+							<xs:enumeration value="CRM" />
+							<xs:enumeration value="PLANNING" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Method kan enkel CRUD bevatten -->
+                <xs:element name="Method">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+							<xs:enumeration value="CREATE" />
+							<xs:enumeration value="UPDATE" />
+							<xs:enumeration value="DELETE" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
                 <!-- Version moet hoger dan 0 zijn -->
                 <xs:element name="Version" >
                     <xs:simpleType>
@@ -36,17 +94,7 @@
                     </xs:simpleType>
                 </xs:element>
 
-                <!-- Description mag max 100 karakters hebben, whitespace = preserved -->
-                <xs:element name="Description">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="75"/> 
-                            <xs:whiteSpace value="preserve"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-
-                 <!-- OrganiserUUID moet min 32 karakters hebben -->
+                <!-- OrganiserUUID moet min 32 karakters hebben -->
                  <xs:element name="OrganiserUUID">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -58,8 +106,7 @@
                  <!-- IsActive kan enkel 0 of 1 zijn -->
                  <xs:element name="IsActive">
                     <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="0|1"/>
+                        <xs:restriction base="xs:boolean">							
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>

@@ -59,11 +59,11 @@ namespace Crm.Link.RabbitMq.Consumer
         {
             switch (messageObject.Methode)
             {
-                case MethodeEnum.CREATE:
+                case MethodEnum.CREATE:
                     break;
-                case MethodeEnum.UPDATE:
+                case MethodEnum.UPDATE:
                     break;
-                case MethodeEnum.DELETE:
+                case MethodEnum.DELETE:
                     break;
                 default:
                     break;

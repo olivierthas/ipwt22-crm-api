@@ -2,11 +2,11 @@
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "2.0.210.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute("InvitationStatus", Namespace = "")]
-    public enum InvitationStatusEnum
+    [System.Xml.Serialization.XmlTypeAttribute("Method", Namespace = "")]
+    public enum MethodEnum
     {
-        PENDING,
-        ACCEPTED,
-        DECLINED,
+        CREATE,
+        UPDATE,
+        DELETE,
     }
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="SessionAttendeeEvent">
+    <xs:element name="AccountEvent">
         <xs:complexType>
             <xs:sequence>
 
-             <!-- GUID moet min bestaan uit 32 karakters -->
+            <!-- GUID moet min bestaan uit 32 karakters -->
                 <xs:element name="UUID_nr" >
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -62,35 +62,52 @@
                     </xs:simpleType>
                 </xs:element>
 
-               
-                  <!-- AttendeeUUID moet min 32 karakters hebben -->
-                  <xs:element name="AttendeeUUID">
+                <!-- Version moet hoger dan 0 zijn -->
+                <xs:element name="Version" >
                     <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:minLength value="32"/>
+                        <xs:restriction base="xs:decimal">
+                            <xs:minExclusive value="0" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
 
-                  <!-- SessionUUID moet min 32 karakters hebben -->
-                  <xs:element name="SessionUUID">
+                <!-- Name max toegelaten karakters = 30 -->
+                <xs:element name="Name">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:minLength value="32"/>
+                            <xs:maxLength value="30"></xs:maxLength>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
 
-                    <!-- InvitationStatus kan enkel pending, accepted of declined zijn -->
-                    <xs:element name="InvitationStatus">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-								<xs:enumeration value="PENDING" />
-								<xs:enumeration value="ACCEPTED" />
-								<xs:enumeration value="DECLINED" />
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:element>
+                <!-- LastName max toegelaten karakters = 50 -->
+                <xs:element name="LastName" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="50"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- Email volgens email pattern-->
+                <xs:element name="Email" >
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <!-- VatNumber moet min 12 karakters hebben, whitespace = collapsed
+                element = optional + element = not required -->
+                <xs:element name="VatNumber" nillable="true" minOccurs="0">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="12"/> 
+                            <xs:whiteSpace value="collapse"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
 
             </xs:sequence>
         </xs:complexType>

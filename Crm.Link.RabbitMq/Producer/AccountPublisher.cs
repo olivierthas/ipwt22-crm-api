@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Crm.Link.RabbitMq.Producer
 {
-    public class AccountPublisher : ProducerBase<AttendeeEvent>
+    public class AccountPublisher : ProducerBase<AccountEvent>
     {
         public AccountPublisher(
             ConnectionProvider connectionProvider,
             ILogger<RabbitMqClientBase> logger,
-            ILogger<ProducerBase<AttendeeEvent>> producerBaseLogger)
+            ILogger<ProducerBase<AccountEvent>> producerBaseLogger)
             : base(connectionProvider, logger, producerBaseLogger)
         {
         }
