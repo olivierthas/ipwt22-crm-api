@@ -16,8 +16,7 @@
                 <!-- SourceEntityId moet hoger dan 0 zijn -->
                 <xs:element name="SourceEntityId">
                     <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:minExclusive value="0" />
+                        <xs:restriction base="xs:string">
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -34,7 +33,7 @@
                 <!-- EntityVersion moet hoger zijn dan 0 -->
                 <xs:element name="EntityVersion" >
                     <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
+                        <xs:restriction base="xs:integer">
                             <xs:minExclusive value="0" />
                         </xs:restriction>
                     </xs:simpleType>
@@ -58,15 +57,6 @@
 							<xs:enumeration value="CREATE" />
 							<xs:enumeration value="UPDATE" />
 							<xs:enumeration value="DELETE" />
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-
-                <!-- Version moet hoger dan 0 zijn -->
-                <xs:element name="Version" >
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:minExclusive value="0" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>

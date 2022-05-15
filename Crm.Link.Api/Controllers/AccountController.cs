@@ -22,14 +22,14 @@ namespace Crm.Link.Api.Controllers
 
         [HttpGet]
         [Route(nameof(Test))]
-        public async Task<IActionResult> Test()
+        public IActionResult Test()
         {
             return Ok();
         }
 
         [HttpPost]
         [Route(nameof(Create))]
-        public async Task<IActionResult> Create(AccountModel account)
+        public IActionResult Create(AccountModel account)
         {
             _ = account ?? throw new ArgumentNullException(nameof(account));
             // map data naar xml
@@ -39,8 +39,7 @@ namespace Crm.Link.Api.Controllers
             {
                 UUID_Nr = 0.ToString(),
                 EntityType = "",
-                EntityVersion = 1, // if uuid dint exist
-                Version = 1,
+                EntityVersion = 1,
                 Name = account.Name,
                 LastName = "",
                 Email = account.Email,
@@ -55,7 +54,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpDelete]
         [Route(nameof(Delete) + "{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
             // do a delete on uuid ? softDelete?
             // 
@@ -72,7 +71,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPut]
         [Route(nameof(Update))]
-        public async Task<IActionResult> Update(AccountModel account)
+        public IActionResult Update(AccountModel account)
         {
             // call uuid 
             // get version number
