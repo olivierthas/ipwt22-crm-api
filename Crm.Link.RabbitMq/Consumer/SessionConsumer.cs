@@ -12,7 +12,7 @@ namespace Crm.Link.RabbitMq.Consumer
     {
         private readonly ILogger<SessionConsumer> sessionLogger;
 
-        protected override string QueueName => "Session";
+        protected override string QueueName => "CrmSession";
 
         public SessionConsumer(
             ConnectionProvider connectionProvider,

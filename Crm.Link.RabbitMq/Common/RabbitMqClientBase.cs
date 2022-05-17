@@ -8,7 +8,7 @@ namespace Crm.Link.RabbitMq.Common
     public class RabbitMqClientBase : IDisposable
     {
         // Configuration to create ques and echange need to move
-        protected const string VirtualHost = "INTEGRATION_HOST";
+        protected const string VirtualHost = "/";
         protected readonly string LoggerExchange = $"{VirtualHost}.Exchange"; // declare of the echange
         protected readonly string LoggerQueue = $"{VirtualHost}.message"; // declare of queus
         protected const string LoggerQueueAndExchangeRoutingKey = "message"; // message key

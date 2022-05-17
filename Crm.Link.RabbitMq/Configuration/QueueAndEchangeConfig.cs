@@ -6,9 +6,10 @@
         {
             {"CrmAccount", new[] { "PlanningAccount", "FrontAccount" } },
             {"CrmSession", new[] { "PlanningSession", "FrontSession" } },
-            {"CrmAccountSession", new[] { "PlanningSession", "FrontSession" } },
-            {"None", new[] { "CrmAccount", "CrmSession", "CrmAccountSession"} }
-
+            {"CrmAccountSession", new[] { "PlanningAccountSession", "FrontAccountSession" } },
+            {"CrmAttendee", new[] { "PlanningAttendee", "FrontAttendee" } },
+            {"CrmAttendeeSession", new[] { "PlanningAttendeeSession", "FrontAttendeeSession" } },
+            {"None", new[] { "CrmAccount", "CrmSession", "CrmAccountSession", "CrmAttendee", "CrmAttendeeSession" } }
         };
     }
 }
