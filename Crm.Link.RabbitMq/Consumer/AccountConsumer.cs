@@ -13,7 +13,7 @@ namespace Crm.Link.RabbitMq.Consumer
     public class AccountConsumer : ConsumerBase<AccountEvent>, IHostedService
     {
         
-        protected override string QueueName => "CrmAccounts";
+        protected override string QueueName => "CrmAccount";
         private readonly ILogger<AccountConsumer> _accountLogger;
         private readonly IAccountGateAway _accountGateAway;
 
