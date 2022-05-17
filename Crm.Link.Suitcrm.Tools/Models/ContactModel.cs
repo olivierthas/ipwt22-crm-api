@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Crm.Link.Api.Models
+namespace Crm.Link.Suitcrm.Tools.Models
 {
     public class ContactModel : ICrmModel
     {

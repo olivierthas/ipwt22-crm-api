@@ -1,6 +1,7 @@
-using Crm.Link.Api.GateAway;
-using Crm.Link.Api.Models;
+using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
+using Crm.Link.Suitcrm.Tools.GateAway;
+using Crm.Link.Suitcrm.Tools.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Link.Api.Controllers
@@ -33,17 +34,16 @@ namespace Crm.Link.Api.Controllers
             _ = contact ?? throw new ArgumentNullException(nameof(contact));
             // map data naar xml
 
-            var @event = new ContactEvent
+            var @event = new AttendeeEvent
             {
-                UUID = Guid.NewGuid().ToString(), // get uuid from uuidmaster
-                Methode = RabbitMq.Messages.MethodeEnum.CREATE,
-                FirstName = contact.FirstName,
+                UUID_Nr = Guid.NewGuid().ToString(), // get uuid from uuidmaster
+                Method = MethodEnum.CREATE,
+                Name = contact.FirstName,
                 LastName = contact.LastName,
                 Email = contact.Email,
-                Phone = contact.Phone,
                 Version = 1,
     };
-            accountPublisher.Publish(@event);
+            ///accountPublisher.Publish(@event);
             return Ok();
         }
 
@@ -51,15 +51,14 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _ = Contact ?? throw new ArgumentNullException(nameof(contact));
             // map data naar xml
 
-            var @event = new ContactEvent
+            var @event = new AttendeeEvent
             {
-                UUID = Guid.GetGuid(id).ToString(), // haal bijhorende UUID op
-                Methode = RabbitMq.Messages.MethodeEnum.DELETE,
+                UUID_Nr = "", // haal bijhorende UUID op
+                Method = MethodEnum.DELETE,
             };
-            accountPublisher.Publish(@event);
+            //ContactPublisher.Publish(@event);
             return Ok();
         }
 

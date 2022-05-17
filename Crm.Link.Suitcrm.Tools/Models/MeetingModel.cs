@@ -1,4 +1,6 @@
-﻿namespace Crm.Link.Suitcrm.Tools.Models
+﻿using Newtonsoft.Json;
+
+namespace Crm.Link.Suitcrm.Tools.Models
 {
     public class MeetingModel : ICrmModel
     {
@@ -15,10 +17,10 @@
         public string? Location { get; set; }
 
         [JsonProperty("date_start")]
-        public string? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [JsonProperty("date_end")]
-        public string? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         [JsonProperty("outlook_ID")]
         public string? OutlookID { get; set; }

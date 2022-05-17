@@ -37,6 +37,7 @@ namespace Crm.Link.RabbitMq.Configuration
         {
             services.AddSingleton<AccountPublisher>();
             services.AddSingleton<SessionPublisher>();
+            services.AddSingleton<ContactPublisher>();
 
             return services;
         }
