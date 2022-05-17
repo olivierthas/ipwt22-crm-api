@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["Crm.Link.Api/Crm.Link.Api.csproj", "Crm.Link.Api/"]
 COPY ["Crm.Link.RabbitMq/Crm.Link.RabbitMq.csproj", "Crm.Link.RabbitMq/"]
 COPY ["Crm.Link.Suitcrm.Tools/Crm.Link.Suitcrm.Tools.csproj", "Crm.Link.Suitcrm.Tools/"]
-RUN dotnet restore "Crm.LinkApi/Crm.LinkApi.csproj"
+RUN dotnet restore "Crm.Link.Api/Crm.Link.Api.csproj"
 COPY . .
 WORKDIR "/src/Crm.Link.Api"
 RUN dotnet build "Crm.Link.Api.csproj" -c Release -o /app/build
