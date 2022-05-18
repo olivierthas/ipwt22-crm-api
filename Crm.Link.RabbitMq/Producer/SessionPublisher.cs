@@ -14,9 +14,9 @@ namespace Crm.Link.RabbitMq.Producer
         {
         }
 
-        protected override string ExchangeName => "Session";
+        protected override string ExchangeName => "CrmSession";
 
-        protected override string RoutingKeyName => "Weet ik niet";
+        protected override string RoutingKeyName => "";
 
         protected override string AppId => "Crm";
     }

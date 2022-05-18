@@ -10,7 +10,7 @@ namespace Crm.Link.RabbitMq.Producer
         {
         }
 
-        protected override string ExchangeName => "Contact";
+        protected override string ExchangeName => "CrmAttendee";
 
         protected override string RoutingKeyName => "";
 

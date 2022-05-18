@@ -11,13 +11,12 @@ namespace Crm.Link.Api.Controllers
     public class ContactController : ControllerBase
     {
         private readonly IAccountGateAway accountGateAway;
-        private readonly AccountPublisher accountPublisher;
+        private readonly ContactPublisher contactPublisher;
 
-        public ContactController(IAccountGateAway accountGateAway, AccountPublisher accountPublisher)
+        public ContactController(IAccountGateAway accountGateAway, ContactPublisher contactPublisher)
         {
-
             this.accountGateAway = accountGateAway;
-            this.accountPublisher = accountPublisher;
+            this.contactPublisher = contactPublisher;
         }
 
         [HttpGet]
@@ -43,7 +42,7 @@ namespace Crm.Link.Api.Controllers
                 Email = contact.Email,
                 Version = 1,
     };
-            ///accountPublisher.Publish(@event);
+            contactPublisher.Publish(@event);
             return Ok();
         }
 
