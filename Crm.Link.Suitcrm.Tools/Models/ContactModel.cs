@@ -4,6 +4,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
 {
     public class ContactModel : ICrmModel
     {
+
         [JsonProperty("id")]
         public string? Id { get; set; }
 

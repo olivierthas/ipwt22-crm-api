@@ -40,7 +40,6 @@ namespace Crm.Link.Api.Controllers
                 Name = contact.FirstName,
                 LastName = contact.LastName,
                 Email = contact.Email,
-                Version = 1,
     };
             contactPublisher.Publish(@event);
             return Ok();
@@ -63,8 +62,21 @@ namespace Crm.Link.Api.Controllers
 
         [HttpPut]
         [Route(nameof(Update))]
-        public async Task<IActionResult> Update(AccountModel account)
+        public async Task<IActionResult> Update(ContactModel account)
         {
+            _ = account ?? throw new ArgumentNullException(nameof(account));
+            // map data naar xml
+
+            var @event = new AttendeeEvent
+            {
+                UUID_Nr = Guid.NewGuid().ToString(), // get uuid from uuidmaster
+                Method = MethodEnum.CREATE,
+                Name = account.FirstName,
+                LastName= account.LastName,
+                Email = account.Email,
+            };
+            contactPublisher.Publish(@event);
+
             return Ok();
         }
     }

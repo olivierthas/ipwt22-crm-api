@@ -2,6 +2,7 @@
 using Crm.Link.RabbitMq.Producer;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.Suitcrm.Tools.Models;
+using Crm.Link.UUID;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Link.Api.Controllers
@@ -10,14 +11,19 @@ namespace Crm.Link.Api.Controllers
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountGateAway accountGateAway;
-        private readonly AccountPublisher accountPublisher;
+        private readonly IAccountGateAway _accountGateAway;
+        private readonly AccountPublisher _accountPublisher;
+        private readonly IUUIDGateAway _uUIDGateAway;
 
-        public AccountController(IAccountGateAway accountGateAway, AccountPublisher accountPublisher)
+        public AccountController(
+            IAccountGateAway accountGateAway,
+            AccountPublisher accountPublisher,
+            IUUIDGateAway uUIDGateAway)
         {
 
-            this.accountGateAway = accountGateAway;
-            this.accountPublisher = accountPublisher;
+            _accountGateAway = accountGateAway;
+            _accountPublisher = accountPublisher;
+            _uUIDGateAway = uUIDGateAway;
         }
 
         [HttpGet]
@@ -33,23 +39,34 @@ namespace Crm.Link.Api.Controllers
         {
             _ = account ?? throw new ArgumentNullException(nameof(account));
             // map data naar xml
-
-            // call uuid and get uuid_nr
             var @event = new AccountEvent
             {
-                UUID_Nr = 0.ToString(),
-                EntityType = "",
-                EntityVersion = 1, // if uuid dint exist
-                Version = 1,
+                EntityType = "Account",
                 Name = account.Name,
-                LastName = "",
                 Email = account.Email,
-                Method = MethodEnum.CREATE, // if version is 1
                 Source = SourceEnum.CRM,
-                SourceEntityId = 0, // account.Id,
-            };
+                SourceEntityId = account.Id,
+                VatNumber = null
+        };
+
+            var response = await _uUIDGateAway.GetGuid(account.Id, SourceEnum.CRM.ToString(), "Account");
+
+            if (response == null)
+            {
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), "Account", account.Id.ToString(), 1);
+                @event.EntityVersion = 1;
+                @event.UUID_Nr = resp.Uuid.ToString();
+                @event.Method = MethodEnum.CREATE;
+            }
+            else
+            {
+                var resp = await _uUIDGateAway.UpdateEntity(account.Id, SourceEnum.CRM.ToString(), "Account");
+                @event.EntityVersion = resp.EntityVersion;
+                @event.UUID_Nr = resp.Uuid.ToString();
+                @event.Method = MethodEnum.UPDATE;
+            }
             
-            accountPublisher.Publish(@event);
+            _accountPublisher.Publish(@event);
             return Ok();
         }
 
@@ -57,42 +74,15 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            // do a delete on uuid ? softDelete?
-            // 
-
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), "Account");
             var @event = new AccountEvent
             {
-                UUID_Nr = "",
+                UUID_Nr = response.Uuid.ToString(),
                 Method = MethodEnum.DELETE,
             };
 
-            accountPublisher.Publish(@event);
+            _accountPublisher.Publish(@event);
             return Ok();
-        }
-
-        [HttpPut]
-        [Route(nameof(Update))]
-        public async Task<IActionResult> Update(AccountModel account)
-        {
-            // call uuid 
-            // get version number
-            var @event = new AccountEvent
-            {
-                UUID_Nr = 0.ToString(),
-                EntityType = "",
-                EntityVersion = 20,
-                Version = 1,
-                Name = account.Name,
-                LastName = "",
-                Email = account.Email,
-                Method = MethodEnum.UPDATE,
-                Source = SourceEnum.CRM,
-                SourceEntityId = 0, // account.Id, WTF we dont need this
-            };
-
-            accountPublisher.Publish(@event);
-
-            return Ok();
-        }
+        }        
     }
 }

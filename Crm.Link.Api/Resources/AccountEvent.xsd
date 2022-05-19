@@ -4,14 +4,33 @@
         <xs:complexType>
             <xs:sequence>
 
-            <!-- GUID moet min bestaan uit 32 karakters -->
-                <xs:element name="UUID_nr" type ="xs:string"/>
-                
+                <!-- GUID moet min bestaan uit 32 karakters -->
+                <xs:element name="UUID_Nr">
+				    <xs:simpleType>
+					    <xs:restriction base="xs:string">
+						    <xs:maxLength value="32"/>
+					    </xs:restriction>
+				    </xs:simpleType>
+				</xs:element>
+				
                 <!-- SourceEntityId moet hoger dan 0 zijn -->
-                <xs:element name="SourceEntityId" type ="xs:string"/>                
+                <xs:element name="SourceEntityId" type="xs:string"/>
+				    
+				<xs:element name="EntityType">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="30"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
 
                 <!-- EntityVersion moet hoger zijn dan 0 -->
-                <xs:element name="EntityVersion" type ="xs:positiveInteger" />
+				<xs:element name="EntityVersion">
+					<xs:simpleType>
+						<xs:restriction base="xs:nonNegativeInteger">
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
 
                 <!-- Source kan enkel frontend, crm of planning bevatten -->
                 <xs:element name="Source">
@@ -37,9 +56,6 @@
 
                 <!-- Name max toegelaten karakters = 30 -->
                 <xs:element name="Name" type ="xs:string" />
-                   
-                <!-- LastName max toegelaten karakters = 50 -->
-                <xs:element name="LastName" type ="xs:string" />
                    
                 <!-- Email volgens email pattern-->
                 <xs:element name="Email" >

@@ -25,7 +25,6 @@ namespace Crm.Link.Api.Controllers
             var @event = new SessionEvent
             {
                 UUID_Nr = "",
-                Version = 1,
                 EntityVersion = 1,
                 Method = MethodEnum.CREATE,
                 Source = SourceEnum.CRM,
@@ -35,7 +34,7 @@ namespace Crm.Link.Api.Controllers
                 EndDateUTC = meeting.EndDate,
                 IsActive = false,
                 EntityType = "SuperBrol",
-                SourceEntityId = 0.12536845887854m
+                SourceEntityId = meeting.Id
             };
 
             _sessionPublisher.Publish(@event);
@@ -66,7 +65,6 @@ namespace Crm.Link.Api.Controllers
             var @event = new SessionEvent
             {
                 UUID_Nr = "",
-                Version = 1,
                 EntityVersion = 1,
                 Method = MethodEnum.CREATE,
                 Source = SourceEnum.CRM,
@@ -76,7 +74,7 @@ namespace Crm.Link.Api.Controllers
                 EndDateUTC = meeting.EndDate,
                 IsActive = false,
                 EntityType = "SuperBrol",
-                SourceEntityId = 0.12536845887854m
+                SourceEntityId = meeting.Id
             };
 
             _sessionPublisher.Publish(@event);

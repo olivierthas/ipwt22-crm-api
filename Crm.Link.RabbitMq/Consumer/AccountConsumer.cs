@@ -64,6 +64,12 @@ namespace Crm.Link.RabbitMq.Consumer
         {
             switch (messageObject.Method)
             {
+                case MethodEnum.CREATE:
+                    break;
+                case MethodEnum.UPDATE:
+                    break;
+                case MethodEnum.DELETE:
+                    break;
                 default:
                     break;
             }
@@ -73,9 +79,7 @@ namespace Crm.Link.RabbitMq.Consumer
             // Map Data 
             var crmObject = new AccountModel
             {
-                // if already exist add id for update
-                // Id = 
-                Name = $"{messageObject.Name} {messageObject.LastName}",
+                Name = $"{messageObject.Name}",
                 Email = messageObject.Email,
             };
             // Send To crm

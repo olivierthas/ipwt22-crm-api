@@ -11,7 +11,7 @@ namespace Crm.Link.RabbitMq.Common
     public abstract class ConsumerBase<T> : RabbitMqClientBase where T : notnull
     {
         private System.Timers.Timer? _timer;
-        private readonly ILogger<ConsumerBase<T>> _logger;
+        protected readonly ILogger<ConsumerBase<T>> _logger;
         protected abstract string QueueName { get; }
         protected Func<Task>? TimerMethode { get; set; }
 
