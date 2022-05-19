@@ -12,14 +12,14 @@ namespace Crm.Link.RabbitMq.Messages
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("UUID_nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UUID_Nr { get; set; }
+        public string? UUID_Nr { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("SourceEntityId", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal SourceEntityId { get; set; }
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(30)]
         [System.Xml.Serialization.XmlElementAttribute("EntityType", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string EntityType { get; set; }
+        public string? EntityType { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("EntityVersion", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal EntityVersion { get; set; }
@@ -35,7 +35,7 @@ namespace Crm.Link.RabbitMq.Messages
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(30)]
         [System.Xml.Serialization.XmlElementAttribute("Title", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("StartDateUTC", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "dateTime")]
         public System.DateTime StartDateUTC { get; set; }
@@ -45,7 +45,7 @@ namespace Crm.Link.RabbitMq.Messages
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("OrganiserUUID", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string OrganiserUUID { get; set; }
+        public string? OrganiserUUID { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("IsActive", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool IsActive { get; set; }

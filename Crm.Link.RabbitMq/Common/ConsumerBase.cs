@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
-using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
-using System.Text;
 using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
@@ -10,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public abstract class ConsumerBase<T> : RabbitMqClientBase
+    public abstract class ConsumerBase<T> : RabbitMqClientBase where T : notnull
     {
         private System.Timers.Timer? _timer;
         private readonly ILogger<ConsumerBase<T>> _logger;
@@ -31,12 +29,14 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
             {
-                Console.WriteLine(basePath);
+                Stream stream = @event.Body.AsStream();
 
-                XmlReader reader = new XmlTextReader(@event.Body.AsStream());
+                XmlReader reader = new XmlTextReader(stream);
                 XmlDocument document = new();
                 document.Load(reader);
 
+
+                _logger.LogInformation($"{basePath}/Resources/AttendeeEvent.xsd");
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
                 xmlSchemaSet.Add("", $"{basePath}/Resources/AttendeeEvent.xsd");
@@ -46,12 +46,13 @@ namespace Crm.Link.RabbitMq.Common
 
 
                 document.Schemas.Add(xmlSchemaSet);
-                ValidationEventHandler eventHandler = new (ValidationEventHandler);
+                ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
-                document.Validate(eventHandler);                
-               
+                document.Validate(eventHandler);
+
                 var serializer = new XmlSerializer(typeof(T));
-                T test = (T)serializer.Deserialize(@event.Body.AsStream());
+
+                T test = (T)serializer.Deserialize(stream)!;
 
                 HandelMessage(test);
             }
@@ -63,9 +64,10 @@ namespace Crm.Link.RabbitMq.Common
             {
                 Channel!.BasicAck(@event.DeliveryTag, false);
             }
+            await Task.CompletedTask;
         }
 
-        protected abstract void HandelMessage(T messageObject); 
+        protected abstract void HandelMessage(T messageObject);
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)

@@ -10,14 +10,14 @@
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("UUID_nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UUID_Nr { get; set; }
+        public string? UUID_Nr { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("SourceEntityId", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal SourceEntityId { get; set; }
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(30)]
         [System.Xml.Serialization.XmlElementAttribute("EntityType", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string EntityType { get; set; }
+        public string? EntityType { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("EntityVersion", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal EntityVersion { get; set; }
@@ -30,11 +30,11 @@
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("AttendeeUUID", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AttendeeUUID { get; set; }
+        public string? AttendeeUUID { get; set; }
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("SessionUUID", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SessionUUID { get; set; }
+        public string? SessionUUID { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("InvitationStatus", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public InvitationStatusEnum InvitationStatus { get; set; }

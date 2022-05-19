@@ -24,7 +24,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             credentials = configuration.GetSection("CrmConfig").Get<Credentials>();
         }
 
-        public string GetToken()
+        public string? GetToken()
         {
             if (token.ValidTillDate != null && token.ValidTillDate > DateTime.UtcNow)
                 return token.TokenValue;
@@ -46,7 +46,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             _ = content ?? throw new ArgumentNullException(nameof(content));
 
             token.ValidTillDate = DateTime.UtcNow.AddSeconds(content.ExpiresIn);
-            token.TokenValue = content.AccessToken;
+            token.TokenValue = content?.AccessToken;
 
             return token.TokenValue;
         }
@@ -55,6 +55,6 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
     public class Token
     {
         public DateTime? ValidTillDate { get; set; } = null;
-        public string TokenValue { get; set; } = string.Empty;
+        public string? TokenValue { get; set; }
     }
 }

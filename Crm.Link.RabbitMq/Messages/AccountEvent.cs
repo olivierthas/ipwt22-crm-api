@@ -10,14 +10,14 @@
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("UUID_nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UUID_Nr { get; set; }
+        public string? UUID_Nr { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("SourceEntityId", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal SourceEntityId { get; set; }
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(30)]
         [System.Xml.Serialization.XmlElementAttribute("EntityType", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string EntityType { get; set; }
+        public string? EntityType { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("EntityVersion", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public decimal EntityVersion { get; set; }
@@ -33,18 +33,18 @@
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(30)]
         [System.Xml.Serialization.XmlElementAttribute("Name", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(50)]
         [System.Xml.Serialization.XmlElementAttribute("LastName", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[^@]+@[^\\.]+\\..+")]
         [System.Xml.Serialization.XmlElementAttribute("Email", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(12)]
         [System.Xml.Serialization.XmlElementAttribute("VatNumber", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = true)]
-        public string VatNumber { get; set; }
+        public string? VatNumber { get; set; }
     }
 }

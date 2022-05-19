@@ -2,14 +2,24 @@
 {
     public static class QueueAndEchangeConfig
     {
-        public static Dictionary<string, string[]> Euhhh { get; set; } = new Dictionary<string, string[]>
+        public static Dictionary<string, string[]> EchangeQueuList { get; set; } = new Dictionary<string, string[]>
         {
-            {"CrmAccount", new[] { "PlanningAccount", "FrontAccount" } },
+            /// Echange => binding to Queues 
+            {"CrmAccount", new[] { "FrontAccount" } },
             {"CrmSession", new[] { "PlanningSession", "FrontSession" } },
-            {"CrmAccountSession", new[] { "PlanningAccountSession", "FrontAccountSession" } },
+            {"CrmAccountSession", new[] { "FrontAccountSession" } },
             {"CrmAttendee", new[] { "PlanningAttendee", "FrontAttendee" } },
             {"CrmAttendeeSession", new[] { "PlanningAttendeeSession", "FrontAttendeeSession" } },
-            {"None", new[] { "CrmAccount", "CrmSession", "CrmAccountSession", "CrmAttendee", "CrmAttendeeSession" } }
+
+            {"PlanningSession", new[] { "CrmSession", "FrontSession" } },
+            {"PlanningAttendee", new[] { "CrmAttendee", "FrontAttendee" } },
+            {"PlanningAttendeeSession", new[] { "CrmAttendeeSession", "FrontAttendeeSession" } },
+
+            {"FrontAccount", new[] { "CrmAccount", "PlanningAccount" } },
+            {"FrontSession", new[] { "CrmSession", "PlanningSession" } },
+            {"FrontAttendee", new[] { "CrmAttendee", "PlanningAttendee" } },
+            {"FrontAccountSession", new[] { "CrmAccountSession" } },
+            {"FrontAttendeeSession", new[] { "CrmAttendeeSession", "PlanningAttendeeSession "} }
         };
     }
 }

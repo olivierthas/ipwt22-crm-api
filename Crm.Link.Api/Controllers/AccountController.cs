@@ -22,7 +22,7 @@ namespace Crm.Link.Api.Controllers
 
         [HttpGet]
         [Route(nameof(Test))]
-        public async Task<IActionResult> Test()
+        public IActionResult Test()
         {
             return Ok();
         }

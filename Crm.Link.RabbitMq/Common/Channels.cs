@@ -9,7 +9,7 @@ namespace Crm.Link.RabbitMq.Common
         {
             _ = model ?? throw new ArgumentNullException(nameof(model));
 
-            foreach (var change in QueueAndEchangeConfig.Euhhh)
+            foreach (var change in QueueAndEchangeConfig.EchangeQueuList)
             {
                 if (change.Key != "None")
                     model.ExchangeDeclare(exchange: change.Key, type: ExchangeType.Direct, durable: true, autoDelete: false);
