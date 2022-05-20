@@ -14,7 +14,7 @@ services:
       
   mysqldb:
     image: mysql/mysql-server:latest # user latest version of mysql-server image
-    container_name: mysqldb # add a name for the container
+    container_name: mysqldbcrm # add a name for the container
     restart: unless-stopped
     environment: # add default values, see docs for more info
       MYSQL_USER: dbadmin
