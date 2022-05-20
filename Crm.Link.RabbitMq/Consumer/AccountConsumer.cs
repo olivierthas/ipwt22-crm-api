@@ -7,6 +7,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.UUID;
+using Crm.Link.UUID.Model;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -71,14 +72,20 @@ namespace Crm.Link.RabbitMq.Consumer
                 Email = messageObject.Email,                
             };
 
+            ResourceDto response;
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
+                    var resp = await _accountGateAway.CreateOrUpdate(crmObject);
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        // await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account,  1);
+                    }
                     break;
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
                     {
-                        var response = await _uUIDGateAway.GetResource(id);
+                        response = await _uUIDGateAway.GetResource(id);
                         if (response == null)
                         {
                             _logger.LogError("response UUIDMaster was null - handelMessage - account");
