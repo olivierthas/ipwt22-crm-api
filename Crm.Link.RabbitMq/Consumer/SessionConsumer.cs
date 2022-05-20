@@ -1,6 +1,7 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
+using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,7 @@ namespace Crm.Link.RabbitMq.Consumer
     {
         private readonly ILogger<SessionConsumer> sessionLogger;
         private readonly IUUIDGateAway _uUIDGateAway;
+        private readonly ISessionGateAway _sessionGateAway;
 
         protected override string QueueName => "CrmSession";
 
@@ -22,11 +24,13 @@ namespace Crm.Link.RabbitMq.Consumer
             ILogger<SessionConsumer> sessionLogger,
             ILogger<ConsumerBase<SessionEvent>> consumerLogger,
             ILogger<RabbitMqClientBase> logger,
-            IUUIDGateAway uUIDGateAway) :
+            IUUIDGateAway uUIDGateAway,
+            ISessionGateAway sessionGateAway) :
             base(connectionProvider, consumerLogger, logger)
         {
             this.sessionLogger = sessionLogger;
-            this._uUIDGateAway = uUIDGateAway;
+            _uUIDGateAway = uUIDGateAway;
+            _sessionGateAway = sessionGateAway;
             TimerMethode += async () => await StartAsync(new CancellationToken(false)); 
         }
 
@@ -90,6 +94,11 @@ namespace Crm.Link.RabbitMq.Consumer
                     }
                     break;
                 case MethodEnum.DELETE:
+                    if (Guid.TryParse(messageObject.UUID_Nr, out var mesId))
+                    {
+                        var del = await _uUIDGateAway.GetResource(mesId);
+                        await _sessionGateAway.Delete(del.SourceEntityId);
+                    }
                     break;
                 default:
                     break;

@@ -3,11 +3,6 @@ using Crm.Link.RabbitMq.Messages;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -25,7 +20,6 @@ namespace Crm.Link.RabbitMq.Consumer
         {
             _accountLogger = accountLogger;
         }
-
 
         public Task StartAsync(CancellationToken cancellationToken)
         {

@@ -8,6 +8,7 @@ using RabbitMQ.Client.Events;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
+using Newtonsoft.Json;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -77,11 +78,15 @@ namespace Crm.Link.RabbitMq.Consumer
             {
                 case MethodEnum.CREATE:
                     var resp = await _accountGateAway.CreateOrUpdate(crmObject);
+
+                    var test = await resp.Content.ReadAsStringAsync();
+                    _logger.LogInformation(test);
+
                     if (resp.IsSuccessStatusCode)
                     {
-                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);
-                        
+                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);                        
                     }
+
                     break;
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))

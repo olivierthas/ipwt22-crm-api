@@ -17,10 +17,11 @@ namespace Crm.Link.RabbitMq.Configuration
         {
             services.AddSingleton<IConnectionFactory>(serviceProvider =>
             {
-                var uri = new Uri(connectionstring);
+                //// var uri = new Uri(connectionstring);
                 return new ConnectionFactory
                 {
-                    Uri = uri,
+                    //// Uri = uri,
+                    HostName = "rabbitmq",
                     DispatchConsumersAsync = true,
                 };
             });
