@@ -6,11 +6,9 @@ using Crm.Link.UUID.Configuration;
 using Newtonsoft.Json.Converters;
 using Serilog;
 
-Log.Logger = ConfigureLogging.Bootstrap();
-Log.Information("Starting up");
+    Log.Logger = ConfigureLogging.Bootstrap();
+    Log.Information("Starting up");
 
-try
-{
     var builder = WebApplication.CreateBuilder(args);
     var configuration = builder.Configuration;
 
@@ -56,15 +54,3 @@ try
 
     app.Run();
 
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Unhandled exception");
-    throw;
-}
-finally
-{
-    Log.Information("Shut down complete");
-    Console.ReadKey();
-    Log.CloseAndFlush();
-}
