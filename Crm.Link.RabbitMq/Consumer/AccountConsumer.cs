@@ -1,5 +1,4 @@
 ﻿using Crm.Link.RabbitMq.Common;
-using Crm.Link.RabbitMq.Producer;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.Suitcrm.Tools.Models;
 using Microsoft.Extensions.Hosting;
@@ -87,7 +86,13 @@ namespace Crm.Link.RabbitMq.Consumer
                         else
                         {
                             crmObject.Id = response.SourceEntityId;
-                            _accountGateAway.CreateOrUpdate(crmObject);
+                            var result = await _accountGateAway.CreateOrUpdate(crmObject);
+
+                            if (result.IsSuccessStatusCode)
+                            {
+
+                            }
+                               // _uUIDGateAway.UpdateEntity()
                         }
 
 

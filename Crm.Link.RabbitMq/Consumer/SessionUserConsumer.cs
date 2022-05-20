@@ -28,10 +28,10 @@ namespace Crm.Link.RabbitMq.Consumer
                 switch (messageObject.EntityType)
                 {
                     case "Contact":
-                        _sessionGateAway.AddUserToSession("Contacts", messageObject.AttendeeUUID, messageObject.SessionUUID);
+                        await _sessionGateAway.AddUserToSession("Contacts", messageObject.AttendeeUUID, messageObject.SessionUUID);
                         break;
                     case "Account":
-                        _sessionGateAway.AddUserToSession("Accounts", messageObject.AttendeeUUID, messageObject.SessionUUID);
+                        await _sessionGateAway.AddUserToSession("Accounts", messageObject.AttendeeUUID, messageObject.SessionUUID);
                         break;
                     default:
                         break;
