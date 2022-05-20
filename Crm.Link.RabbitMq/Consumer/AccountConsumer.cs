@@ -90,9 +90,9 @@ namespace Crm.Link.RabbitMq.Consumer
 
                             if (result.IsSuccessStatusCode)
                             {
+                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, messageObject.EntityVersion);
 
                             }
-                               // _uUIDGateAway.UpdateEntity()
                         }
 
 
