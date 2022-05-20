@@ -62,9 +62,9 @@ services:
   #    - '443:8443'
 
   crm-api:
-    build:
-        context: ../
-        dockerfile: DockerFile
+    #build:
+    #    context: .
+    #    dockerfile: DockerFile
     image: docker.io/thaso/suitecrm-api:latest
     container_name: crm-api
     restart: unless-stopped
