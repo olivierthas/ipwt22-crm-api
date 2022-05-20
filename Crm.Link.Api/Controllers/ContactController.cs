@@ -2,6 +2,7 @@ using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.Suitcrm.Tools.Models;
+using Crm.Link.UUID;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Link.Api.Controllers
@@ -10,13 +11,18 @@ namespace Crm.Link.Api.Controllers
     [Route("api/contact")]
     public class ContactController : ControllerBase
     {
-        private readonly IAccountGateAway accountGateAway;
-        private readonly ContactPublisher contactPublisher;
+        private readonly ContactPublisher _contactPublisher;
+        private readonly ILogger<ContactController> _logger;
+        private readonly IUUIDGateAway _uUIDGateAway;
 
-        public ContactController(IAccountGateAway accountGateAway, ContactPublisher contactPublisher)
+        public ContactController(
+            ContactPublisher contactPublisher,
+            ILogger<ContactController> logger,
+            IUUIDGateAway uUIDGateAway)
         {
-            this.accountGateAway = accountGateAway;
-            this.contactPublisher = contactPublisher;
+            _contactPublisher = contactPublisher;
+            _logger = logger;
+            _uUIDGateAway = uUIDGateAway;
         }
 
         [HttpGet]
@@ -30,8 +36,15 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Create))]
         public async Task<IActionResult> Create(ContactModel contact)
         {
-            _ = contact ?? throw new ArgumentNullException(nameof(contact));
-            // map data naar xml
+            if (contact == null)
+            {
+                var date = DateTime.UtcNow;
+                _logger.LogError("BadRequest on SessionController : {date}", date);
+                return BadRequest();
+            }
+
+            // call uid
+            var response = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), "Contact");
 
             var @event = new AttendeeEvent
             {
@@ -40,8 +53,23 @@ namespace Crm.Link.Api.Controllers
                 Name = contact.FirstName,
                 LastName = contact.LastName,
                 Email = contact.Email,
-    };
-            contactPublisher.Publish(@event);
+            };
+
+            if (response == null)
+            {
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), "Account", contact.Id, 1);
+                @event.EntityVersion = 1;
+                @event.UUID_Nr = resp.Uuid.ToString();
+                @event.Method = MethodEnum.CREATE;
+            }
+            else
+            {
+                var resp = await _uUIDGateAway.UpdateEntity(contact.Id, SourceEnum.CRM.ToString(), "Account");
+                @event.EntityVersion = resp.EntityVersion;
+                @event.UUID_Nr = resp.Uuid.ToString();
+                @event.Method = MethodEnum.UPDATE;
+            }
+            _contactPublisher.Publish(@event);
             return Ok();
         }
 
@@ -49,34 +77,21 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            // map data naar xml
-
-            var @event = new AttendeeEvent
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), "Contact");
+            if (response != null)
             {
-                UUID_Nr = "", // haal bijhorende UUID op
-                Method = MethodEnum.DELETE,
-            };
-            //ContactPublisher.Publish(@event);
-            return Ok();
-        }
+                var @event = new AttendeeEvent
+                {
+                    UUID_Nr = response.Uuid.ToString(),
+                    Method = MethodEnum.DELETE,
+                };
 
-        [HttpPut]
-        [Route(nameof(Update))]
-        public async Task<IActionResult> Update(ContactModel account)
-        {
-            _ = account ?? throw new ArgumentNullException(nameof(account));
-            // map data naar xml
+                _contactPublisher.Publish(@event);
 
-            var @event = new AttendeeEvent
-            {
-                UUID_Nr = Guid.NewGuid().ToString(), // get uuid from uuidmaster
-                Method = MethodEnum.CREATE,
-                Name = account.FirstName,
-                LastName= account.LastName,
-                Email = account.Email,
-            };
-            contactPublisher.Publish(@event);
+                return Ok();
+            }
 
+            _logger.LogError("response UUIDMaster was null for: {id}", id);
             return Ok();
         }
     }

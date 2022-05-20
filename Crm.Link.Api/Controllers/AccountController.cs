@@ -14,16 +14,19 @@ namespace Crm.Link.Api.Controllers
         private readonly IAccountGateAway _accountGateAway;
         private readonly AccountPublisher _accountPublisher;
         private readonly IUUIDGateAway _uUIDGateAway;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             IAccountGateAway accountGateAway,
             AccountPublisher accountPublisher,
-            IUUIDGateAway uUIDGateAway)
+            IUUIDGateAway uUIDGateAway,
+            ILogger<AccountController> logger)
         {
 
             _accountGateAway = accountGateAway;
             _accountPublisher = accountPublisher;
             _uUIDGateAway = uUIDGateAway;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -37,7 +40,12 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Create))]
         public async Task<IActionResult> Create(AccountModel account)
         {
-            _ = account ?? throw new ArgumentNullException(nameof(account));
+            if (account == null)
+            {
+                var date = DateTime.UtcNow;
+                _logger.LogError("BadRequest on SessionController : {date}", date);
+                return BadRequest();
+            }
             // map data naar xml
             var @event = new AccountEvent
             {
@@ -47,13 +55,13 @@ namespace Crm.Link.Api.Controllers
                 Source = SourceEnum.CRM,
                 SourceEntityId = account.Id,
                 VatNumber = null
-        };
+            };
 
-            var response = await _uUIDGateAway.GetGuid(account.Id, SourceEnum.CRM.ToString(), "Account");
+            var response = await _uUIDGateAway.GetGuid(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
 
             if (response == null)
             {
-                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), "Account", account.Id.ToString(), 1);
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, account.Id.ToString(), 1);
                 @event.EntityVersion = 1;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.CREATE;
@@ -75,13 +83,20 @@ namespace Crm.Link.Api.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), "Account");
-            var @event = new AccountEvent
+            if (response != null)
             {
-                UUID_Nr = response.Uuid.ToString(),
-                Method = MethodEnum.DELETE,
-            };
+                var @event = new AccountEvent
+                {
+                    UUID_Nr = response.Uuid.ToString(),
+                    Method = MethodEnum.DELETE,
+                };
+                
+                _accountPublisher.Publish(@event);
+                return Ok();
+            }
 
-            _accountPublisher.Publish(@event);
+
+            _logger.LogError("response UUIDMaster was null for: {id}", id);
             return Ok();
         }        
     }

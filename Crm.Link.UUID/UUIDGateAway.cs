@@ -19,7 +19,7 @@ namespace Crm.Link.UUID
         }
 
 
-        public async Task<ResourceDto?> GetGuid(string id, string sourceType, string entityType)
+        public async Task<ResourceDto?> GetGuid(string id, string sourceType, EntityTypeEnum entityType)
         {
             var response = await _httpClient.GetAsync($"resources/search?source={sourceType}&entityType={entityType}&sourceEntityId={id}");
 
@@ -35,12 +35,12 @@ namespace Crm.Link.UUID
             return resource;
         }
 
-        public async Task<ResourceDto?> PublishEntity(string source, string entityType, string sourceEntityId, int version)
+        public async Task<ResourceDto?> PublishEntity(string source, EntityTypeEnum entityType, string sourceEntityId, int version)
         {
             var body = new
             {
                 Source = source,
-                EntityType = entityType,
+                EntityType = entityType.ToString(),
                 SourceEntityId = sourceEntityId,
                 EntityVersion = version
             };
@@ -59,7 +59,7 @@ namespace Crm.Link.UUID
             }
         }
 
-        public async Task<ResourceDto?> UpdateEntity(string id, string sourceType, string entityType)
+        public async Task<ResourceDto?> UpdateEntity(string id, string sourceType, EntityTypeEnum entityType)
         {
             var response = await GetGuid(id, sourceType, entityType);
             _ = response ?? throw new ArgumentNullException(nameof(response));
@@ -70,6 +70,33 @@ namespace Crm.Link.UUID
                 EntityType = entityType,
                 SourceEntityId = id,
                 EntityVersion = ++response!.EntityVersion
+            };
+
+            var json = JsonConvert.SerializeObject(body);
+            var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
+            var resp = await _httpClient.PatchAsync($"resources/{response.Uuid}", contentBody);
+            if (resp.IsSuccessStatusCode)
+            {
+                var content = await resp.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ResourceDto>(content);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<ResourceDto?> UpdateEntity(string id, string sourceType, EntityTypeEnum entityType, int newVersion)
+        {
+            var response = await GetGuid(id, sourceType, entityType);
+            _ = response ?? throw new ArgumentNullException(nameof(response));
+
+            var body = new
+            {
+                Source = sourceType,
+                EntityType = entityType,
+                SourceEntityId = id,
+                EntityVersion = newVersion
             };
 
             var json = JsonConvert.SerializeObject(body);
