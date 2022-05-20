@@ -29,37 +29,37 @@ services:
   #  ports:
   #    - '3306:3306'
 
-  suitecrm:
-    depends_on:
-      - mysqldb
-    image: docker.io/thaso/suitecrm:latest
-    container_name: suitecrm
-    restart: unless-stopped
-    environment:
-      APACHE_HTTP_PORT_NUMBER: '8080'
-      APACHE_HTTPS_PORT_NUMBER: '443'
-      SUITECRM_USERNAME: user
-      SUITECRM_PASSWORD: bitnami
-      SUITECRM_EMAIL: user@example.com
-      SUITECRM_SKIP_BOOTSTRAP: 'no'
-      SUITECRM_HOST: localhost
-      SUITECRM_ENABLE_HTTPS: 'no'
-      SUITECRM_EXTERNAL_HTTP_PORT_NUMBER: '80'
-      SUITECRM_EXTERNAL_HTTPS_PORT_NUMBER: '443'
-      SUITECRM_DATABASE_HOST: mysqldb # define the address/hostname of the mysql server eg mysql container name
-      SUITECRM_DATABASE_PORT_NUMBER: '3306'
-      SUITECRM_DATABASE_NAME: suitecrm-db
-      SUITECRM_DATABASE_USER: root # this is the root user to login on startup
-      SUITECRM_DATABASE_PASSWORD: mypassword
-      ALLOW_EMPTY_PASSWORD: 'yes'
-      #MYSQL_CLIENT_FLAVOR: mysql
-      #MYSQL_CLIENT_DATABASE_HOST: mysqldb
-      #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
-    networks:
-      - dockerNetwork
-    ports:
-      - '80:8080'
-      - '443:8443'
+  #suitecrm:
+  #  depends_on:
+  #    - mysqldb
+  #  image: docker.io/thaso/suitecrm:latest
+  #  container_name: suitecrm
+  #  restart: unless-stopped
+  #  environment:
+  #    APACHE_HTTP_PORT_NUMBER: '8080'
+  #    APACHE_HTTPS_PORT_NUMBER: '443'
+  #    SUITECRM_USERNAME: user
+  #    SUITECRM_PASSWORD: bitnami
+  #    SUITECRM_EMAIL: user@example.com
+  #    SUITECRM_SKIP_BOOTSTRAP: 'no'
+  #    SUITECRM_HOST: localhost
+  #    SUITECRM_ENABLE_HTTPS: 'no'
+  #    SUITECRM_EXTERNAL_HTTP_PORT_NUMBER: '80'
+  #    SUITECRM_EXTERNAL_HTTPS_PORT_NUMBER: '443'
+  #    SUITECRM_DATABASE_HOST: mysqldb # define the address/hostname of the mysql server eg mysql container name
+  #    SUITECRM_DATABASE_PORT_NUMBER: '3306'
+  #    SUITECRM_DATABASE_NAME: suitecrm-db
+  #    SUITECRM_DATABASE_USER: root # this is the root user to login on startup
+  #    SUITECRM_DATABASE_PASSWORD: mypassword
+  #    ALLOW_EMPTY_PASSWORD: 'yes'
+  #    #MYSQL_CLIENT_FLAVOR: mysql
+  #    #MYSQL_CLIENT_DATABASE_HOST: mysqldb
+  #    #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
+  #  networks:
+  #    - dockerNetwork
+  #  ports:
+  #    - '80:8080'
+  #    - '443:8443'
 
   crm-api:
     build:
