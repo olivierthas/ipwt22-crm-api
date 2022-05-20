@@ -43,7 +43,7 @@ namespace Crm.Link.Api.Controllers
             }
 
             // call uid
-            var response = await _uUIDGateAway.GetGuid(meeting.Id, SourceEnum.CRM.ToString(), "Meeting");
+            var response = await _uUIDGateAway.GetGuid(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
 
             var @event = new SessionEvent
             {
@@ -59,14 +59,14 @@ namespace Crm.Link.Api.Controllers
 
             if (response == null)
             {
-                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), "Account", meeting.Id, 1);
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session, meeting.Id, 1);
                 @event.EntityVersion = 1;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.CREATE;
             }
             else
             {
-                var resp = await _uUIDGateAway.UpdateEntity(meeting.Id, SourceEnum.CRM.ToString(), "Account");
+                var resp = await _uUIDGateAway.UpdateEntity(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
                 @event.EntityVersion = resp.EntityVersion;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.UPDATE;
@@ -81,7 +81,7 @@ namespace Crm.Link.Api.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             // uuid
-            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), "Meeting");
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
             if (response != null)
             {
                 var @event = new SessionEvent

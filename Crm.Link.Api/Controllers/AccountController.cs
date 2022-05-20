@@ -68,7 +68,7 @@ namespace Crm.Link.Api.Controllers
             }
             else
             {
-                var resp = await _uUIDGateAway.UpdateEntity(account.Id, SourceEnum.CRM.ToString(), "Account");
+                var resp = await _uUIDGateAway.UpdateEntity(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
                 @event.EntityVersion = resp.EntityVersion;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.UPDATE;
@@ -82,7 +82,7 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), "Account");
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
             if (response != null)
             {
                 var @event = new AccountEvent
