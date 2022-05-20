@@ -79,7 +79,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 case MethodEnum.CREATE:
                     var resp = await _accountGateAway.CreateOrUpdate(crmObject);
 
-                    var test = await resp.Content.ReadAsStringAsync();
+                    var test = await resp.Content.ReadAsStringAsync(); //wat are you
                     _logger.LogInformation(test);
 
                     if (resp.IsSuccessStatusCode)
