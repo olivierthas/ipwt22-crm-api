@@ -12,7 +12,7 @@ services:
   #    - '5672:5672'
   #    - '15672:15672'
       
-  mysqldb:
+  mysqldbcrm:
     image: mysql/mysql-server:latest # user latest version of mysql-server image
     container_name: mysqldbcrm # add a name for the container
     restart: unless-stopped
