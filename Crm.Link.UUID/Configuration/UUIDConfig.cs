@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Net.Http.Headers;
 
 namespace Crm.Link.UUID.Configuration
 {
@@ -11,6 +7,11 @@ namespace Crm.Link.UUID.Configuration
     {
         public static IServiceCollection UseUUID(this IServiceCollection service)
         {
+            service.AddHttpClient("UuidMasterApi", httpClient => {
+                httpClient.BaseAddress = new Uri("http://api:5000/api");
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
+
             service.AddTransient<IUUIDGateAway, UUIDGateAway>();
 
             return service;
