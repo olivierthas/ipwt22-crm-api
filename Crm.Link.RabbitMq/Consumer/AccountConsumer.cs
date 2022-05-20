@@ -81,7 +81,8 @@ namespace Crm.Link.RabbitMq.Consumer
                     {
                         var response = _uUIDGateAway.GetResource(id);
                         if (response == null)
-                            _logger.LogError("");
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account");
+
                     }
                     break;
                 case MethodEnum.DELETE:
