@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crm.Link.Suitcrm.Tools\Crm.Link.Suitcrm.Tools.csproj" />
+    <ProjectReference Include="..\Crm.Link.UUID\Crm.Link.UUID.csproj" />
   </ItemGroup>
 
 </Project>

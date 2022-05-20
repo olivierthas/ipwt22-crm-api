@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Crm.Link.Suitcrm.Tools.GateAway;
+using Crm.Link.UUID;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -16,17 +17,20 @@ namespace Crm.Link.RabbitMq.Consumer
         protected override string QueueName => "CrmAccount";
         private readonly ILogger<AccountConsumer> _accountLogger;
         private readonly IAccountGateAway _accountGateAway;
+        private readonly IUUIDGateAway _uUIDGateAway;
 
         public AccountConsumer(
             ConnectionProvider connectionProvider,
             ILogger<AccountConsumer> accountLogger,
             ILogger<ConsumerBase<AccountEvent>> consumerLogger,
             ILogger<RabbitMqClientBase> logger,
-            IAccountGateAway accountGateAway) :
+            IAccountGateAway accountGateAway,
+            IUUIDGateAway uUIDGateAway) :
             base(connectionProvider, consumerLogger, logger)
         {
             _accountLogger = accountLogger;
             _accountGateAway = accountGateAway;
+            _uUIDGateAway = uUIDGateAway;
             TimerMethode += async () => await StartAsync(new CancellationToken(false));  
         }
 
@@ -62,11 +66,23 @@ namespace Crm.Link.RabbitMq.Consumer
         /// 
         protected override void HandelMessage(AccountEvent messageObject)
         {
+            var crmObject = new AccountModel
+            {                
+                Name = $"{messageObject.Name}",
+                Email = messageObject.Email,                
+            };
+
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
                     break;
                 case MethodEnum.UPDATE:
+                    if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
+                    {
+                        var response = _uUIDGateAway.GetResource(id);
+                        if (response == null)
+                            _logger.LogError("");
+                    }
                     break;
                 case MethodEnum.DELETE:
                     break;
@@ -77,11 +93,6 @@ namespace Crm.Link.RabbitMq.Consumer
             // Call UUId Do Stuff
             // 
             // Map Data 
-            var crmObject = new AccountModel
-            {
-                Name = $"{messageObject.Name}",
-                Email = messageObject.Email,
-            };
             // Send To crm
             _accountGateAway.CreateOrUpdate(crmObject);
         }
