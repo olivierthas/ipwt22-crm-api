@@ -63,7 +63,7 @@ services:
 
   crm-api:
     build:
-        context: ../
+        context: .
         dockerfile: DockerFile
     image: docker.io/thaso/suitecrm-api:latest
     container_name: crm-api
