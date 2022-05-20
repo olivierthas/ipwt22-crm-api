@@ -12,9 +12,9 @@ namespace Crm.Link.UUID
         private readonly HttpClient _httpClient;
         private readonly ILogger<UUIDGateAway> _logger;
 
-        public UUIDGateAway(HttpClient httpClient, ILogger<UUIDGateAway> logger)
+        public UUIDGateAway(IHttpClientFactory httpClientFactory, ILogger<UUIDGateAway> logger)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient("UuidMasterApi");
             _logger = logger;
         }
 
