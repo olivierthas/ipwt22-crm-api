@@ -21,7 +21,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected override string QueueName => "CrmSessionAttendee";
 
-        protected override void HandelMessage(SessionAttendeeEvent messageObject)
+        protected async override Task HandelMessage(SessionAttendeeEvent messageObject)
         {
             try
             {

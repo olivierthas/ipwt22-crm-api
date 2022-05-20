@@ -55,7 +55,7 @@ namespace Crm.Link.RabbitMq.Consumer
             throw new NotImplementedException();
         }
 
-        protected override void HandelMessage(AttendeeEvent messageObject)
+        protected override Task HandelMessage(AttendeeEvent messageObject)
         {
             throw new NotImplementedException();
         }

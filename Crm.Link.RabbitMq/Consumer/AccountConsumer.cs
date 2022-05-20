@@ -64,7 +64,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         /// need to inject methode from top level class
         /// 
-        protected override void HandelMessage(AccountEvent messageObject)
+        protected async override Task HandelMessage(AccountEvent messageObject)
         {
             var crmObject = new AccountModel
             {                
@@ -79,9 +79,17 @@ namespace Crm.Link.RabbitMq.Consumer
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
                     {
-                        var response = _uUIDGateAway.GetResource(id);
+                        var response = await _uUIDGateAway.GetResource(id);
                         if (response == null)
+                        {
                             _logger.LogError("response UUIDMaster was null - handelMessage - account");
+                        }
+                        else
+                        {
+                            crmObject.Id = response.SourceEntityId;
+                            _accountGateAway.CreateOrUpdate(crmObject);
+                        }
+
 
                     }
                     break;

@@ -54,7 +54,7 @@ namespace Crm.Link.RabbitMq.Common
 
                 T test = (T)serializer.Deserialize(stream)!;
 
-                HandelMessage(test);
+                await HandelMessage(test);
             }
             catch (Exception ex)
             {
@@ -67,7 +67,7 @@ namespace Crm.Link.RabbitMq.Common
             await Task.CompletedTask;
         }
 
-        protected abstract void HandelMessage(T messageObject);
+        protected abstract Task HandelMessage(T messageObject);
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)

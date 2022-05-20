@@ -55,7 +55,7 @@ namespace Crm.Link.RabbitMq.Consumer
             return Task.CompletedTask;
         }
 
-        protected override void HandelMessage(SessionEvent messageObject)
+        protected async override Task HandelMessage(SessionEvent messageObject)
         {
             switch (messageObject.Method)
             {
@@ -68,6 +68,8 @@ namespace Crm.Link.RabbitMq.Consumer
                 default:
                     break;
             }
+
+            
         }
     }
 }
