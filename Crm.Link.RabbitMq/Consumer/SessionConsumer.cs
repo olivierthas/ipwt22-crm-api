@@ -1,6 +1,8 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
+using Crm.Link.UUID;
+using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -11,6 +13,7 @@ namespace Crm.Link.RabbitMq.Consumer
     public class SessionConsumer : ConsumerBase<SessionEvent>, IHostedService
     {
         private readonly ILogger<SessionConsumer> sessionLogger;
+        private readonly IUUIDGateAway _uUIDGateAway;
 
         protected override string QueueName => "CrmSession";
 
@@ -18,10 +21,12 @@ namespace Crm.Link.RabbitMq.Consumer
             ConnectionProvider connectionProvider,
             ILogger<SessionConsumer> sessionLogger,
             ILogger<ConsumerBase<SessionEvent>> consumerLogger,
-            ILogger<RabbitMqClientBase> logger) :
+            ILogger<RabbitMqClientBase> logger,
+            IUUIDGateAway uUIDGateAway) :
             base(connectionProvider, consumerLogger, logger)
         {
             this.sessionLogger = sessionLogger;
+            this._uUIDGateAway = uUIDGateAway;
             TimerMethode += async () => await StartAsync(new CancellationToken(false)); 
         }
 
@@ -57,11 +62,32 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandelMessage(SessionEvent messageObject)
         {
+
+            ResourceDto response;
+
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
                     break;
                 case MethodEnum.UPDATE:
+                    if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
+                    {
+                        response = await _uUIDGateAway.GetResource(id);
+                        if (response == null)
+                        {
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account");
+                        }
+                        else
+                        {
+                            /*crmObject.Id = response.SourceEntityId;
+                            var result = await _accountGateAway.CreateOrUpdate(crmObject);
+
+                            if (result.IsSuccessStatusCode)
+                            {
+                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, messageObject.EntityVersion);
+                            }*/
+                        }
+                    }
                     break;
                 case MethodEnum.DELETE:
                     break;

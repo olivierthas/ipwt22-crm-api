@@ -28,7 +28,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             return await HttpClient!.PostAsync($"/api/v8/modules/{Module}", content);
         }
 
-        public virtual async Task<HttpResponseMessage> Delete(Guid id)
+        public virtual async Task<HttpResponseMessage> Delete(string id)
         {
             return await HttpClient!.DeleteAsync($"/api/v8/modules/{Module}/{id}");
         }

@@ -79,7 +79,8 @@ namespace Crm.Link.RabbitMq.Consumer
                     var resp = await _accountGateAway.CreateOrUpdate(crmObject);
                     if (resp.IsSuccessStatusCode)
                     {
-                        // await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account,  1);
+                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);
+                        
                     }
                     break;
                 case MethodEnum.UPDATE:
@@ -100,21 +101,16 @@ namespace Crm.Link.RabbitMq.Consumer
                                 await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, messageObject.EntityVersion);
                             }
                         }
-
-
                     }
                     break;
                 case MethodEnum.DELETE:
-                    break;
-                default:
-                    break;
+                    if (Guid.TryParse(messageObject.UUID_Nr, out var mesId))
+                    {
+                        var del = await _uUIDGateAway.GetResource(mesId);
+                        await _accountGateAway.Delete(del.SourceEntityId);
+                    }
+                    break;                
             }
-
-            // Call UUId Do Stuff
-            // 
-            // Map Data 
-            // Send To crm
-            _accountGateAway.CreateOrUpdate(crmObject);
         }
     }
 }
