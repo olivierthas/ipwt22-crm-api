@@ -77,21 +77,21 @@ services:
     ports:
       - '5172:80'
 
-  planning:
-    depends_on:
-      - crm-api
-    build:
-        context: .
-        dockerfile: ./planning/Dockerfile
-    container_name: planning-api
-    restart: unless-stopped
-    networks:
-      - rabbitmq
-      - planning
-      - uuidmasterapi
-    ports:
-      - '6002:80'
-      - '6003:443'
+  #planning:
+  #  depends_on:
+  #    - crm-api
+  #  build:
+  #      context: .
+  #      dockerfile: ./planning/Dockerfile
+  #  container_name: planning-api
+  #  restart: unless-stopped
+  #  networks:
+  #    - rabbitmq
+  #    - planning
+  #    - uuidmasterapi
+  #  ports:
+  #    - '6002:80'
+  #    - '6003:443'
 
 networks:
     crmNetwork:
