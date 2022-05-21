@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public class ContactGateAway : GateAwayBase<ContactModel>
+    public class ContactGateAway : GateAwayBase<ContactModel>, IContactGateAway
     {
         protected override string Module => "Contacts";
     }

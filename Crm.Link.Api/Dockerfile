@@ -19,8 +19,8 @@ RUN dotnet build "Crm.Link.Api.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "Crm.Link.Api.csproj" -c Release -o /app/publish
 
-Run apt update
-RUN apt install curl -y
+RUN sh apt update
+RUN sh apt install curl -y
 
 FROM base AS final
 WORKDIR /app
