@@ -103,6 +103,8 @@ services:
       - uuidmasterapi
     ports:
       - '5172:80'
+    volumes:
+      - 'suitecrm-db:/var/lib/crm-api'
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost/api/account/Test"]
         interval: 1m30s
@@ -119,8 +121,8 @@ services:
     container_name: planning-api
     restart: unless-stopped
     networks:
-      - rabbitmq
       - planning
+      - rabbitmq
       - uuidmasterapi
     ports:
       - '6002:80'

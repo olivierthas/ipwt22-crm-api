@@ -1,6 +1,5 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
-using Crm.Link.RabbitMq.Producer;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
@@ -47,6 +46,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 catch (Exception ex)
                 {
                     sessionLogger.LogCritical(ex, "Error while consuming message");
+                    SetTimer();
                 }
             }
             else

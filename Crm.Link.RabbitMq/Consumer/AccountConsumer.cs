@@ -47,6 +47,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 catch (Exception ex)
                 {
                     _accountLogger.LogCritical(ex, "Error while consuming message");
+                    SetTimer();
                 }
             }
             else
