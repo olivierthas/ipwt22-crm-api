@@ -107,8 +107,6 @@ services:
       - '5172:80'
     volumes:
       - suitecrm-db:/crm_logs
-    command:
-        - 'apt update && apt install curl -y'
     healthcheck:
         test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
         interval: 1m30s
@@ -151,7 +149,9 @@ networks:
 
 volumes: # add persistent data even if container is removed
     suitecrm-db:
-        driver: local    
+        driver: local
+    crm-logs:
+        driver: local
     rabbitmq_data:
         driver: local
     db_data: {}

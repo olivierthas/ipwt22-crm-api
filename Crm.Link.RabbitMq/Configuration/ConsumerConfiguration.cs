@@ -30,6 +30,8 @@ namespace Crm.Link.RabbitMq.Configuration
 
             services.AddHostedService<AccountConsumer>();
             services.AddHostedService<SessionConsumer>();
+            services.AddHostedService<ContactConsumer>();
+            services.AddHostedService<SessionUserConsumer>();
 
             return services;
         }
