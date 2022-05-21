@@ -14,7 +14,7 @@ services:
       - '15672:15672'
     volumes:
       #- rabbitmq_data:/var/lib/rabbitmq
-      - rabbitmq_data:/var/lib/rabbitmq/mnesia/
+      - rabbitmq_data:/var/lib/rabbitmq
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -108,7 +108,7 @@ services:
     volumes:
       - suitecrm-db:/crm_logs
     command:
-        - 'apt update -y && apt install curl -y'
+        - 'apt update && apt install curl -y'
     healthcheck:
         test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
         interval: 1m30s
