@@ -108,7 +108,7 @@ services:
     volumes:
       - suitecrm-db:/crm_logs
     command:
-        - sh -c 'apt update -y && apt install curl -y'
+        - 'apt update -y && apt install curl -y'
     healthcheck:
         test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
         interval: 1m30s
