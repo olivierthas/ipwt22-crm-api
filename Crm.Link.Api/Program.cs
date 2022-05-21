@@ -13,8 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Host.AddCrmLogging();
-var basePath = AppDomain.CurrentDomain.BaseDirectory;
-Log.Information($"{basePath}/crm_logs/crm.txt");
 
 // builder.Services.AddCrmAuthentication(configuration);
 // builder.Services.AddCrmCors("CorsPolicyName");

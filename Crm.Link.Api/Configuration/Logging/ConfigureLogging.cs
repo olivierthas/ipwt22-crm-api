@@ -11,7 +11,7 @@ namespace Crm.Link.Api
 
             builder.UseSerilog((ctx, lc) => lc
                    .WriteTo.Console()
-                   .WriteTo.File($"{basePath}/crm_logs/crm.txt")
+                   .WriteTo.File($"{basePath}crm_logs/crm.txt")
                    .ReadFrom.Configuration(ctx.Configuration));
             return builder;
         }

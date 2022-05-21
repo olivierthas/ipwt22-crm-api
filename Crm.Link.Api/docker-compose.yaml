@@ -14,7 +14,7 @@ services:
       - '15672:15672'
     volumes:
       #- rabbitmq_data:/var/lib/rabbitmq
-      - '~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/'
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia/
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -54,7 +54,7 @@ services:
     networks:
       - crmNetwork
     volumes:
-      - 'suitecrm-db:/var/lib/mysql'
+      - suitecrm-db:/var/lib/mysql
     ports:
       - '3306:3306'
 
@@ -81,9 +81,9 @@ services:
       SUITECRM_DATABASE_USER: root # this is the root user to login on startup
       SUITECRM_DATABASE_PASSWORD: mypassword
       ALLOW_EMPTY_PASSWORD: 'yes'
-      #MYSQL_CLIENT_FLAVOR: mysql
-      #MYSQL_CLIENT_DATABASE_HOST: mysqldb
-      #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
+      MYSQL_CLIENT_FLAVOR: mysql
+      MYSQL_CLIENT_DATABASE_HOST: mysqldb
+      MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
     networks:
       - crmNetwork
     ports:
@@ -106,11 +106,11 @@ services:
     ports:
       - '5172:80'
     volumes:
-      - 'suitecrm-db:/var/lib/crm-api'
+      - suitecrm-db:/crm_logs
     command:
         - sh -c 'apt update -y && apt install curl -y'
     healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost/api/account/Test"]
+        test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
         interval: 1m30s
         timeout: 10s
         retries: 3
