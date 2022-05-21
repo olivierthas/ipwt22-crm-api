@@ -2,15 +2,15 @@ version: '3.3'
 
 services:
 
-  #rabbitmq:
-  #  image: docker.io/rabbitmq:3.9-management
-  #  container_name: rabbitmq
-  #  restart: unless-stopped
-  #  networks:
-  #    - rabbitmq
-  #  ports:
-  #    - '5672:5672'
-  #    - '15672:15672'
+  rabbitmq:
+    image: docker.io/rabbitmq:3.9-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    networks:
+      - rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
       
   crm-mysqldb:
     image: mysql/mysql-server:latest
@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
     environment:
       APACHE_HTTP_PORT_NUMBER: '8080'
-      APACHE_HTTPS_PORT_NUMBER: '443'
+      APACHE_HTTPS_PORT_NUMBER: '8443'
       SUITECRM_USERNAME: user
       SUITECRM_PASSWORD: bitnami
       SUITECRM_EMAIL: user@example.com
@@ -85,14 +85,17 @@ services:
       - rabbitmq
       - planning
       - uuidmasterapi
+    ports:
+      - '6002:80'
+      - '6003:443'
 
 networks:
     crmNetwork:
         name: crmNetwork
         driver: bridge
-    frontend:
-        name: frontend
-        driver: bridge
+    #frontend:
+    #    name: frontend
+    #    driver: bridge
     planning:
         name: planning
         driver: bridge
