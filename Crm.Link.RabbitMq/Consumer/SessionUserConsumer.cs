@@ -1,11 +1,14 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.Suitcrm.Tools.GateAway;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
-    public class SessionUserConsumer : ConsumerBase<SessionAttendeeEvent>
+    public class SessionUserConsumer : ConsumerBase<SessionAttendeeEvent>, IHostedService
     {
         private readonly ISessionGateAway _sessionGateAway;
 
@@ -20,6 +23,35 @@ namespace Crm.Link.RabbitMq.Consumer
         }
 
         protected override string QueueName => "CrmSessionAttendee";
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            if (Channel is not null)
+            {
+                try
+                {
+                    var consumer = new AsyncEventingBasicConsumer(Channel);
+                    consumer.Received += OnEventReceived;
+                    Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex, "Error while consuming message");
+                    SetTimer();
+                }
+            }
+            else
+            {
+                SetTimer();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
 
         protected async override Task HandelMessage(SessionAttendeeEvent messageObject)
         {

@@ -3,6 +3,7 @@ version: '3.4'
 services:
 
   rabbitmq:
+    hostname: 'rabbitmq'
     image: docker.io/rabbitmq:3.9-management
     container_name: rabbitmq
     restart: unless-stopped
@@ -12,7 +13,8 @@ services:
       - '5672:5672'
       - '15672:15672'
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      #- rabbitmq_data:/var/lib/rabbitmq
+      - '~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/'
 
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -103,6 +105,10 @@ services:
       - uuidmasterapi
     ports:
       - '5172:80'
+    volumes:
+      - 'suitecrm-db:/var/lib/crm-api'
+    command:
+        - sh -c 'apt update -y && apt install curl -y'
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost/api/account/Test"]
         interval: 1m30s
@@ -119,8 +125,8 @@ services:
     container_name: planning-api
     restart: unless-stopped
     networks:
-      - rabbitmq
       - planning
+      - rabbitmq
       - uuidmasterapi
     ports:
       - '6002:80'
