@@ -11,10 +11,37 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    hostname: db
+    ports:
+      - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
+    environment:
+      - SA_PASSWORD=Student1
+      - ACCEPT_EULA=Y
+    networks:
+      - uuidmasterapi
+    volumes:
+      - db_data:/var/opt/mssql
+  api:
+    depends_on:
+      - db
+    build:
+      context: ./uuid
+      dockerfile: Dockerfile
+    ports: # replace by expose
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - uuidmasterapi
       
-  crm-mysqldb:
+  mysqldb:
     image: mysql/mysql-server:latest
-    container_name: crm-mysqldb
+    container_name: mysqldb
     restart: unless-stopped
     environment:
       MYSQL_USER: dbadmin
@@ -113,3 +140,8 @@ networks:
 volumes: # add persistent data even if container is removed
     suitecrm-db:
         driver: local
+    
+    rabbitmq_data: {
+    name: rabbitmq_data
+    }
+    db_data: {}
