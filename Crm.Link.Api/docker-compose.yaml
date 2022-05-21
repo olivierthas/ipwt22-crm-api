@@ -103,6 +103,12 @@ services:
       - uuidmasterapi
     ports:
       - '5172:80'
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost/api/account/Test"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 40sa
 
   planning:
     depends_on:
@@ -134,14 +140,12 @@ networks:
         name: rabbitmq
         driver: bridge
     uuidmasterapi:
-        name: uuidmasterap
+        name: uuidmasterapi
         driver: bridge
 
 volumes: # add persistent data even if container is removed
     suitecrm-db:
+        driver: local    
+    rabbitmq_data:
         driver: local
-    
-    rabbitmq_data: {
-    name: rabbitmq_data
-    }
     db_data: {}
