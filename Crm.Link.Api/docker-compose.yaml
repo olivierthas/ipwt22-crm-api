@@ -58,7 +58,7 @@ services:
 
   suitecrm:
     depends_on:
-      - crm-mysqldb
+      - mysqldb
     image: docker.io/thaso/ipwt22-suitecrm:latest
     container_name: suitecrm
     restart: unless-stopped
