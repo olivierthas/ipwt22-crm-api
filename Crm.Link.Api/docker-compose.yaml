@@ -32,7 +32,7 @@ services:
   suitecrm:
     depends_on:
       - crm-mysqldb
-    image: docker.io/thaso/ipwt22-suitecrm-api:latest
+    image: docker.io/thaso/ipwt22-suitecrm:latest
     container_name: suitecrm
     restart: unless-stopped
     environment:
@@ -100,9 +100,11 @@ networks:
         name: planning
         driver: bridge
     rabbitmq:
-        external: true
+        name: rabbitmq
+        driver: bridge
     uuidmasterapi:
-        external: true
+        name: uuidmasterap
+        driver: bridge
 
 volumes: # add persistent data even if container is removed
     suitecrm-db:
