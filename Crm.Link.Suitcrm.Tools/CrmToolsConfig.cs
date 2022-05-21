@@ -12,6 +12,7 @@ namespace Crm.Link.Suitcrm.Tools
 
             services.AddTransient<IAccountGateAway, AccountGateAway>();
             services.AddTransient<ISessionGateAway, SessionGateAway>();
+            services.AddTransient<IContactGateAway, ContactGateAway>();
 
             var uri = configuration.GetConnectionString("crm_url");
             services.AddHttpClient("Crm", client =>
