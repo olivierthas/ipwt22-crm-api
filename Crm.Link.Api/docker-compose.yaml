@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.4'
 
 services:
 
@@ -115,7 +115,7 @@ services:
       - crm-api
     build:
         context: ./planning
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile        
     container_name: planning-api
     restart: unless-stopped
     networks:

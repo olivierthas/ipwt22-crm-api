@@ -8,7 +8,6 @@ using RabbitMQ.Client.Events;
 using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
-using Newtonsoft.Json;
 
 namespace Crm.Link.RabbitMq.Consumer
 {

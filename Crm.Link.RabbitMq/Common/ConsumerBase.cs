@@ -54,7 +54,7 @@ namespace Crm.Link.RabbitMq.Common
 
                 T test = (T)serializer.Deserialize(stream)!;
 
-                await HandelMessage(test);
+                await HandelMessage(test);                
             }
             catch (Exception ex)
             {
