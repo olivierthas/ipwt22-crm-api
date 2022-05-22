@@ -40,8 +40,7 @@ namespace Crm.Link.RabbitMq.Common
                 XmlReader reader = new XmlTextReader(stream);
                 XmlDocument document = new();
                 document.Load(stream);
-                
-                
+                                
                 _logger.LogInformation("{basePath}Resources/AttendeeEvent.xsd", basePath);
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
@@ -55,12 +54,12 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Validate(eventHandler);
                 
-                stream.Position = 0;
+                stream.Position = 1;
                 XmlRootAttribute root = new(typeof(T).Name);
                 root.IsNullable = true;
                 var serializer = new XmlSerializer(typeof(T), root);
 
-                T? message = serializer.Deserialize(stream) != null? (T)serializer.Deserialize(stream)! : default;
+                T? message = serializer.Deserialize(@event.Body.AsStream()) != null? (T)serializer.Deserialize(@event.Body.AsStream())! : default;
 
                 await HandelMessage(message);                
             }
