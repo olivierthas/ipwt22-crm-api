@@ -49,8 +49,8 @@ namespace Crm.Link.RabbitMq.Common
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
                 document.Validate(eventHandler);
-                
-                
+
+                _logger?.LogInformation(typeof(T).Name);
                 XmlRootAttribute root = new(typeof(T).Name);
                 var serializer = new XmlSerializer(typeof(T), root);
 
