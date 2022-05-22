@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Crm.Link.RabbitMq.Messages;
+using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
 using RabbitMQ.Client.Events;
 using System.Resources;
@@ -30,6 +31,7 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
             {
+                
                 _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
                 Stream stream = @event.Body.AsStream();
 
@@ -51,7 +53,7 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Validate(eventHandler);
 
-                XmlRootAttribute root = new(typeof(T).Name);
+                XmlRootAttribute root = new("SessionEvent");
                 var serializer = new XmlSerializer(typeof(T), root);
 
                 T? message = serializer.Deserialize(stream) != null? (T)serializer.Deserialize(stream)! : default;
