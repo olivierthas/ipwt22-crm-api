@@ -35,6 +35,7 @@ namespace Crm.Link.RabbitMq.Common
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
+                _logger?.LogInformation(reader.ReadContentAs(typeof(string), null) as string);
                 XmlDocument document = new();
                 document.Load(reader);
 
@@ -52,7 +53,7 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Validate(eventHandler);
 
-                XmlRootAttribute root = new("SessionEvent");
+                XmlRootAttribute root = new(typeof(T).Name);
                 root.IsNullable = true;
                 var serializer = new XmlSerializer(typeof(T), root);
 
