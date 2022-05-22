@@ -54,7 +54,7 @@ namespace Crm.Link.RabbitMq.Consumer
             throw new NotImplementedException();
         }
 
-        protected async override Task HandelMessage(SessionAttendeeEvent? messageObject)
+        protected async override Task HandleMessage(SessionAttendeeEvent? messageObject)
         {
             try
             {

@@ -66,7 +66,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         /// need to inject methode from top level class
         /// 
-        protected async override Task HandelMessage(AccountEvent messageObject)
+        protected async override Task HandleMessage(AccountEvent messageObject)
         {
             var crmObject = new AccountModel
             {                

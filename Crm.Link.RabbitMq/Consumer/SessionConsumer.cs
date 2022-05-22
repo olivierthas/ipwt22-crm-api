@@ -65,7 +65,7 @@ namespace Crm.Link.RabbitMq.Consumer
             return Task.CompletedTask;
         }
 
-        protected async override Task HandelMessage(SessionEvent messageObject)
+        protected async override Task HandleMessage(SessionEvent messageObject)
         {
 
             ResourceDto response;

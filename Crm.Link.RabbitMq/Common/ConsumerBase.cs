@@ -62,12 +62,12 @@ namespace Crm.Link.RabbitMq.Common
                 root.IsNullable = true;
                 _logger.LogInformation("4");
 
-                var serializer = new XmlSerializer(typeof(SessionEvent), root);
+                var serializer = new XmlSerializer(typeof(T), root);
                 _logger.LogInformation("5");
 
                 var message = serializer.Deserialize(@event.Body.AsStream());
                 if (message != null)
-                    await HandelMessage((T)message);                
+                    await HandleMessage((T)message);                
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Crm.Link.RabbitMq.Common
             Channel!.BasicAck(@event.DeliveryTag, false);
         }
 
-        protected abstract Task HandelMessage(T? messageObject);
+        protected abstract Task HandleMessage(T? messageObject);
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)
