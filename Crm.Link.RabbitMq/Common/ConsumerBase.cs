@@ -30,6 +30,7 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
             {
+                _logger?.LogInformation(typeof(T).Name);
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
@@ -37,20 +38,19 @@ namespace Crm.Link.RabbitMq.Common
                 document.Load(reader);
 
                 
-                _logger.LogInformation("{basePath}/Resources/AttendeeEvent.xsd", basePath);
+                _logger.LogInformation("{basePath}Resources/AttendeeEvent.xsd", basePath);
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
-                xmlSchemaSet.Add("", $"{basePath}/Resources/AttendeeEvent.xsd");
-                xmlSchemaSet.Add("", $"{basePath}/Resources/SessionEvent.xsd");
-                xmlSchemaSet.Add("", $"{basePath}/Resources/SessionAttendeeEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}Resources/AttendeeEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}Resources/SessionEvent.xsd");
+                xmlSchemaSet.Add("", $"{basePath}Resources/SessionAttendeeEvent.xsd");
 
 
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
                 document.Validate(eventHandler);
-                
-                
+
                 XmlRootAttribute root = new(typeof(T).Name);
                 var serializer = new XmlSerializer(typeof(T), root);
 
