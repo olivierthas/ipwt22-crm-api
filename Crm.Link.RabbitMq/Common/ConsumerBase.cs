@@ -33,13 +33,13 @@ namespace Crm.Link.RabbitMq.Common
             _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             try
             {                
-                Stream stream = @event.Body.AsStream();
+                /*Stream stream = @event.Body.AsStream();
                 _logger?.LogInformation(Encoding.UTF8.GetString(new BinaryReader(stream).ReadBytes((int)stream.Length)));
 
-                stream.Position = 0;
-                XmlReader reader = new XmlTextReader(stream);
+                stream.Position = 0;*/
+                XmlReader reader = new XmlTextReader(@event.Body.AsStream());
                 XmlDocument document = new();
-                document.Load(stream);
+                document.Load(reader);
                                 
                 _logger.LogInformation("{basePath}Resources/AttendeeEvent.xsd", basePath);
                 // xsd for validation
@@ -48,20 +48,26 @@ namespace Crm.Link.RabbitMq.Common
                 xmlSchemaSet.Add("", $"{basePath}Resources/SessionEvent.xsd");
                 xmlSchemaSet.Add("", $"{basePath}Resources/SessionAttendeeEvent.xsd");
 
-
+                _logger.LogInformation("1");
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
+                _logger.LogInformation("2");
 
                 document.Validate(eventHandler);
-                
-                stream.Position = 0;
-                XmlRootAttribute root = new(typeof(T).Name);
+                _logger.LogInformation("3");
+
+                // stream.Position = 0;
+                XmlRootAttribute root = new();
+                root.ElementName = SessionEvent.XmlElementName;
                 root.IsNullable = true;
-                var serializer = new XmlSerializer(typeof(T), root);
+                _logger.LogInformation("4");
 
-                T? message = (T)serializer.Deserialize(@event.Body.AsStream())!;
+                var serializer = new XmlSerializer(typeof(SessionEvent), root);
+                _logger.LogInformation("5");
 
-                await HandelMessage(message);                
+                var message = serializer.Deserialize(@event.Body.AsStream());
+                if (message != null)
+                    await HandelMessage((T)message);                
             }
             catch (Exception ex)
             {
