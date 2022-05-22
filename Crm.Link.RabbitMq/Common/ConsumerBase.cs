@@ -29,10 +29,9 @@ namespace Crm.Link.RabbitMq.Common
         protected virtual async Task OnEventReceived(object sender, BasicDeliverEventArgs @event)
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             try
-            {
-                
-                _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
+            {                
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
@@ -54,6 +53,7 @@ namespace Crm.Link.RabbitMq.Common
                 document.Validate(eventHandler);
 
                 XmlRootAttribute root = new("SessionEvent");
+                root.IsNullable = true;
                 var serializer = new XmlSerializer(typeof(T), root);
 
                 T? message = serializer.Deserialize(stream) != null? (T)serializer.Deserialize(stream)! : default;
@@ -64,6 +64,10 @@ namespace Crm.Link.RabbitMq.Common
             {
                 _logger.LogCritical(ex, "Error while retrieving message from queue.");                
                 return;
+            }
+            finally
+            {
+                _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             }
 
             Channel!.BasicAck(@event.DeliveryTag, false);
