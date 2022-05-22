@@ -34,12 +34,13 @@ namespace Crm.Link.RabbitMq.Common
             try
             {                
                 Stream stream = @event.Body.AsStream();
+                _logger?.LogInformation(Encoding.UTF8.GetString(new BinaryReader(stream).ReadBytes((int)stream.Length)));
 
+                stream.Position = 0;
                 XmlReader reader = new XmlTextReader(stream);
-                _logger?.LogInformation(Encoding.UTF8.GetString(@event.Body.ToArray()));
                 XmlDocument document = new();
-                document.Load(reader);
-
+                document.Load(stream);
+                
                 
                 _logger.LogInformation("{basePath}Resources/AttendeeEvent.xsd", basePath);
                 // xsd for validation
