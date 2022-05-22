@@ -32,38 +32,27 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             try
-            {                
-                /*Stream stream = @event.Body.AsStream();
-                _logger?.LogInformation(Encoding.UTF8.GetString(new BinaryReader(stream).ReadBytes((int)stream.Length)));
-
-                stream.Position = 0;*/
+            {                   
                 XmlReader reader = new XmlTextReader(@event.Body.AsStream());
                 XmlDocument document = new();
                 document.Load(reader);
-                                
-                _logger.LogInformation("{basePath}Resources/AttendeeEvent.xsd", basePath);
+                 
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
                 xmlSchemaSet.Add("", $"{basePath}Resources/AttendeeEvent.xsd");
                 xmlSchemaSet.Add("", $"{basePath}Resources/SessionEvent.xsd");
                 xmlSchemaSet.Add("", $"{basePath}Resources/SessionAttendeeEvent.xsd");
 
-                _logger.LogInformation("1");
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
-                _logger.LogInformation("2");
-
+                
                 document.Validate(eventHandler);
-                _logger.LogInformation("3");
-
-                // stream.Position = 0;
+               
                 XmlRootAttribute root = new();
                 root.ElementName = SessionEvent.XmlElementName;
                 root.IsNullable = true;
-                _logger.LogInformation("4");
 
                 var serializer = new XmlSerializer(typeof(T), root);
-                _logger.LogInformation("5");
 
                 var message = serializer.Deserialize(@event.Body.AsStream());
                 if (message != null)
@@ -71,7 +60,8 @@ namespace Crm.Link.RabbitMq.Common
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Error while retrieving message from queue.");                
+                _logger.LogCritical(ex, "Error while retrieving message from queue.");
+                Channel!.BasicNack(@event.DeliveryTag, false, true);
                 return;
             }
             finally

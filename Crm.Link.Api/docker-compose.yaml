@@ -22,7 +22,7 @@ services:
     ports:
       - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
     environment:
-      - SA_PASSWORD=Student1
+      - SA_PASSWORD=y4jDDCDqmv2mAjQZ4WPKYiSL4g7nnh
       - ACCEPT_EULA=Y
     networks:
       - uuidmasterapi
