@@ -35,7 +35,7 @@ namespace Crm.Link.RabbitMq.Common
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
-                _logger?.LogInformation(reader.ReadContentAs(typeof(string), null) as string);
+                _logger?.LogInformation(reader.ReadElementContentAs(typeof(string), null) as string);
                 XmlDocument document = new();
                 document.Load(reader);
 
