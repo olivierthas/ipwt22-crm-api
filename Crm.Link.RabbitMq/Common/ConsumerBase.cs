@@ -30,7 +30,7 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             try
             {
-                _logger?.LogInformation(typeof(T).Name);
+                _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
