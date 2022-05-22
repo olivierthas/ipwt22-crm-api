@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
 using RabbitMQ.Client.Events;
 using System.Resources;
+using System.Text;
 using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
@@ -35,7 +36,7 @@ namespace Crm.Link.RabbitMq.Common
                 Stream stream = @event.Body.AsStream();
 
                 XmlReader reader = new XmlTextReader(stream);
-                _logger?.LogInformation(reader.ReadElementContentAs(typeof(string), null) as string);
+                _logger?.LogInformation(Encoding.UTF8.GetString(@event.Body.ToArray()));
                 XmlDocument document = new();
                 document.Load(reader);
 
@@ -52,7 +53,8 @@ namespace Crm.Link.RabbitMq.Common
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
                 document.Validate(eventHandler);
-
+                
+                stream.Position = 0;
                 XmlRootAttribute root = new(typeof(T).Name);
                 root.IsNullable = true;
                 var serializer = new XmlSerializer(typeof(T), root);
