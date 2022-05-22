@@ -147,7 +147,7 @@ networks:
         name: uuidmasterapi
         driver: bridge
 
-volumes: # add persistent data even if container is removed
+volumes: 
     suitecrm-db:
         driver: local
     crm-logs:

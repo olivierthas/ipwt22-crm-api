@@ -53,10 +53,12 @@ namespace Crm.Link.RabbitMq.Consumer
             throw new NotImplementedException();
         }
 
-        protected async override Task HandelMessage(SessionAttendeeEvent messageObject)
+        protected async override Task HandelMessage(SessionAttendeeEvent? messageObject)
         {
             try
             {
+                _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));
+
                 switch (messageObject.EntityType)
                 {
                     case "Contact":
@@ -71,7 +73,8 @@ namespace Crm.Link.RabbitMq.Consumer
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "post to crm error: ");                
+                _logger.LogError(ex, "post to crm error: ");
+                throw;
             }
         }
     }

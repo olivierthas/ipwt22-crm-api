@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
 using RabbitMQ.Client.Events;
+using System.Resources;
 using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
@@ -35,8 +36,8 @@ namespace Crm.Link.RabbitMq.Common
                 XmlDocument document = new();
                 document.Load(reader);
 
-
-                _logger.LogInformation($"{basePath}/Resources/AttendeeEvent.xsd");
+                
+                _logger.LogInformation("{basePath}/Resources/AttendeeEvent.xsd", basePath);
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
                 xmlSchemaSet.Add("", $"{basePath}/Resources/AttendeeEvent.xsd");
@@ -48,34 +49,34 @@ namespace Crm.Link.RabbitMq.Common
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
                 document.Validate(eventHandler);
+                
+                
+                XmlRootAttribute root = new(typeof(T).Name);
+                var serializer = new XmlSerializer(typeof(T), root);
 
-                var serializer = new XmlSerializer(typeof(T));
+                T? message = serializer.Deserialize(stream) != null? (T)serializer.Deserialize(stream)! : default;
 
-                T test = (T)serializer.Deserialize(stream)!;
-
-                await HandelMessage(test);                
+                await HandelMessage(message);                
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Error while retrieving message from queue.");
+                _logger.LogCritical(ex, "Error while retrieving message from queue.");                
+                return;
             }
-            finally
-            {
-                Channel!.BasicAck(@event.DeliveryTag, false);
-            }
-            await Task.CompletedTask;
+
+            Channel!.BasicAck(@event.DeliveryTag, false);
         }
 
-        protected abstract Task HandelMessage(T messageObject);
+        protected abstract Task HandelMessage(T? messageObject);
         private void ValidationEventHandler(object? sender, ValidationEventArgs e)
         {
             switch (e.Severity)
             {
                 case XmlSeverityType.Error:
-                    Console.WriteLine("Error: {0}", e.Message);
+                    _logger.LogError("Error: {Message}", e.Message);
                     break;
                 case XmlSeverityType.Warning:
-                    Console.WriteLine("Warning {0}", e.Message);
+                    _logger.LogWarning("Warning {Message}", e.Message);
                     break;
             }
         }
