@@ -40,12 +40,14 @@ namespace Crm.Link.RabbitMq.Consumer
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogCritical(ex, "Error while consuming message");
+                    _logger.LogCritical(ex, "Error while binding to queue.");
+
                     SetTimer();
                 }
             }
             else
             {
+                _logger.LogCritical("Channel was null - starting timer.");
                 SetTimer();
             }
 

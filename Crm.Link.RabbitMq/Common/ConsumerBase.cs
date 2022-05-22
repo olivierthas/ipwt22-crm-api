@@ -85,6 +85,7 @@ namespace Crm.Link.RabbitMq.Common
         {
             if (_timer == null)
             {
+                _logger.LogInformation("creating timer - consumerbase.");
                 _timer = new System.Timers.Timer(10000);
 
                 _timer.Elapsed += OnTimedEvent;

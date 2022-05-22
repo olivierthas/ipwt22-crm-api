@@ -43,7 +43,7 @@ namespace Crm.Link.RabbitMq.Common
                 }
             }
 
-            if (_connection is not null && (Channel == null || Channel.IsOpen == false))
+            if (_connection is not null && (Channel == null || !Channel.IsOpen))
             {
                 Channel = _connection.CreateModel();
 
