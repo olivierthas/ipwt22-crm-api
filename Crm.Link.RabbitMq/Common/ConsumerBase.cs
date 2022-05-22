@@ -54,12 +54,12 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Validate(eventHandler);
                 
-                stream.Position = 1;
+                stream.Position = 0;
                 XmlRootAttribute root = new(typeof(T).Name);
                 root.IsNullable = true;
                 var serializer = new XmlSerializer(typeof(T), root);
 
-                T? message = serializer.Deserialize(@event.Body.AsStream()) != null? (T)serializer.Deserialize(@event.Body.AsStream())! : default;
+                T? message = (T)serializer.Deserialize(@event.Body.AsStream())!;
 
                 await HandelMessage(message);                
             }
