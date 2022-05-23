@@ -16,31 +16,31 @@ services:
       #- rabbitmq_data:/var/lib/rabbitmq
       - rabbitmq_data:/var/lib/rabbitmq
 
-  db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    hostname: db
-    ports:
-      - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
-    environment:
-      - SA_PASSWORD=y4jDDCDqmv2mAjQZ4WPKYiSL4g7nnh
-      - ACCEPT_EULA=Y
-    networks:
-      - uuidmasterapi
-    volumes:
-      - db_data:/var/opt/mssql
+  #db:
+  #  image: mcr.microsoft.com/mssql/server:2019-latest
+  #  hostname: db
+  #  ports:
+  #    - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
+  #  environment:
+  #    - SA_PASSWORD=y4jDDCDqmv2mAjQZ4WPKYiSL4g7nnh
+  #    - ACCEPT_EULA=Y
+  #  networks:
+  #    - uuidmasterapi
+  #  volumes:
+  #    - db_data:/var/opt/mssql
 
-  api:
-    depends_on:
-      - db
-    build:
-      context: ./uuid
-      dockerfile: Dockerfile
-    ports: # replace by expose
-      - "5000:5000"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    networks:
-      - uuidmasterapi
+  #api:
+  #  depends_on:
+  #    - db
+  #  build:
+  #    context: ./uuid
+  #    dockerfile: Dockerfile
+  #  ports: # replace by expose
+  #    - "5000:5000"
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #  networks:
+  #    - uuidmasterapi
 
   suitecrm-db:
     image: mysql/mysql-server:latest # user latest version of mysql-server image
@@ -91,29 +91,29 @@ services:
       - '80:8080'
       - '443:8443'
 
-  #crm-api:
-  #  depends_on:
-  #    - rabbitmq
-  #  build:
-  #      context: ./crm
-  #      dockerfile: Dockerfile
-  #  # image: docker.io/thaso/suitecrm-api:latest
-  #  container_name: crm-api
-  #  restart: unless-stopped
-  #  networks:
-  #    - suitecrmNetwork
-  #    - rabbitmq
-  #    - uuidmasterapi
-  #  ports:
-  #    - '5172:80'
-  #  volumes:
-  #    - suitecrm-db:/crm_logs
-  #  healthcheck:
-  #      test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
-  #      interval: 1m30s
-  #      timeout: 10s
-  #      retries: 3
-  #      start_period: 40s
+  crm-api:
+    depends_on:
+      - rabbitmq
+    build:
+        context: ./crm
+        dockerfile: Dockerfile
+    # image: docker.io/thaso/suitecrm-api:latest
+    container_name: crm-api
+    restart: unless-stopped
+    networks:
+      - suitecrmNetwork
+      - rabbitmq
+      - uuidmasterapi
+    ports:
+      - '5172:80'
+    volumes:
+      - suitecrm-db:/crm_logs
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
 
   planning:    
     build:
