@@ -28,6 +28,7 @@ services:
       - uuidmasterapi
     volumes:
       - db_data:/var/opt/mssql
+
   api:
     depends_on:
       - db
