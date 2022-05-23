@@ -1,6 +1,7 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.Suitcrm.Tools.GateAway;
+using Crm.Link.Suitcrm.Tools.Models;
 using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Hosting;
@@ -73,6 +74,22 @@ namespace Crm.Link.RabbitMq.Consumer
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
+                    var crmObject = new MeetingModel
+                    {
+                        Name = messageObject.Title,
+                        EndDate = messageObject.EndDateUTC,
+                        StartDate = messageObject.StartDateUTC
+                    };
+
+                    var resp = await _sessionGateAway.CreateOrUpdate(crmObject);
+                    
+                    var test = await resp.Content.ReadAsStringAsync(); //wat are you
+                    _logger.LogInformation(test);
+
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);
+                    }
                     break;
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
@@ -80,7 +97,8 @@ namespace Crm.Link.RabbitMq.Consumer
                         response = await _uUIDGateAway.GetResource(id);
                         if (response == null)
                         {
-                            _logger.LogError("response UUIDMaster was null - handelMessage - account");
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account - guid: {id}", id);
+                            throw new ArgumentNullException(nameof(response), "");
                         }
                         else
                         {

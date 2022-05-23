@@ -61,7 +61,7 @@ services:
   suitecrm:
     depends_on:
       - mysqldb
-    image: docker.io/thaso/ipwt22-suitecrm:latest
+    image: docker.io/thaso/ipwt22-suitecrm:1.0
     container_name: suitecrm
     restart: unless-stopped
     environment:
@@ -81,9 +81,9 @@ services:
       SUITECRM_DATABASE_USER: root # this is the root user to login on startup
       SUITECRM_DATABASE_PASSWORD: mypassword
       ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_CLIENT_FLAVOR: mysql
-      MYSQL_CLIENT_DATABASE_HOST: mysqldb
-      MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
+      #MYSQL_CLIENT_FLAVOR: mysql
+      #MYSQL_CLIENT_DATABASE_HOST: mysqldb
+      #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
     networks:
       - crmNetwork
     ports:
@@ -149,6 +149,7 @@ networks:
 
 volumes: 
     suitecrm-db:
+        name: mysqldb
         driver: local
     crm-logs:
         driver: local
