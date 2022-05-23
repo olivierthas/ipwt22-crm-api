@@ -155,6 +155,6 @@ volumes:
         driver: local
     crm-logs:
         driver: local
-    rabbitmq_data:
-        driver: local
-    db_data: {}
+    #rabbitmq_data:
+    #    driver: local
+    #db_data: {}
