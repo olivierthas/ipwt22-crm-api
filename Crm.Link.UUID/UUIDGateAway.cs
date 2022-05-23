@@ -1,7 +1,6 @@
 ﻿using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Net;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -20,19 +19,19 @@ namespace Crm.Link.UUID
 
         public async Task<ResourceDto?> GetResource(Guid id)
         {
-            var response = await _httpClient.GetAsync($"resource/{id}");
+            var response = await _httpClient.GetAsync($"api/resource/{id}");
             if (!response.IsSuccessStatusCode)
                 return null;
             var content = await response.Content.ReadAsStringAsync();
             if (content == null)
                 return null;
             return JsonConvert.DeserializeObject<ResourceDto>(content);
-            
+
         }
 
         public async Task<ResourceDto?> GetGuid(string id, string sourceType, EntityTypeEnum entityType)
         {
-            var response = await _httpClient.GetAsync($"resources/search?source={sourceType}&entityType={entityType}&sourceEntityId={id}");
+            var response = await _httpClient.GetAsync($"api/resources/search?source={sourceType}&entityType={entityType}&sourceEntityId={id}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -58,7 +57,7 @@ namespace Crm.Link.UUID
 
             var json = JsonConvert.SerializeObject(body);
             var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
-            var response = await _httpClient.PostAsync("resources", contentBody);
+            var response = await _httpClient.PostAsync("api/resources", contentBody);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -85,7 +84,7 @@ namespace Crm.Link.UUID
 
             var json = JsonConvert.SerializeObject(body);
             var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
-            var resp = await _httpClient.PatchAsync($"resources/{response.Uuid}", contentBody);
+            var resp = await _httpClient.PatchAsync($"api/resources/{response.Uuid}", contentBody);
             if (resp.IsSuccessStatusCode)
             {
                 var content = await resp.Content.ReadAsStringAsync();
@@ -112,7 +111,7 @@ namespace Crm.Link.UUID
 
             var json = JsonConvert.SerializeObject(body);
             var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
-            var resp = await _httpClient.PatchAsync($"resources/{response.Uuid}", contentBody);
+            var resp = await _httpClient.PatchAsync($"api/resources/{response.Uuid}", contentBody);
             if (resp.IsSuccessStatusCode)
             {
                 var content = await resp.Content.ReadAsStringAsync();
