@@ -26,18 +26,18 @@ services:
     volumes:
       - db-data:/var/opt/mssql
 
-  #api:
-  #  depends_on:
-  #    - db
-  #  build:
-  #    context: ./uuid
-  #    dockerfile: Dockerfile
-  #  ports: # replace by expose
-  #    - "5000:5000"
-  #  environment:
-  #    - ASPNETCORE_ENVIRONMENT=Development
-  #  networks:
-  #    - uuidmasterapi
+  api:
+    depends_on:
+      - db
+    build:
+      context: ./uuid
+      dockerfile: Dockerfile
+    ports: # replace by expose
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - uuidmasterapi
 
   suitecrm-db:
     image: mysql/mysql-server:latest # user latest version of mysql-server image
@@ -100,7 +100,7 @@ services:
     networks:
       - suitecrmNetwork
       - rabbitmq
-      #- uuidmasterapi
+      - uuidmasterapi
     ports:
       - '5172:80'
     volumes:
@@ -121,7 +121,7 @@ services:
     networks:
       - planning
       - rabbitmq
-      #- uuidmasterapi
+      - uuidmasterapi
     ports:
       - '6002:80'
       - '6003:443'
