@@ -11,20 +11,20 @@ services:
       - '5672:5672'
       - '15672:15672'
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq-data:/var/lib/rabbitmq
 
-  #db:
-  #  image: mcr.microsoft.com/mssql/server:2019-latest
-  #  hostname: db
-  #  ports:
-  #    - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
-  #  environment:
-  #    - SA_PASSWORD=y4jDDCDqmv2mAjQZ4WPKYiSL4g7nnh
-  #    - ACCEPT_EULA=Y
-  #  networks:
-  #    - uuidmasterapi
-  #  volumes:
-  #    - db_data:/var/opt/mssql
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    hostname: db
+    ports:
+      - "1433:1433" # Publishes the port to docker host in order to access db from vscode extension. 
+    environment:
+      - SA_PASSWORD=y4jDDCDqmv2mAjQZ4WPKYiSL4g7nnh
+      - ACCEPT_EULA=Y
+    networks:
+      - uuidmasterapi
+    volumes:
+      - db-data:/var/opt/mssql
 
   #api:
   #  depends_on:
@@ -139,9 +139,9 @@ networks:
     rabbitmq:
         name: rabbitmq
         driver: bridge
-    #uuidmasterapi:
-    #    name: uuidmasterapi
-    #    driver: bridge
+    uuidmasterapi:
+        name: uuidmasterapi
+        driver: bridge
 
 volumes: 
     suitecrm-db-v:
@@ -150,6 +150,9 @@ volumes:
     crm-logs:
         name: crm-logs
         driver: local
-    rabbitmq_data:
+    rabbitmq-data:
+        name: rabbitmq-data
         driver: local
-    db_data: {}
+    db-data:
+        name: db-data
+        driver: local
