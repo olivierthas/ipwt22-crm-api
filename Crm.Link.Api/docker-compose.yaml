@@ -88,29 +88,29 @@ services:
       - '80:8080'
       - '443:8443'
 
-  #crm-api:
-  #  depends_on:
-  #    - rabbitmq
-  #  build:
-  #      context: ./crm
-  #      dockerfile: Dockerfile
-  #  # image: docker.io/thaso/suitecrm-api:latest
-  #  container_name: crm-api
-  #  restart: unless-stopped
-  #  networks:
-  #    - suitecrmNetwork
-  #    #- rabbitmq
-  #    #- uuidmasterapi
-  #  ports:
-  #    - '5172:80'
-  #  volumes:
-  #    - suitecrm-db:/crm_logs
-  #  healthcheck:
-  #      test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
-  #      interval: 1m30s
-  #      timeout: 10s
-  #      retries: 3
-  #      start_period: 40s
+  crm-api:
+    depends_on:
+      - rabbitmq
+    build:
+        context: ./crm
+        dockerfile: Dockerfile
+    # image: docker.io/thaso/suitecrm-api:latest
+    container_name: crm-api
+    restart: unless-stopped
+    networks:
+      - suitecrmNetwork
+      - rabbitmq
+      #- uuidmasterapi
+    ports:
+      - '5172:80'
+    volumes:
+      - suitecrm-db:/crm_logs
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://crm-api/api/account/Test"]
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
 
   #planning:    
   #  build:
