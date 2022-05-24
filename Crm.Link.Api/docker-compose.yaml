@@ -1,18 +1,17 @@
 services:
 
-  #rabbitmq:
-  #  hostname: 'rabbitmq'
-  #  image: docker.io/rabbitmq:3.9-management
-  #  container_name: rabbitmq
-  #  restart: unless-stopped
-  #  networks:
-  #    - rabbitmq
-  #  ports:
-  #    - '5672:5672'
-  #    - '15672:15672'
-  #  volumes:
-  #    #- rabbitmq_data:/var/lib/rabbitmq
-  #    - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    hostname: 'rabbitmq'
+    image: docker.io/rabbitmq:3.9-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    networks:
+      - rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
 
   #db:
   #  image: mcr.microsoft.com/mssql/server:2019-latest
@@ -140,9 +139,9 @@ networks:
     #planning:
     #    name: planning
     #    driver: bridge
-    #rabbitmq:
-    #    name: rabbitmq
-    #    driver: bridge
+    rabbitmq:
+        name: rabbitmq
+        driver: bridge
     #uuidmasterapi:
     #    name: uuidmasterapi
     #    driver: bridge
@@ -153,6 +152,6 @@ volumes:
         driver: local
     #crm-logs:
     #    driver: local
-    #rabbitmq_data:
-    #    driver: local
-    #db_data: {}
+    rabbitmq_data:
+        driver: local
+    db_data: {}
