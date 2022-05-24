@@ -39,54 +39,54 @@ services:
     networks:
       - uuidmasterapi
 
-  suitecrm-db:
-    image: mysql/mysql-server:latest # user latest version of mysql-server image
-    container_name: suitecrm-db # add a name for the container
-    restart: unless-stopped
-    environment: # add default values, see docs for more info
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: Student1
-      MYSQL_ROOT_HOST: '%' # this variable '%' creates the 'root'@'localhost' account
-      MYSQL_ROOT_PASSWORD: Student1
-      MYSQL_DATABASE: suitecrm-db # create this database on startup
-    networks:
-      - suitecrmNetwork
-    volumes:
-      - 'suitecrm-db-v:/var/lib/mysql'
-    ports:
-      - '3306:3306'
+  #suitecrm-db:
+  #  image: mysql/mysql-server:latest # user latest version of mysql-server image
+  #  container_name: suitecrm-db # add a name for the container
+  #  restart: unless-stopped
+  #  environment: # add default values, see docs for more info
+  #    MYSQL_USER: admin
+  #    MYSQL_PASSWORD: Student1
+  #    MYSQL_ROOT_HOST: '%' # this variable '%' creates the 'root'@'localhost' account
+  #    MYSQL_ROOT_PASSWORD: Student1
+  #    MYSQL_DATABASE: suitecrm-db # create this database on startup
+  #  networks:
+  #    - suitecrmNetwork
+  #  volumes:
+  #    - 'suitecrm-db-v:/var/lib/mysql'
+  #  ports:
+  #    - '3306:3306'
 
-  suitecrm:
-    depends_on:
-      - suitecrm-db
-    image: docker.io/thaso/ipwt22-suitecrm:1.0
-    container_name: suitecrm
-    restart: unless-stopped
-    environment:
-      APACHE_HTTP_PORT_NUMBER: '8080'
-      APACHE_HTTPS_PORT_NUMBER: '443'
-      SUITECRM_USERNAME: suitecrm
-      SUITECRM_PASSWORD: Student1
-      SUITECRM_EMAIL: user@example.com
-      SUITECRM_SKIP_BOOTSTRAP: 'no'
-      SUITECRM_HOST: localhost
-      SUITECRM_ENABLE_HTTPS: 'no'
-      SUITECRM_EXTERNAL_HTTP_PORT_NUMBER: '80'
-      SUITECRM_EXTERNAL_HTTPS_PORT_NUMBER: '443'
-      SUITECRM_DATABASE_HOST: suitecrm-db # define the address/hostname of the mysql server eg mysql container name
-      SUITECRM_DATABASE_PORT_NUMBER: '3306'
-      SUITECRM_DATABASE_NAME: suitecrm-db
-      SUITECRM_DATABASE_USER: root # this is the root user to login on startup
-      SUITECRM_DATABASE_PASSWORD: Student1
-      ALLOW_EMPTY_PASSWORD: 'yes'
-      #MYSQL_CLIENT_FLAVOR: mysql
-      #MYSQL_CLIENT_DATABASE_HOST: mysqldb
-      #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
-    networks:
-      - suitecrmNetwork
-    ports:
-      - '80:8080'
-      - '443:8443'
+  #suitecrm:
+  #  depends_on:
+  #    - suitecrm-db
+  #  image: docker.io/thaso/ipwt22-suitecrm:1.0
+  #  container_name: suitecrm
+  #  restart: unless-stopped
+  #  environment:
+  #    APACHE_HTTP_PORT_NUMBER: '8080'
+  #    APACHE_HTTPS_PORT_NUMBER: '443'
+  #    SUITECRM_USERNAME: suitecrm
+  #    SUITECRM_PASSWORD: Student1
+  #    SUITECRM_EMAIL: user@example.com
+  #    SUITECRM_SKIP_BOOTSTRAP: 'no'
+  #    SUITECRM_HOST: localhost
+  #    SUITECRM_ENABLE_HTTPS: 'no'
+  #    SUITECRM_EXTERNAL_HTTP_PORT_NUMBER: '80'
+  #    SUITECRM_EXTERNAL_HTTPS_PORT_NUMBER: '443'
+  #    SUITECRM_DATABASE_HOST: suitecrm-db # define the address/hostname of the mysql server eg mysql container name
+  #    SUITECRM_DATABASE_PORT_NUMBER: '3306'
+  #    SUITECRM_DATABASE_NAME: suitecrm-db
+  #    SUITECRM_DATABASE_USER: root # this is the root user to login on startup
+  #    SUITECRM_DATABASE_PASSWORD: Student1
+  #    ALLOW_EMPTY_PASSWORD: 'yes'
+  #    #MYSQL_CLIENT_FLAVOR: mysql
+  #    #MYSQL_CLIENT_DATABASE_HOST: mysqldb
+  #    #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
+  #  networks:
+  #    - suitecrmNetwork
+  #  ports:
+  #    - '80:8080'
+  #    - '443:8443'
 
   crm-api:
     depends_on:
