@@ -53,7 +53,7 @@ services:
     networks:
       - suitecrmNetwork
     volumes:
-      - 'suitecrm-db:/var/lib/mysql'
+      - 'suitecrm-db-v:/var/lib/mysql'
     ports:
       - '3306:3306'
 
@@ -148,8 +148,8 @@ networks:
     #    driver: bridge
 
 volumes: 
-    suitecrm-db:
-        name: mysqldb
+    suitecrm-db-v:
+        name: suitecrm-db-v
         driver: local
     #crm-logs:
     #    driver: local
