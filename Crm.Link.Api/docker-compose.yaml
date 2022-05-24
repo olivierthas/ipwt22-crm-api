@@ -112,19 +112,19 @@ services:
         retries: 3
         start_period: 40s
 
-  #planning:    
-  #  build:
-  #      context: ./planning
-  #      dockerfile: Dockerfile        
-  #  container_name: planning-api
-  #  restart: unless-stopped
-  #  networks:
-  #    - planning
-  #    - rabbitmq
-  #    - uuidmasterapi
-  #  ports:
-  #    - '6002:80'
-  #    - '6003:443'
+  planning:    
+    build:
+        context: ./planning
+        dockerfile: Dockerfile        
+    container_name: planning-api
+    restart: unless-stopped
+    networks:
+      - planning
+      - rabbitmq
+      #- uuidmasterapi
+    ports:
+      - '6002:80'
+      - '6003:443'
 
 networks:
     suitecrmNetwork:
@@ -133,9 +133,9 @@ networks:
     #frontend:
     #    name: frontend
     #    driver: bridge
-    #planning:
-    #    name: planning
-    #    driver: bridge
+    planning:
+        name: planning
+        driver: bridge
     rabbitmq:
         name: rabbitmq
         driver: bridge
