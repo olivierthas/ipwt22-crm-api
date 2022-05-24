@@ -10,5 +10,11 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
     public class ContactGateAway : GateAwayBase<ContactModel>, IContactGateAway
     {
         protected override string Module => "Contacts";
+        public ContactGateAway(
+            IHttpClientFactory httpClientFactory,
+            TokenProvider tokenProvider) : base(tokenProvider)
+        {
+            HttpClient = httpClientFactory.CreateClient("Crm");
+        }
     }
 }

@@ -9,10 +9,11 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
     {
         protected override string Module => "Meetings";
 
-        public SessionGateAway(HttpClient httpClient, TokenProvider tokenProvider)
+        public SessionGateAway(
+            IHttpClientFactory httpClientFactory,
+            TokenProvider tokenProvider) : base(tokenProvider)
         {
-            this.HttpClient = httpClient;
-            Token = tokenProvider.GetToken();
+            this.HttpClient = httpClientFactory.CreateClient("Crm");
         }
 
         public async Task AddUserToSession(string module, string userId, string sessionId)

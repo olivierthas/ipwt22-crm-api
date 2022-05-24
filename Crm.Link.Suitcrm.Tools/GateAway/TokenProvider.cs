@@ -28,8 +28,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         {
             if (token.ValidTillDate != null && token.ValidTillDate > DateTime.UtcNow)
                 return token.TokenValue;
-
-            _ = credentials ?? throw new ArgumentNullException(nameof(credentials));
+                        
             var json = JsonConvert.SerializeObject(credentials);
 
             var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
@@ -38,7 +37,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             if (!response.IsSuccessStatusCode)
             {
                 logger.LogError(message: "Fetch token failed: ", args: response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
-                response.EnsureSuccessStatusCode();
+                return null;
             }
 
             var res = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();

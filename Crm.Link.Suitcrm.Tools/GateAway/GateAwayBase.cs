@@ -7,11 +7,15 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
 {
     public abstract class GateAwayBase<T> : IGateAwayBase<T> where T : ICrmModel
     {
+        protected TokenProvider tokenProvider;
         protected abstract string Module { get; }
-
         protected HttpClient? HttpClient { get; set; }
         protected string? Token { get; set; }
 
+        public GateAwayBase(TokenProvider tokenProvider)
+        {
+            this.tokenProvider = tokenProvider;
+        }
         protected HttpContent CreateContent(T moduleModel)
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -24,13 +28,21 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
 
         public virtual async Task<HttpResponseMessage> CreateOrUpdate(T moduleModel)
         {
+            CheckToken();  
             var content = CreateContent(moduleModel);
             return await HttpClient!.PostAsync($"/api/v8/modules/{Module}", content);
         }
 
         public virtual async Task<HttpResponseMessage> Delete(string id)
         {
+            CheckToken();
             return await HttpClient!.DeleteAsync($"/api/v8/modules/{Module}/{id}");
+        }
+
+        protected void CheckToken()
+        {
+            if (Token == null)
+                Token = tokenProvider.GetToken();
         }
     }
 }
