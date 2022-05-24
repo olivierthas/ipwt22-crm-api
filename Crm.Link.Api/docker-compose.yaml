@@ -82,8 +82,6 @@ services:
       #MYSQL_CLIENT_FLAVOR: mysql
       #MYSQL_CLIENT_DATABASE_HOST: mysqldb
       #MYSQL_CLIENT_DATABASE_PORT_NUMBER: '3306'
-    command:
-        - bash sleep 10
     networks:
       - suitecrmNetwork
     ports:
