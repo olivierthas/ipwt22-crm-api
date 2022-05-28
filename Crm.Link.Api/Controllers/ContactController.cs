@@ -49,6 +49,8 @@ namespace Crm.Link.Api.Controllers
             var @event = new AttendeeEvent
             {
                 UUID_Nr = Guid.NewGuid().ToString(), // get uuid from uuidmaster
+                SourceEntityId = contact.Id,
+                EntityType = UUID.Model.EntityTypeEnum.Attendee.ToString(),
                 Method = MethodEnum.CREATE,
                 Name = contact.FirstName,
                 LastName = contact.LastName,
