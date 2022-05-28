@@ -1,9 +1,5 @@
 ﻿using Crm.Link.Suitcrm.Tools.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
@@ -15,6 +11,17 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             TokenProvider tokenProvider) : base(tokenProvider)
         {
             HttpClient = httpClientFactory.CreateClient("Crm");
+        }
+
+        public async Task<ContactModel?> GetContact(string id)
+        {
+            var response = await HttpClient.GetAsync($"/Api/V8/module/{Module}/{id}");
+            if (!response.IsSuccessStatusCode && string.IsNullOrWhiteSpace(await response.Content.ReadAsStringAsync()))
+            {
+
+                return null;
+            }
+            return JsonConvert.DeserializeObject<ContactModel>(await response.Content.ReadAsStringAsync());
         }
     }
 }

@@ -27,5 +27,10 @@ namespace Crm.Link.Suitcrm.Tools.Models
 
         [JsonProperty("status")]
         public string? Status { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}, {Name}, {Description}, {Location}, {StartDate}, {EndDate}, {OutlookID}, {Status}";
+        }
     }
 }

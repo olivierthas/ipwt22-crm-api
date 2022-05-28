@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crm.Link.UUID.Model
+﻿namespace Crm.Link.UUID.Model
 {
     public class ResourceDto
     {

@@ -73,7 +73,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 Email = messageObject.Email,
             };
 
-            ResourceDto response;
+            ResourceDto? response;
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
@@ -82,18 +82,23 @@ namespace Crm.Link.RabbitMq.Consumer
                     var test = await resp.Content.ReadAsStringAsync();
                     _logger.LogInformation(test);
                     //add to uuid
-                    if (resp.IsSuccessStatusCode)
+                    if (!resp.IsSuccessStatusCode)
                     {
-                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, "0000", 1);
+                        _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
+                        return;
                     }
+                    
+                    _ = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, "0000", 1);
+                    
                     break;
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
                     {
-                        response = await _uUIDGateAway.GetResource(id);
+                        response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
                         if (response == null)
                         {
-                            _logger.LogError("response UUIDMaster was null - handelMessage - contact");
+                            _logger.LogError("response UUIDMaster was null - handelMessage - contact - guid: {id}", id);
+                            return;
                         }
                         else
                         {
@@ -105,16 +110,28 @@ namespace Crm.Link.RabbitMq.Consumer
                                 await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, messageObject.EntityVersion);
                             }
                         }
+                        return;
                     }
+
+                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
                     break;
                 case MethodEnum.DELETE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out var mesId))
                     {
-                        var del = await _uUIDGateAway.GetResource(mesId);
+                        var del = await _uUIDGateAway.GetResource(mesId, SourceEnum.CRM.ToString());
+                        if (del == null)
+                        {
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account - guid: {id}", mesId);
+                            return;
+                        }
                         await _contactGateAway.Delete(del.SourceEntityId);
+                        return;
                     }
+
+                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
                     break;
                 default:
+                    _logger.LogError("methode notFound: {method}", messageObject.Method);
                     break;
             }
         }

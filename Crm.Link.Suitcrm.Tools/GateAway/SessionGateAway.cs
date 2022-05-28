@@ -34,5 +34,12 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             
             await HttpClient.PostAsync($"/api/v8/module/Meetings/relationships/", stringContent);
         }
+
+        public async Task RemoveUserFromSession(string module, string userId, string sessionId)
+        {
+            HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);            
+
+            await HttpClient.DeleteAsync($"/api/v8/module/Meetings/{sessionId}/relationships/{module}/{userId}");
+        }
     }
 }
