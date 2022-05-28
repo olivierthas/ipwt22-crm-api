@@ -52,8 +52,8 @@ namespace Crm.Link.Api.Controllers
                 Source = SourceEnum.CRM,
                 Title = meeting.Name,
                 OrganiserUUID = "",
-                StartDateUTC = meeting.StartDate,
-                EndDateUTC = meeting.EndDate,
+                StartDateUTC = meeting.StartDate == DateTime.MinValue ? DateTime.UtcNow.AddHours(2) : meeting.StartDate,
+                EndDateUTC = meeting.EndDate == DateTime.MinValue ? DateTime.UtcNow.AddHours(3) : meeting.EndDate,
                 IsActive = true,
                 EntityType = "Meeting",
                 SourceEntityId = meeting.Id
