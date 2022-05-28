@@ -80,7 +80,11 @@ namespace Crm.Link.RabbitMq.Consumer
                 {
                     Name = messageObject.Title,
                     EndDate = messageObject.EndDateUTC,
-                    StartDate = messageObject.StartDateUTC
+                    StartDate = messageObject.StartDateUTC,
+                    Description = "",
+                    Location = "",
+                    Status = "",
+                    OutlookID = "",
                 };
 
                 var sendObject = new ModuleModel
@@ -105,7 +109,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
                         if (!resp.IsSuccessStatusCode)
                         {
-                            _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
+                            _logger.LogError("Response from suiteCrm was not Ok : {tostring}", sendObject.ToString());
                             return;
                         }
 

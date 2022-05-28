@@ -9,5 +9,10 @@ namespace Crm.Link.Suitcrm.Tools.Models
 
         [JsonProperty("attributes")]
         public ICrmModel? Attributes { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Type}, {Attributes.ToString()}";
+        }
     }
 }
