@@ -45,6 +45,8 @@ namespace Crm.Link.Api.Controllers
             // call uid
             var response = await _uUIDGateAway.GetGuid(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
 
+            _logger.LogInformation($"{meeting.StartDate}, {meeting.EndDate}");
+
             var @event = new SessionEvent
             {
                 Source = SourceEnum.CRM,

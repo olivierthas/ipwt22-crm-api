@@ -72,89 +72,84 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandleMessage(SessionEvent messageObject)
         {
-
-            ResourceDto? response;
-
-            var crmObject = new MeetingModel
+            if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
             {
-                Name = messageObject.Title,
-                EndDate = messageObject.EndDateUTC,
-                StartDate = messageObject.StartDateUTC
-            };
+                ResourceDto? response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString()); ;
 
-            var sendObject = new ModuleModel
-            {
-                Data = new BaseModel
+                var crmObject = new MeetingModel
                 {
-                    Type = "Meetings",
-                    Attributes = crmObject
-                }
-            };
+                    Name = messageObject.Title,
+                    EndDate = messageObject.EndDateUTC,
+                    StartDate = messageObject.StartDateUTC
+                };
 
-            switch (messageObject.Method)
-            {
-                case MethodEnum.CREATE:
-
-                    var resp = await _sessionGateAway.CreateOrUpdate(sendObject);
-                    
-                    var test = await resp.Content.ReadAsStringAsync(); //wat are you
-                    _logger.LogInformation(test);
-
-                    if (!resp.IsSuccessStatusCode)
+                var sendObject = new ModuleModel
+                {
+                    Data = new BaseModel
                     {
-                        _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
-                        return;
+                        Type = "Meetings",
+                        Attributes = crmObject
                     }
+                };
 
-                    _ = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "", 1);                    
+                switch (messageObject.Method)
+                {
+                    case MethodEnum.CREATE:
+                        if (response != null)
+                            return;
 
-                    break;
-                case MethodEnum.UPDATE:
-                    if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
-                    {
-                        response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
+                        var resp = await _sessionGateAway.CreateOrUpdate(sendObject);
+                    
+                        var test = await resp.Content.ReadAsStringAsync(); //wat are you
+                        _logger.LogInformation(test);
+
+                        if (!resp.IsSuccessStatusCode)
+                        {
+                            _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
+                            return;
+                        }
+
+                        _ = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, response.Uuid.ToString(), 1);                    
+
+                        break;
+                    case MethodEnum.UPDATE:                        
+                        
                         if (response == null)
                         {
                             _logger.LogError("response UUIDMaster was null - handelMessage - session - guid: {id}", id);
                             return;
                         }
-                        else
+
+                        if (response.EntityVersion == messageObject.EntityVersion)
+                            return;
+                        
+                        crmObject.Id = response.SourceEntityId;
+                        var result = await _sessionGateAway.CreateOrUpdate(sendObject);
+
+                        if (result.IsSuccessStatusCode)
                         {
-                            crmObject.Id = response.SourceEntityId;
-                            var result = await _sessionGateAway.CreateOrUpdate(sendObject);
+                            await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
+                        }                       
 
-                            if (result.IsSuccessStatusCode)
-                            {
-                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, messageObject.EntityVersion);
-                            }
-                        }
-
-                        return;
-                    }
-
-                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
-                    break;
-                case MethodEnum.DELETE:
-                    if (Guid.TryParse(messageObject.UUID_Nr, out var mesId))
-                    {
-                        var del = await _uUIDGateAway.GetResource(mesId, SourceEnum.CRM.ToString());
-                        if (del == null)
+                        break;
+                    case MethodEnum.DELETE:                        
+                        
+                        if (response == null)
                         {
-                            _logger.LogError("response UUIDMaster was null - handelMessage - account - guid: {id}", mesId);
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account - guid: {id}", id);
                             return;
                         }
-                        await _sessionGateAway.Delete(del!.SourceEntityId);
-                        return;
-                    }
+                        await _sessionGateAway.Delete(response!.SourceEntityId);
 
-                    _logger.LogError("uuidNumber not falid: {uuid}", messageObject.UUID_Nr);
-                    break;
-                default:
-                    _logger.LogError("methode notFound: {method}", messageObject.Method);
-                    break;
+                        break;
+                    default:
+                        _logger.LogError("methode notFound: {method}", messageObject.Method);
+                        break;
+                }
+
+                return;
             }
-
-            
+            _logger.LogError("uuidNumber not falid: {uuid}", messageObject.UUID_Nr);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Crm.Link.RabbitMq.Common
                         }
 
                         _logger.LogInformation("sending");
-                        _logger.LogInformation("message size: {body.Length}");
+                        _logger.LogInformation($"message size: {body.Length}");
 
                         var properties = Channel.CreateBasicProperties();
                         properties.AppId = AppId;
