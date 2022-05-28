@@ -91,7 +91,7 @@ namespace Crm.Link.UUID
                 Source = sourceType,
                 EntityType = entityType,
                 SourceEntityId = id,
-                EntityVersion = ++response!.EntityVersion
+                EntityVersion = response!.EntityVersion++
             };
 
             var json = JsonConvert.SerializeObject(body);
