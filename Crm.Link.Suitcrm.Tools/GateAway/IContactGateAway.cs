@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public interface IContactGateAway : IGateAwayBase<ContactModel>
+    public interface IContactGateAway : IGateAwayBase
     {
     }
 }

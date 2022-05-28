@@ -60,6 +60,12 @@ namespace Crm.Link.Api.Controllers
             if (response == null)
             {
                 var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session, meeting.Id, 1);
+                if (resp == null)
+                {
+                    _logger.LogError("uuid response was null: {tostring}", meeting.ToString());
+                    return Ok();
+                }
+
                 @event.EntityVersion = 1;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.CREATE;
@@ -67,7 +73,13 @@ namespace Crm.Link.Api.Controllers
             else
             {
                 var resp = await _uUIDGateAway.UpdateEntity(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
-                @event.EntityVersion = resp.EntityVersion;
+                if (resp == null)
+                {
+                    _logger.LogError("uuid response was null: {tostring}", meeting.ToString());
+                    return Ok();
+                }
+
+                @event.EntityVersion = resp!.EntityVersion;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.UPDATE;
             }

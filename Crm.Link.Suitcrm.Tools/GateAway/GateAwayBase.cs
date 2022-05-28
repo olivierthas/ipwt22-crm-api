@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public abstract class GateAwayBase<T> : IGateAwayBase<T> where T : ICrmModel
+    public abstract class GateAwayBase : IGateAwayBase
     {
         protected TokenProvider tokenProvider;
         protected abstract string Module { get; }
@@ -16,7 +16,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         {
             this.tokenProvider = tokenProvider;
         }
-        protected HttpContent CreateContent(T moduleModel)
+        protected HttpContent CreateContent(ModuleModel moduleModel)
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
@@ -26,7 +26,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             return stringContent;
         }
 
-        public virtual async Task<HttpResponseMessage> CreateOrUpdate(T moduleModel)
+        public virtual async Task<HttpResponseMessage> CreateOrUpdate(ModuleModel moduleModel)
         {
             CheckToken();  
             var content = CreateContent(moduleModel);

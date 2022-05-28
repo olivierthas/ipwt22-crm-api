@@ -2,7 +2,7 @@
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public interface IAccountGateAway : IGateAwayBase<AccountModel>
+    public interface IAccountGateAway : IGateAwayBase
     {
     }
 }

@@ -74,47 +74,71 @@ namespace Crm.Link.RabbitMq.Consumer
                 Email = messageObject.Email,                
             };
 
-            ResourceDto response;
+            var sendObject = new ModuleModel
+            {
+                Data = new BaseModel
+                {
+                    Type = "Accounts",
+                    Attributes = crmObject
+                }
+            };
+            ResourceDto? response;
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
-                    var resp = await _accountGateAway.CreateOrUpdate(crmObject);
+                    var resp = await _accountGateAway.CreateOrUpdate(sendObject);
 
                     var test = await resp.Content.ReadAsStringAsync(); //wat are you
                     _logger.LogInformation(test);
 
                     if (resp.IsSuccessStatusCode)
                     {
-                        await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);                        
+                        _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
+                        return;
                     }
+
+                    await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);                        
 
                     break;
                 case MethodEnum.UPDATE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
                     {
-                        response = await _uUIDGateAway.GetResource(id);
+                        response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
                         if (response == null)
                         {
-                            _logger.LogError("response UUIDMaster was null - handelMessage - account");
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account - {id}: ", messageObject.UUID_Nr );
+                            return;
                         }
                         else
                         {
                             crmObject.Id = response.SourceEntityId;
-                            var result = await _accountGateAway.CreateOrUpdate(crmObject);
+                            var result = await _accountGateAway.CreateOrUpdate(sendObject);
 
                             if (result.IsSuccessStatusCode)
                             {
-                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, messageObject.EntityVersion);
+                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
                             }
                         }
+
+                        return;
                     }
+
+                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
                     break;
                 case MethodEnum.DELETE:
                     if (Guid.TryParse(messageObject.UUID_Nr, out var mesId))
                     {
-                        var del = await _uUIDGateAway.GetResource(mesId);
+                        var del = await _uUIDGateAway.GetResource(mesId, SourceEnum.CRM.ToString());
+                        if (del == null)
+                        {
+                            _logger.LogError("response UUIDMaster was null - handelMessage - account - guid: {id}", mesId);
+                            return;
+                        }
                         await _accountGateAway.Delete(del.SourceEntityId);
+                        return;
                     }
+
+                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
                     break;                
             }
         }

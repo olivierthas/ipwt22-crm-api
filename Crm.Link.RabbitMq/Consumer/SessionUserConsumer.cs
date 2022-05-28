@@ -1,6 +1,8 @@
 ﻿using Crm.Link.RabbitMq.Common;
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.Suitcrm.Tools.GateAway;
+using Crm.Link.UUID;
+using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -11,18 +13,21 @@ namespace Crm.Link.RabbitMq.Consumer
     public class SessionUserConsumer : ConsumerBase<SessionAttendeeEvent>, IHostedService
     {
         private readonly ISessionGateAway _sessionGateAway;
+        private readonly IUUIDGateAway _uUIDGateAway;
 
         public SessionUserConsumer(
             ConnectionProvider connectionProvider,
             ILogger<ConsumerBase<SessionAttendeeEvent>> consumerLogger,
             ILogger<RabbitMqClientBase> logger,
-            ISessionGateAway sessionGateAway)
+            ISessionGateAway sessionGateAway,
+            IUUIDGateAway uUIDGateAway)
             : base(connectionProvider, consumerLogger, logger)
         {
             _sessionGateAway = sessionGateAway;
+            _uUIDGateAway = uUIDGateAway;
         }
 
-        protected override string QueueName => "CrmSessionAttendee";
+        protected override string QueueName => "CrmAttendeeSession";
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -59,18 +64,37 @@ namespace Crm.Link.RabbitMq.Consumer
             try
             {
                 _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));
-
-                switch (messageObject.EntityType)
+                
+                ResourceDto? session = null;
+                ResourceDto? contact = null;
+                if (Guid.TryParse(messageObject.SessionUUID, out var sId) && Guid.TryParse(messageObject.AttendeeUUID, out var aId))
                 {
-                    case "Contact":
-                        await _sessionGateAway.AddUserToSession("Contacts", messageObject.AttendeeUUID, messageObject.SessionUUID);
-                        break;
-                    case "Account":
-                        await _sessionGateAway.AddUserToSession("Accounts", messageObject.AttendeeUUID, messageObject.SessionUUID);
-                        break;
-                    default:
-                        break;
+                    session = await _uUIDGateAway.GetResource(sId, SourceEnum.CRM.ToString());
+                    contact = await _uUIDGateAway.GetResource(aId, SourceEnum.CRM.ToString());
+                    if (session == null || contact == null)
+                    {
+                        _logger.LogError("uuid response was null session: {id1} - contact: {id2}", new[] { sId, aId });
+                    }
+
+                    switch (messageObject.Method)
+                    {
+                        case MethodEnum.CREATE:
+                            await _sessionGateAway.AddUserToSession("Contacts", contact!.SourceEntityId, session!.SourceEntityId);
+                            break;
+                        case MethodEnum.UPDATE:
+                            //// ?????
+                            break;
+                        case MethodEnum.DELETE:
+                            await _sessionGateAway.RemoveUserFromSession("Contact", contact!.SourceEntityId, session!.SourceEntityId);
+                            break;
+                        default:
+                            _logger.LogError("methode notFound: {method}", messageObject.Method);
+                            break;
+                    }
                 }
+
+                _logger.LogError("uuidNumber not falid session: {uuid}, user: {uuid2}", new[] { messageObject.SessionUUID, messageObject.AttendeeUUID });
+
             }
             catch (Exception ex)
             {
