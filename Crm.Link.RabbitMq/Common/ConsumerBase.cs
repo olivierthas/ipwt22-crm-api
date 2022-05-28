@@ -61,7 +61,8 @@ namespace Crm.Link.RabbitMq.Common
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Error while retrieving message from queue.");
-                // Channel!.BasicNack(@event.DeliveryTag, false, true);
+                Channel!.BasicNack(@event.DeliveryTag, false, false);
+                
                 return;
             }
             finally

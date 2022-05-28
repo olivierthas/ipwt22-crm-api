@@ -6,6 +6,7 @@ using Crm.Link.UUID;
 using Crm.Link.UUID.Model;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace Crm.Link.RabbitMq.Consumer
@@ -36,12 +37,11 @@ namespace Crm.Link.RabbitMq.Consumer
                 {
                     var consumer = new AsyncEventingBasicConsumer(Channel);
                     consumer.Received += OnEventReceived;
-                    //Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+                    Channel?.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogCritical(ex, "Error while binding to queue.");
-
                     SetTimer();
                 }
             }
