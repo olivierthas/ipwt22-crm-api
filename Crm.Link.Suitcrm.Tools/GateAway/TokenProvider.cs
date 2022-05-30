@@ -41,6 +41,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             }
 
             var res = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            logger.LogInformation("token response body: {res}", res);
             TokenResponse? content = JsonConvert.DeserializeObject<TokenResponse>(res);
             _ = content ?? throw new ArgumentNullException(nameof(content));
 
