@@ -67,6 +67,7 @@ namespace Crm.Link.RabbitMq.Common
             catch (FieldAccessException fex)
             {
                 FaildMessage(_key, @event);
+                return;
             }
             catch (Exception ex)
             {

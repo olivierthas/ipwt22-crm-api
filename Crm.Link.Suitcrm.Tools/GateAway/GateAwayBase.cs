@@ -24,9 +24,9 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var json = JsonConvert.SerializeObject(moduleModel);      
-            _logger.LogInformation(json);
-            var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
+            var json = JsonConvert.SerializeObject(moduleModel);
+            _logger.LogInformation(json + "}");
+            var stringContent = new StringContent(json + "}", Encoding.UTF8, "application/vnd.api+json");
             stringContent.Headers.ContentType!.CharSet = "";
             return stringContent;
         }
