@@ -57,9 +57,12 @@ namespace Crm.Link.RabbitMq.Common
                 var message = serializer.Deserialize(@event.Body.AsStream());
                 if (message != null)
                 {
-                    _key = ((T)message).UUID_Nr;
-                    await HandleMessage((T)message);
+                    _logger.LogError("deserialized message waqs null!!!!");
+                    Channel.BasicAck(@event.DeliveryTag, false);
                 }
+
+                _key = ((T)message).UUID_Nr;
+                await HandleMessage((T)message);
             }
             catch (FieldAccessException fex)
             {
@@ -132,6 +135,7 @@ namespace Crm.Link.RabbitMq.Common
                 if (value <= 5)
                 {
                     _failCount[key] = value++;
+                    _logger.LogInformation("message failed for: {key} - {count}", key, value);
                     Channel!.BasicNack(@event.DeliveryTag, false, true);
                 }
                 else
