@@ -7,7 +7,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("type", Required = Required.Always)]
         public string? Type { get; set; }
 
-        [JsonProperty("attributes", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
 
         [JsonProperty("attributes")]
