@@ -1,4 +1,5 @@
 ﻿using Crm.Link.Suitcrm.Tools.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
@@ -8,7 +9,8 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         protected override string Module => "Contacts";
         public ContactGateAway(
             IHttpClientFactory httpClientFactory,
-            TokenProvider tokenProvider) : base(tokenProvider)
+            TokenProvider tokenProvider,
+            ILogger<ContactGateAway> logger) : base(tokenProvider, logger)
         {
             HttpClient = httpClientFactory.CreateClient("Crm");
         }

@@ -3,11 +3,6 @@ using Crm.Link.RabbitMq.Consumer;
 using Crm.Link.RabbitMq.Producer;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crm.Link.RabbitMq.Configuration
 {
@@ -41,6 +36,7 @@ namespace Crm.Link.RabbitMq.Configuration
             services.AddSingleton<AccountPublisher>();
             services.AddSingleton<SessionPublisher>();
             services.AddSingleton<ContactPublisher>();
+            services.AddSingleton<SessionContactPublisher>();
 
             return services;
         }

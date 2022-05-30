@@ -4,16 +4,16 @@ namespace Crm.Link.Suitcrm.Tools.Models
 {
     public class MeetingModel : ICrmModel
     {
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string? Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string? Name { get; set; }
         
-        [JsonProperty("description")]
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string? Description { get; set; }
 
-        [JsonProperty("location")]
+        [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
         public string? Location { get; set; }
 
         [JsonProperty("date_start")]
@@ -22,11 +22,17 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("date_end")]
         public DateTime EndDate { get; set; }
 
-        [JsonProperty("outlook_ID")]
+        [JsonProperty("outlook_ID", NullValueHandling = NullValueHandling.Ignore)]
         public string? OutlookID { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string? Status { get; set; }
+
+        [JsonProperty("parent_type", NullValueHandling = NullValueHandling.Ignore)]
+        public string ParentType { get; set; }
+
+        [JsonProperty("parent_Id", NullValueHandling = NullValueHandling.Ignore)]
+        public string ParentId { get; set; }
 
         public override string ToString()
         {

@@ -1,5 +1,4 @@
 using Crm.Link.Api;
-using Crm.Link.Api.Configuration.Httpclient;
 using Crm.Link.RabbitMq.Configuration;
 using Crm.Link.Suitcrm.Tools;
 using Crm.Link.UUID.Configuration;

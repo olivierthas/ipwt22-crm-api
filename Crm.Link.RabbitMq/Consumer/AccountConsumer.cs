@@ -86,16 +86,7 @@ namespace Crm.Link.RabbitMq.Consumer
             switch (messageObject.Method)
             {
                 case MethodEnum.CREATE:
-                    var resp = await _accountGateAway.CreateOrUpdate(sendObject);
-
-                    var test = await resp.Content.ReadAsStringAsync(); //wat are you
-                    _logger.LogInformation(test);
-
-                    if (resp.IsSuccessStatusCode)
-                    {
-                        _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
-                        return;
-                    }
+                    var resp = await _accountGateAway.CreateOrUpdate(sendObject);                   
 
                     await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);                        
 
@@ -114,7 +105,7 @@ namespace Crm.Link.RabbitMq.Consumer
                             crmObject.Id = response.SourceEntityId;
                             var result = await _accountGateAway.CreateOrUpdate(sendObject);
 
-                            if (result.IsSuccessStatusCode)
+                            if (result != null)
                             {
                                 await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
                             }

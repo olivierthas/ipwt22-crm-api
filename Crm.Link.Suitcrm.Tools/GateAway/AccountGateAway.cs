@@ -1,4 +1,4 @@
-﻿using Crm.Link.Suitcrm.Tools.Models;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
@@ -7,10 +7,11 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         protected override string Module => "Accounts";
         public AccountGateAway(
             IHttpClientFactory httpClientFactory,
-            TokenProvider tokenProvider)
-            : base (tokenProvider)
+            TokenProvider tokenProvider,
+            ILogger<AccountGateAway> logger)
+            : base(tokenProvider, logger)
         {
             HttpClient = httpClientFactory.CreateClient("Crm");
-        }               
+        }
     }
 }

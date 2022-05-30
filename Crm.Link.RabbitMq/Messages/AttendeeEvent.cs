@@ -5,7 +5,7 @@
     [System.Xml.Serialization.XmlTypeAttribute("AttendeeEvent", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("AttendeeEvent", Namespace = "")]
-    public class AttendeeEvent
+    public class AttendeeEvent : IEvent
     {
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("UUID_Nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]

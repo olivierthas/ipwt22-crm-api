@@ -5,7 +5,7 @@
     [System.Xml.Serialization.XmlTypeAttribute("SessionAttendeeEvent", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("SessionAttendeeEvent", Namespace = "")]
-    public partial class SessionAttendeeEvent
+    public partial class SessionAttendeeEvent : IEvent
     {
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]

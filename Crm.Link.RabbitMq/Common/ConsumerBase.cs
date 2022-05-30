@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Toolkit.HighPerformance;
 using RabbitMQ.Client.Events;
-using System.Resources;
-using System.Text;
 using System.Timers;
 using System.Xml;
 using System.Xml.Schema;
@@ -11,9 +9,11 @@ using System.Xml.Serialization;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public abstract class ConsumerBase<T> : RabbitMqClientBase where T : notnull
+    public abstract class ConsumerBase<T> : RabbitMqClientBase where T : IEvent
     {
         private System.Timers.Timer? _timer;
+        private Dictionary<string, int> _failCount = new();
+        private string _key = "";
         protected readonly ILogger<ConsumerBase<T>> _logger;
         protected abstract string QueueName { get; }
         protected Func<Task>? TimerMethode { get; set; }
@@ -32,11 +32,11 @@ namespace Crm.Link.RabbitMq.Common
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
             _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             try
-            {                   
+            {
                 XmlReader reader = new XmlTextReader(@event.Body.AsStream());
                 XmlDocument document = new();
                 document.Load(reader);
-                 
+
                 // xsd for validation
                 XmlSchemaSet xmlSchemaSet = new();
                 xmlSchemaSet.Add("", $"{basePath}Resources/AttendeeEvent.xsd");
@@ -45,9 +45,9 @@ namespace Crm.Link.RabbitMq.Common
 
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
-                
+
                 document.Validate(eventHandler);
-               
+
                 XmlRootAttribute root = new();
                 root.ElementName = SessionEvent.XmlElementName;
                 root.IsNullable = true;
@@ -56,21 +56,24 @@ namespace Crm.Link.RabbitMq.Common
 
                 var message = serializer.Deserialize(@event.Body.AsStream());
                 if (message != null)
-                    await HandleMessage((T)message);                
+                {
+                    _key = ((T)message).UUID_Nr;
+                    await HandleMessage((T)message);
+                }
+            }
+            catch (FieldAccessException fex)
+            {
+                FaildMessage(_key, @event);
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Error while retrieving message from queue.");
-                // Channel!.BasicNack(@event.DeliveryTag, false, false);
-                
+                FaildMessage(_key, @event);
                 return;
-            }
-            finally
-            {
-                _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             }
 
             Channel!.BasicAck(@event.DeliveryTag, false);
+            SuccessMessage(_key);
         }
 
         protected abstract Task HandleMessage(T? messageObject);
@@ -109,6 +112,38 @@ namespace Crm.Link.RabbitMq.Common
                 _timer?.Stop();
                 _timer?.Dispose();
             }
+        }
+
+        protected void SuccessMessage(string key)
+        {
+            if (_failCount.TryGetValue(key, out int value))
+            {
+                _failCount.Remove(key);
+            }
+        }
+
+        protected void FaildMessage(string key, BasicDeliverEventArgs @event)
+        {
+            if (string.IsNullOrEmpty(key))
+                Channel!.BasicAck(@event.DeliveryTag, false);
+
+            if (_failCount.TryGetValue(key, out int value))
+            {
+                if (value <= 5)
+                {
+                    _failCount[key] = value++;
+                    Channel!.BasicNack(@event.DeliveryTag, false, true);
+                }
+                else
+                {
+                    Channel!.BasicAck(@event.DeliveryTag, false);
+                    _failCount.Remove(key);
+                }
+
+                return;
+            }
+            _failCount.Add(key, 1);
+
         }
     }
 }

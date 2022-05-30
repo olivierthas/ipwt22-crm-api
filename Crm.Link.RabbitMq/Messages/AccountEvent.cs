@@ -6,7 +6,7 @@
     [System.Xml.Serialization.XmlTypeAttribute("AccountEvent", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("AccountEvent", Namespace = "")]
-    public partial class AccountEvent
+    public partial class AccountEvent : IEvent
     {
 
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(32)]

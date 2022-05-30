@@ -2,6 +2,5 @@
 {
     public interface ICrmModel
     {
-        string? Id { get; set; }
     }
 }

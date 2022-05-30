@@ -81,6 +81,30 @@ namespace Crm.Link.UUID
             }
         }
 
+        public async Task<ResourceDto?> PublishEntity(Guid uuid, string source, EntityTypeEnum entityType, string sourceEntityId, int version)
+        {
+            var body = new
+            {
+                Source = source,
+                EntityType = entityType.ToString(),
+                SourceEntityId = sourceEntityId,
+                EntityVersion = version
+            };
+
+            var json = JsonConvert.SerializeObject(body);
+            var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
+            var response = await _httpClient.PostAsync($"api/resources/{uuid}", contentBody);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<ResourceDto>(content);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<ResourceDto?> UpdateEntity(string id, string sourceType, EntityTypeEnum entityType)
         {
             var response = await GetGuid(id, sourceType, entityType);

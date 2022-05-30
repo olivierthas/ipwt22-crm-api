@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Threading;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -61,6 +62,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandleMessage(SessionAttendeeEvent? messageObject)
         {
+            Thread.Sleep(2000);
             try
             {
                 _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));
@@ -79,11 +81,9 @@ namespace Crm.Link.RabbitMq.Consumer
                     switch (messageObject.Method)
                     {
                         case MethodEnum.CREATE:
-                            await _sessionGateAway.AddUserToSession("Contacts", contact!.SourceEntityId, session!.SourceEntityId);
-                            break;
                         case MethodEnum.UPDATE:
-                            //// ?????
-                            break;
+                            await _sessionGateAway.AddUserToSession("Contacts", contact!.SourceEntityId, session!.SourceEntityId);
+                            break;                            
                         case MethodEnum.DELETE:
                             await _sessionGateAway.RemoveUserFromSession("Contact", contact!.SourceEntityId, session!.SourceEntityId);
                             break;

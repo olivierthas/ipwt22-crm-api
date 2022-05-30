@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Crm.Link.Suitcrm.Tools.Models;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -10,7 +12,8 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
 
         public SessionGateAway(
             IHttpClientFactory httpClientFactory,
-            TokenProvider tokenProvider) : base(tokenProvider)
+            TokenProvider tokenProvider,
+            ILogger<SessionGateAway> logger) : base(tokenProvider, logger)
         {
             this.HttpClient = httpClientFactory.CreateClient("Crm");
         }
@@ -32,14 +35,26 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
             stringContent.Headers.ContentType!.CharSet = "";
 
-            await HttpClient.PostAsync($"/api/v8/module/Meetings/relationships/", stringContent);
+            await HttpClient.PostAsync("/Api/V8/module/Meetings/relationships/", stringContent);
+        }
+
+        public async Task<MeetingContacts?> GetContacts(string meetingId)
+        {
+            var response = await HttpClient.GetAsync("/Api/V8/module/Meetings/{meetingId/relationships/contacts}");
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var contentJson = await response.Content.ReadAsStringAsync();
+            _logger.LogInformation("response createOrUpdate: {resp}", contentJson);
+            return JsonConvert.DeserializeObject<MeetingContacts>(contentJson);
         }
 
         public async Task RemoveUserFromSession(string module, string userId, string sessionId)
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            await HttpClient.DeleteAsync($"/api/v8/module/Meetings/{sessionId}/relationships/{module}/{userId}");
+            await HttpClient.DeleteAsync($"/Api/V8/module/Meetings/{sessionId}/relationships/{module}/{userId}");
         }
     }
 }

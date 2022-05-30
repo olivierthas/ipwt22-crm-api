@@ -7,7 +7,7 @@ namespace Crm.Link.RabbitMq.Messages
     [System.Xml.Serialization.XmlTypeAttribute("SessionEvent", Namespace = "", AnonymousType = true)]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("SessionEvent", Namespace = "")]
-    public partial class SessionEvent
+    public partial class SessionEvent : IEvent
     {
         public static string XmlElementName = "SessionEvent";
 

@@ -92,19 +92,20 @@ namespace Crm.Link.RabbitMq.Consumer
                 {
                     case MethodEnum.CREATE:
                         if (response != null)
-                            return;
-
-                        var resp = await _contactGateAway.CreateOrUpdate(sendObject);
-
-                        var test = await resp.Content.ReadAsStringAsync();
-                        _logger.LogInformation(test);
-                        //add to uuid
-                        if (!resp.IsSuccessStatusCode)
                         {
-                            _logger.LogError("Response from suiteCrm was not Ok : {tostring}", crmObject.ToString());
+                            _logger.LogError("entity already exist can't create: {entity}", sendObject.ToString());
                             return;
-                        }                    
-                        _ = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, response!.Uuid.ToString(), 1);                    
+                        }
+                            
+                        var resp = await _contactGateAway.CreateOrUpdate(sendObject);                        
+                        if (resp == null)
+                        {
+                            _logger.LogError("response suitecrm was null for entity: {entity}", sendObject.ToString());
+                            throw new FieldAccessException();
+                        }
+
+                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, resp.Id, 1);                    
+                        
                         break;
                     case MethodEnum.UPDATE:
 
@@ -113,16 +114,20 @@ namespace Crm.Link.RabbitMq.Consumer
                             _logger.LogError("response UUIDMaster was null - handelMessage - contact - guid: {id}", id);
                             return;
                         }
-                        
+
                         if (response.EntityVersion == messageObject.EntityVersion)
                             return;
+
                         crmObject.Id = response.SourceEntityId;
                         var result = await _contactGateAway.CreateOrUpdate(sendObject);
 
-                        if (result.IsSuccessStatusCode)
+                        if (result == null)
                         {
-                            await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, messageObject.EntityVersion);
+                            _logger.LogError("response suitecrm was null for entity: {entity}", sendObject.ToString());
+                            throw new FieldAccessException();
                         }
+                        
+                        await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, messageObject.EntityVersion);
                         
                         break;
                     case MethodEnum.DELETE:                        

@@ -100,20 +100,18 @@ namespace Crm.Link.RabbitMq.Consumer
                 {
                     case MethodEnum.CREATE:
                         if (response != null)
-                            return;
-
-                        var resp = await _sessionGateAway.CreateOrUpdate(sendObject);
-                    
-                        var test = await resp.Content.ReadAsStringAsync(); //wat are you
-                        _logger.LogInformation(test);
-
-                        if (!resp.IsSuccessStatusCode)
                         {
-                            _logger.LogError("Response from suiteCrm was not Ok : {tostring}", sendObject.ToString());
+                            _logger.LogError("entity already exist can't create: {entity}", sendObject.ToString());
                             return;
                         }
 
-                        _ = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, response.Uuid.ToString(), 1);                    
+                        var resp = await _sessionGateAway.CreateOrUpdate(sendObject);                       
+                        if (resp == null)
+                        {
+                            _logger.LogError("suiteCrm did not create entity: {entity}", sendObject.ToString());
+                            throw new FieldAccessException();
+                        }
+                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Account, response.Uuid.ToString(), 1);                    
 
                         break;
                     case MethodEnum.UPDATE:                        
@@ -121,19 +119,23 @@ namespace Crm.Link.RabbitMq.Consumer
                         if (response == null)
                         {
                             _logger.LogError("response UUIDMaster was null - handelMessage - session - guid: {id}", id);
-                            return;
+                            throw new FieldAccessException();
                         }
 
                         if (response.EntityVersion == messageObject.EntityVersion)
                             return;
                         
                         crmObject.Id = response.SourceEntityId;
+                        sendObject.Data.Id = response.SourceEntityId;
                         var result = await _sessionGateAway.CreateOrUpdate(sendObject);
 
-                        if (result.IsSuccessStatusCode)
+                        if (result == null)
                         {
-                            await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
+                            _logger.LogError("response suitecrm was null for entity: {entity}", sendObject.ToString());
+                            throw new FieldAccessException();
                         }                       
+                        
+                        await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
 
                         break;
                     case MethodEnum.DELETE:                        

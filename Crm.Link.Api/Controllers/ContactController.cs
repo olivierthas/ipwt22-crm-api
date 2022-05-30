@@ -1,6 +1,5 @@
 using Crm.Link.RabbitMq.Messages;
 using Crm.Link.RabbitMq.Producer;
-using Crm.Link.Suitcrm.Tools.GateAway;
 using Crm.Link.Suitcrm.Tools.Models;
 using Crm.Link.UUID;
 using Microsoft.AspNetCore.Mvc;
@@ -42,19 +41,17 @@ namespace Crm.Link.Api.Controllers
                 _logger.LogError("BadRequest on SessionController : {date}", date);
                 return BadRequest();
             }
-
-            // call uid
+                        
             var response = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Attendee);
 
             var @event = new AttendeeEvent
             {
-                UUID_Nr = Guid.NewGuid().ToString(), // get uuid from uuidmaster
                 SourceEntityId = contact.Id,
                 EntityType = UUID.Model.EntityTypeEnum.Attendee.ToString(),
                 Method = MethodEnum.CREATE,
                 Name = contact.FirstName,
                 LastName = contact.LastName,
-                Email = contact.Email,
+                Email = contact.Email                
             };
 
             if (response == null)
