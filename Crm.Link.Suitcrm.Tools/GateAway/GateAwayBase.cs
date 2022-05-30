@@ -35,7 +35,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         {
             CheckToken();  
             var content = CreateContent(moduleModel);
-            var response = await HttpClient!.PostAsync($"/api/v8/module", content);
+            var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
             if (response.IsSuccessStatusCode)
             {
                 var contentJson = await response.Content.ReadAsStringAsync();
@@ -49,7 +49,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         public virtual async Task<HttpResponseMessage> Delete(string id)
         {
             CheckToken();
-            return await HttpClient!.DeleteAsync($"/api/v8/module/{Module}/{id}");
+            return await HttpClient!.DeleteAsync($"/Api/V8/module/{Module}/{id}");
         }
 
         protected void CheckToken()
