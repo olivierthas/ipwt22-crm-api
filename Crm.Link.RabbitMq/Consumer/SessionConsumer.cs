@@ -84,7 +84,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     Description = "",
                     Location = "",
                     Status = "",
-                    OutlookID = "",
+                    OutlookID = null,
                 };
 
                 var sendObject = new ModuleModel
