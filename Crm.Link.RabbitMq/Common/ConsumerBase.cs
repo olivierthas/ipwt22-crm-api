@@ -57,7 +57,7 @@ namespace Crm.Link.RabbitMq.Common
                 var message = serializer.Deserialize(@event.Body.AsStream());
                 if (message == null)
                 {
-                    _logger.LogError("deserialized message waqs null!!!!");
+                    _logger.LogError("deserialized message was null!!!!");
                     Channel.BasicAck(@event.DeliveryTag, false);
                 }
 
