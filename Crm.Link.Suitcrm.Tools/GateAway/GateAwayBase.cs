@@ -36,10 +36,10 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         public virtual async Task<Response?> CreateOrUpdate(ModuleModel moduleModel)
         {
             CheckToken();  
-            //var content = CreateContent(moduleModel);
+            var content = CreateContent(moduleModel);
             var json = JsonConvert.SerializeObject(moduleModel);
-            //var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
-            var response = await HttpClient!.PostAsJsonAsync($"/Api/V8/module", json + "}");
+            var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
+            var response2 = await HttpClient!.PostAsJsonAsync($"/Api/V8/module", json + "}");
             if (response.IsSuccessStatusCode)
             {
                 var contentJson = await response.Content.ReadAsStringAsync();
