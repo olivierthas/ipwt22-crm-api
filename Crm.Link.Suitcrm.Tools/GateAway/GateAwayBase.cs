@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
@@ -28,14 +29,17 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             _logger.LogInformation(json + "}");
             var stringContent = new StringContent(json + "}", Encoding.UTF8, "application/json");
             stringContent.Headers.ContentType!.CharSet = "UTF8";
+            _logger.LogInformation(stringContent.ReadAsStringAsync().GetAwaiter().GetResult());            
             return stringContent;
         }
 
         public virtual async Task<Response?> CreateOrUpdate(ModuleModel moduleModel)
         {
             CheckToken();  
-            var content = CreateContent(moduleModel);
-            var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
+            //var content = CreateContent(moduleModel);
+            var json = JsonConvert.SerializeObject(moduleModel);
+            //var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
+            var response = await HttpClient!.PostAsJsonAsync($"/Api/V8/module", json + "}");
             if (response.IsSuccessStatusCode)
             {
                 var contentJson = await response.Content.ReadAsStringAsync();
