@@ -13,7 +13,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("client_secret")]
         public string? ClientSecret { get; set; }
 
-        [JsonProperty("scope")]
-        public string? Scope { get; set; }
+        /*[JsonProperty("scope")]
+        public string? Scope { get; set; }*/
     }
 }

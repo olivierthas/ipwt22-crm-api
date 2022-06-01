@@ -30,9 +30,10 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
                 return token.TokenValue;
                         
             var json = JsonConvert.SerializeObject(credentials);
-
+            logger.LogInformation(json);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
-            var response = client.PostAsync("/api/oauth/access_token", stringContent).GetAwaiter().GetResult();
+            //var response = client.PostAsync("/api/oauth/access_token", stringContent).GetAwaiter().GetResult();
+            var response = client.PostAsync("/api/access_token", stringContent).GetAwaiter().GetResult();
 
             if (!response.IsSuccessStatusCode)
             {
