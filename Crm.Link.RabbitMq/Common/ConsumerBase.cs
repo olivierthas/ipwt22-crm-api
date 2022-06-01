@@ -137,7 +137,7 @@ namespace Crm.Link.RabbitMq.Common
                 if (value <= 5)
                 {
                     _failCount[key] = value++;
-                    _logger.LogInformation("message failed for: {key} - {count}", key, value);
+                    _logger.LogInformation("message failed for: {key} - {count}", key, _failCount[key]);
                     Channel!.BasicNack(@event.DeliveryTag, false, true);
                 }
                 else
