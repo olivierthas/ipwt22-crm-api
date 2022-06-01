@@ -9,7 +9,7 @@
     {
 
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
-        [System.Xml.Serialization.XmlElementAttribute("UUID_nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlElementAttribute("UUID_Nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string? UUID_Nr { get; set; }
 
         [System.Xml.Serialization.XmlElementAttribute("SourceEntityId", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
