@@ -31,7 +31,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("parent_type", NullValueHandling = NullValueHandling.Ignore)]
         public string ParentType { get; set; }
 
-        [JsonProperty("parent_Id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("parent_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ParentId { get; set; }
 
         public override string ToString()
