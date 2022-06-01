@@ -27,7 +27,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             var json = JsonConvert.SerializeObject(moduleModel);
             _logger.LogInformation(json + "}");
             var stringContent = new StringContent(json + "}", Encoding.UTF8, "application/json");
-            stringContent.Headers.ContentType!.CharSet = "";
+            stringContent.Headers.ContentType!.CharSet = "UTF8";
             return stringContent;
         }
 

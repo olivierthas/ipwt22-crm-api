@@ -13,17 +13,11 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string? Description { get; set; }
 
-        [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
-        public string? Location { get; set; }
-
         [JsonProperty("date_start")]
         public DateTime StartDate { get; set; }
 
         [JsonProperty("date_end")]
-        public DateTime EndDate { get; set; }
-
-        [JsonProperty("outlook_ID", NullValueHandling = NullValueHandling.Ignore)]
-        public string? OutlookID { get; set; }
+        public DateTime EndDate { get; set; }        
 
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string? Status { get; set; }
@@ -36,7 +30,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
 
         public override string ToString()
         {
-            return $"{Id}, {Name}, {Description}, {Location}, {StartDate}, {EndDate}, {OutlookID}, {Status}";
+            return $"{Id}, {Name}, {Description}, {StartDate}, {EndDate}, {Status}";
         }
     }
 }

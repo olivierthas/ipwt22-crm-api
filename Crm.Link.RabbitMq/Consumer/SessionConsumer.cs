@@ -82,9 +82,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     EndDate = messageObject.EndDateUTC,
                     StartDate = messageObject.StartDateUTC,
                     Description = null,
-                    Location = null,
                     Status = null,
-                    OutlookID = null,
                 };
 
                 var sendObject = new ModuleModel
