@@ -90,7 +90,6 @@ namespace Crm.Link.RabbitMq.Common
                 _connection?.Dispose();
                 _connection = null;
 
-                connectionProvider?.Dispose();
                 _timer?.Dispose();
             }
             catch (Exception ex)

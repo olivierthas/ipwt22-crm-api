@@ -4,46 +4,26 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public class ConnectionProvider : IDisposable
+    public class ConnectionProvider
     {
         private readonly IConnectionFactory connectionFactory;
         private readonly ILogger<ConnectionProvider> logger;
-        private IConnection? consumerConnection;
-        private IConnection? publisherConnection;
 
         public ConnectionProvider(IConnectionFactory connectionFactory, ILogger<ConnectionProvider> logger)
         {
             this.connectionFactory = connectionFactory;
             this.logger = logger;
         }
-
-        public void Dispose()
-        {
-            if (consumerConnection != null)
-            {
-                consumerConnection.Dispose();
-            }
-
-            if (publisherConnection != null)
-            {
-                publisherConnection.Dispose();
-            }
-        }
-
+                
         public IConnection? GetConsumerConnection()
         {
-            if (consumerConnection == null || !consumerConnection!.IsOpen)
-                return consumerConnection = OpenConnection();
-
-            return consumerConnection;
+            return OpenConnection();
         }
 
         public IConnection? GetPublisherConnection()
         {
-            if (publisherConnection == null || !publisherConnection!.IsOpen)
-                return publisherConnection = OpenConnection();
-
-            return publisherConnection;
+            
+            return OpenConnection();
         }
 
         private IConnection? OpenConnection()
