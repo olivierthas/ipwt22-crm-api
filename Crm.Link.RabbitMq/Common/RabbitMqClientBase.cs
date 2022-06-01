@@ -5,13 +5,9 @@ using System.Timers;
 
 namespace Crm.Link.RabbitMq.Common
 {
-    public class RabbitMqClientBase : IDisposable
+    public abstract class RabbitMqClientBase : IDisposable
     {
-        // Configuration to create ques and echange need to move
-        /*protected const string VirtualHost = "/";
-        protected readonly string LoggerExchange = $"{VirtualHost}.Exchange"; // declare of the echange
-        protected readonly string LoggerQueue = $"{VirtualHost}.message"; // declare of queus
-        protected const string LoggerQueueAndExchangeRoutingKey = "message"; // message key*/
+        public abstract string ClientType { get; }
 
         protected IModel? Channel { get; private set; }
         private System.Timers.Timer? _timer;
@@ -34,7 +30,10 @@ namespace Crm.Link.RabbitMq.Common
             {                
                 try
                 {
-                    _connection = connectionProvider.GetConnection();
+                    if (ClientType == "CONSUMER")
+                        _connection = connectionProvider.GetConsumerConnection();
+                    else
+                        _connection = connectionProvider.GetPublisherConnection();
                 }
                 catch (BrokerUnreachableException)
                 {

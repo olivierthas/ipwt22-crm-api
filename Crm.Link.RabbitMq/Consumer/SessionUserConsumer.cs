@@ -28,6 +28,8 @@ namespace Crm.Link.RabbitMq.Consumer
             _uUIDGateAway = uUIDGateAway;
         }
 
+        public override string ClientType => "CONSUMER";
+
         protected override string QueueName => "CrmAttendeeSession";
 
         public Task StartAsync(CancellationToken cancellationToken)

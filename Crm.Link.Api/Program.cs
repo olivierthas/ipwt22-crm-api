@@ -35,7 +35,7 @@ var app = builder.Build();
 app.UseCrmLoggng();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || true)
+if (app.Environment.IsDevelopment())
 {
     Log.Information("OpenApi active");
     app.UseOpenApi();

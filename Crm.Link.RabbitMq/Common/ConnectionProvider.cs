@@ -8,7 +8,8 @@ namespace Crm.Link.RabbitMq.Common
     {
         private readonly IConnectionFactory connectionFactory;
         private readonly ILogger<ConnectionProvider> logger;
-        private IConnection? connection;
+        private IConnection? consumerConnection;
+        private IConnection? publisherConnection;
 
         public ConnectionProvider(IConnectionFactory connectionFactory, ILogger<ConnectionProvider> logger)
         {
@@ -18,18 +19,31 @@ namespace Crm.Link.RabbitMq.Common
 
         public void Dispose()
         {
-            if (connection != null)
+            if (consumerConnection != null)
             {
-                connection.Dispose();
+                consumerConnection.Dispose();
+            }
+
+            if (publisherConnection != null)
+            {
+                publisherConnection.Dispose();
             }
         }
 
-        public IConnection? GetConnection()
+        public IConnection? GetConsumerConnection()
         {
-            if (connection == null || !connection!.IsOpen)
-                return connection = OpenConnection();
+            if (consumerConnection == null || !consumerConnection!.IsOpen)
+                return consumerConnection = OpenConnection();
 
-            return connection;
+            return consumerConnection;
+        }
+
+        public IConnection? GetPublisherConnection()
+        {
+            if (publisherConnection == null || !publisherConnection!.IsOpen)
+                return publisherConnection = OpenConnection();
+
+            return publisherConnection;
         }
 
         private IConnection? OpenConnection()

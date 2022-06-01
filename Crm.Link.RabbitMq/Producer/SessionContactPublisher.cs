@@ -19,6 +19,8 @@ namespace Crm.Link.RabbitMq.Producer
         {
         }
 
+        public override string ClientType => "PUBLISHER";
+
         protected override string ExchangeName => "CrmAttendeeSession";
 
         protected override string RoutingKeyName => "";

@@ -14,6 +14,9 @@ namespace Crm.Link.RabbitMq.Consumer
     public class ContactConsumer : ConsumerBase<AttendeeEvent>, IHostedService
     {
         protected override string QueueName => "CrmAttendee";
+
+        public override string ClientType => "CONSUMER";
+
         private readonly IContactGateAway _contactGateAway;
         private readonly IUUIDGateAway _uUIDGateAway;
 

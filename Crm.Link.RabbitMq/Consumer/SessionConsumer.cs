@@ -21,6 +21,8 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected override string QueueName => "CrmSession";
 
+        public override string ClientType => "CONSUMER";
+
         public SessionConsumer(
             ConnectionProvider connectionProvider,
             ILogger<SessionConsumer> sessionLogger,
@@ -74,14 +76,17 @@ namespace Crm.Link.RabbitMq.Consumer
         {
             if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
             {
-                ResourceDto? response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString()); ;
+                ResourceDto? response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
 
                 var crmObject = new MeetingModel
                 {
                     Name = messageObject.Title,
-                    EndDate = messageObject.EndDateUTC,
                     StartDate = messageObject.StartDateUTC,
-                    Description = null,
+                    DurationHours = ((int)(messageObject.EndDateUTC - messageObject.StartDateUTC).TotalHours) + Math.Abs(messageObject.EndDateUTC.Hour - messageObject.StartDateUTC.Hour),
+                    DurationMinutes = Math.Abs(messageObject.EndDateUTC.Minute - messageObject.StartDateUTC.Minute),
+                    Description = "you suck",
+                    ParentType = "Contacts",
+                    ParentId = "a379f70c-faea-36b4-be02-62420b0c7046",
                     Status = null,
                 };
 

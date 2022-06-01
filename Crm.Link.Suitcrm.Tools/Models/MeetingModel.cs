@@ -17,7 +17,13 @@ namespace Crm.Link.Suitcrm.Tools.Models
         public DateTime StartDate { get; set; }
 
         [JsonProperty("date_end")]
-        public DateTime EndDate { get; set; }        
+        public DateTime? EndDate { get; set; }
+
+        [JsonProperty("duration_hours")]
+        public int DurationHours { get; set; } = 0;
+
+        [JsonProperty("duration_minutes")]
+        public int DurationMinutes { get; set; } = 0;
 
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string? Status { get; set; }

@@ -15,6 +15,9 @@ namespace Crm.Link.RabbitMq.Consumer
     {
         
         protected override string QueueName => "CrmAccount";
+
+        public override string ClientType => "CONSUMER";
+
         private readonly ILogger<AccountConsumer> _accountLogger;
         private readonly IAccountGateAway _accountGateAway;
         private readonly IUUIDGateAway _uUIDGateAway;

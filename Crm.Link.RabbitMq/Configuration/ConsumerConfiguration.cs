@@ -8,11 +8,19 @@ namespace Crm.Link.RabbitMq.Configuration
 {
     public static class ConsumerConfiguration
     {
-        public static IServiceCollection StartConsumers(this IServiceCollection services, string connectionstring)
+        public static IServiceCollection StartConsumers(this IServiceCollection services, string connectionstring, bool isDevelopment = false)
         {
             services.AddSingleton<IConnectionFactory>(serviceProvider =>
-            {
-                //// var uri = new Uri(connectionstring);
+            {               
+                if (isDevelopment)
+                {
+                    var uri = new Uri(connectionstring);
+                    return new ConnectionFactory
+                    {
+                        Uri = uri,                        
+                        DispatchConsumersAsync = true,
+                    };
+                }
                 return new ConnectionFactory
                 {
                     //// Uri = uri,
