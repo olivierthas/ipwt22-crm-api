@@ -39,6 +39,36 @@ namespace Crm.Link.Api.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route(nameof(Test2))]
+        public async Task<IActionResult> Test2()
+        {
+
+            var crmObject = new MeetingModel
+            {
+                Name = "Test1juni",
+                StartDate = DateTime.Parse("2022-06-02 18:25:43"),
+                DurationHours = ((int)(DateTime.Parse("2022-06-02 20:25:43") - DateTime.Parse("2022-06-02 18:25:43")).TotalHours) + Math.Abs(DateTime.Parse("2022-06-02 20:25:43").Hour - DateTime.Parse("2022-06-02 18:25:43").Hour),
+                DurationMinutes = Math.Abs(DateTime.Parse("2022-06-02 20:25:43").Minute - DateTime.Parse("2022-06-02 18:25:43").Minute),
+                Description = "you suck",
+                ParentType = "Contacts",
+                ParentId = "a379f70c-faea-36b4-be02-62420b0c7046",
+                Status = null,
+            };
+
+            var sendObject = new ModuleModel
+            {
+                Data = new BaseModel
+                {
+                    Type = "Meetings",
+                    Attributes = crmObject
+                }
+            };
+
+            var response = await _sessionGateAway.CreateOrUpdate(sendObject);
+            return Ok(response.Data.Id);
+        }
+
         [HttpPost]
         [Route(nameof(Create))]
         public async Task<IActionResult> Create(MeetingModel meeting)

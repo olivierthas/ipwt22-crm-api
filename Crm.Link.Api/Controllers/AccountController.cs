@@ -34,7 +34,7 @@ namespace Crm.Link.Api.Controllers
         public IActionResult Test()
         {
             return Ok();
-        }
+        }       
 
         [HttpPost]
         [Route(nameof(Create))]

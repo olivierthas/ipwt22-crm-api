@@ -26,25 +26,25 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var json = JsonConvert.SerializeObject(moduleModel);
-            _logger.LogInformation(json + "}");
-            var stringContent = new StringContent(json + "}", Encoding.UTF8, "application/json");
+            _logger.LogInformation(json);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             stringContent.Headers.ContentType!.CharSet = "UTF-8";
             _logger.LogInformation(stringContent.ReadAsStringAsync().GetAwaiter().GetResult());            
             return stringContent;
         }
 
-        public virtual async Task<Response?> CreateOrUpdate(ModuleModel moduleModel)
+        public virtual async Task<ModuleModel?> CreateOrUpdate(ModuleModel moduleModel)
         {
             CheckToken();  
             var content = CreateContent(moduleModel);
             var json = JsonConvert.SerializeObject(moduleModel);
             var response = await HttpClient!.PostAsync($"/Api/V8/module", content);
-            var response2 = await HttpClient!.PostAsJsonAsync($"/Api/V8/module", json + "}");
+            
             if (response.IsSuccessStatusCode)
             {
                 var contentJson = await response.Content.ReadAsStringAsync();
                 _logger.LogInformation("response createOrUpdate: {resp}", contentJson);
-                return JsonConvert.DeserializeObject<Response>(contentJson);
+                return JsonConvert.DeserializeObject<ModuleModel>(contentJson);
             }
 
             return null;

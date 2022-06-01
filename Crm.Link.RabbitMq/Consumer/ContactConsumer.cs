@@ -107,7 +107,7 @@ namespace Crm.Link.RabbitMq.Consumer
                             throw new FieldAccessException();
                         }
 
-                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, resp.Id, 1);                    
+                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, resp.Data.Id, 1);                    
                         
                         break;
                     case MethodEnum.UPDATE:
