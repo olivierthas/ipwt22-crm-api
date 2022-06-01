@@ -31,8 +31,9 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
                         
             var json = JsonConvert.SerializeObject(credentials);
             logger.LogInformation(json);
-            var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
-            stringContent.Headers.ContentType.CharSet = "";
+            //var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            stringContent.Headers.ContentType.CharSet = "UTF-8";
             //var response = client.PostAsync("/api/oauth/access_token", stringContent).GetAwaiter().GetResult();
             var response = client.PostAsync("/api/access_token", stringContent).GetAwaiter().GetResult();
 

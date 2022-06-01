@@ -19,9 +19,9 @@ namespace Crm.Link.Suitcrm.Tools
             {
                 client.BaseAddress = new Uri(uri);
                 client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue { NoCache = true };
-                client.DefaultRequestHeaders.Add("Accept", "application/vnd.api+json");
+                client.DefaultRequestHeaders.Add("Accept", "*/*");
                 client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-                client.DefaultRequestHeaders.Add("User-Agent", "Crm.Link.Api");
+                //client.DefaultRequestHeaders.Add("User-Agent", "Crm.Link.Api");
                 client.DefaultRequestHeaders.Add("Connection", "keep-alive");
             });
 
