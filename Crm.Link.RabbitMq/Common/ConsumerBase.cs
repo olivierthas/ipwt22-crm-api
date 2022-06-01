@@ -150,6 +150,7 @@ namespace Crm.Link.RabbitMq.Common
             }
             _failCount.Add(key, 1);
             _logger.LogInformation("message failed adding key: {key}", key);
+            Channel!.BasicNack(@event.DeliveryTag, false, true);
         }
     }
 }
