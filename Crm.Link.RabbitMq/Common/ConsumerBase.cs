@@ -62,6 +62,7 @@ namespace Crm.Link.RabbitMq.Common
                 }
 
                 _key = ((T)message).UUID_Nr;
+                _logger.LogInformation("key for requeu is: {key}", _key);
                 await HandleMessage((T)message);
             }
             catch (FieldAccessException fex)
@@ -148,7 +149,7 @@ namespace Crm.Link.RabbitMq.Common
                 return;
             }
             _failCount.Add(key, 1);
-
+            _logger.LogInformation("message failed adding key: {key}", key);
         }
     }
 }
