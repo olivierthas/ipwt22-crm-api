@@ -81,9 +81,9 @@ namespace Crm.Link.RabbitMq.Consumer
                     Name = messageObject.Title,
                     EndDate = messageObject.EndDateUTC,
                     StartDate = messageObject.StartDateUTC,
-                    Description = "",
-                    Location = "",
-                    Status = "",
+                    Description = null,
+                    Location = null,
+                    Status = null,
                     OutlookID = null,
                 };
 
