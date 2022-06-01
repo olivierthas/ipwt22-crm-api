@@ -16,7 +16,7 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("date_start")]
         public DateTime StartDate { get; set; }
 
-        [JsonProperty("date_end")]
+        [JsonProperty("date_end", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? EndDate { get; set; }
 
         [JsonProperty("duration_hours")]
