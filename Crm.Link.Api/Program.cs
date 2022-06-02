@@ -1,67 +1,55 @@
 using Crm.Link.Api;
-using Crm.Link.RabbitMq.Consumer;
+using Crm.Link.RabbitMq.Configuration;
+using Crm.Link.Suitcrm.Tools;
+using Crm.Link.UUID.Configuration;
 using Newtonsoft.Json.Converters;
-using RabbitMQ.Client;
 using Serilog;
 
 Log.Logger = ConfigureLogging.Bootstrap();
 Log.Information("Starting up");
 
-try
+var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+
+builder.Host.AddCrmLogging();
+
+// builder.Services.AddCrmAuthentication(configuration);
+// builder.Services.AddCrmCors("CorsPolicyName");
+builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
+// builder.Services.AddHttpClientFactory(configuration);
+builder.Services.UseCrmTools(configuration);
+builder.Services.UseUUID();
+builder.Services.AddOpenApi();
+
+// configuration rabbitmq
+builder.Services.StartConsumers(configuration.GetConnectionString("RabbitMq"));
+builder.Services.AddPublisher();
+
+var app = builder.Build();
+
+app.UseCrmLoggng();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    var builder = WebApplication.CreateBuilder(args);
-    var configuration = builder.Configuration;
-    
-    builder.Host.AddCrmLogging();
-
-    // builder.Services.AddCrmAuthentication(configuration);
-    builder.Services.AddCrmCors("CorsPolicyName");
-    builder.Services.AddControllers()
-                    .AddNewtonsoftJson(options =>
-                    {
-                        options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    });
-    builder.Services.AddOpenApi();
-    builder.Services.AddHostedService<LogConsumer>().AddSingleton(serviceProvider =>
-    {
-        var uri = new Uri(configuration.GetConnectionString("RabbitMQ"));
-        return new ConnectionFactory
-        {
-            Uri = uri,
-            DispatchConsumersAsync = true,            
-        };
-    });
-   
-    var app = builder.Build();
-
-    app.UseCrmLoggng();
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseOpenApi();
-    }
-
-    app.UseHttpsRedirection();
-
-    app.UseRouting();
-    app.UseCors(ConfigureCORS.PolicyName);
-
-    app.UseAuthentication();
-    // app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
-
+    Log.Information("OpenApi active");
+    app.UseOpenApi();
 }
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Unhandled exception");
-    throw;
-}
-finally
-{
-    Log.Information("Shut down complete");
-    Console.ReadKey();
-    Log.CloseAndFlush();
-}
+
+// app.UseHttpsRedirection();
+
+app.UseRouting();
+// app.UseCors(ConfigureCORS.PolicyName);
+
+// app.UseAuthentication();
+// app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+

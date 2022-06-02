@@ -7,8 +7,11 @@ namespace Crm.Link.Api
     {
         public static IHostBuilder AddCrmLogging(this IHostBuilder builder)
         {
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+
             builder.UseSerilog((ctx, lc) => lc
                    .WriteTo.Console()
+                   .WriteTo.File($"{basePath}crm_logs/crm.txt")
                    .ReadFrom.Configuration(ctx.Configuration));
             return builder;
         }

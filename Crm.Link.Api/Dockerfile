@@ -7,16 +7,22 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Crm.LinkApi/Crm.LinkApi.csproj", "Crm.LinkApi/"]
-RUN dotnet restore "Crm.LinkApi/Crm.LinkApi.csproj"
+COPY ["Crm.Link.Api/Crm.Link.Api.csproj", "Crm.Link.Api/"]
+COPY ["Crm.Link.RabbitMq/Crm.Link.RabbitMq.csproj", "Crm.Link.RabbitMq/"]
+COPY ["Crm.Link.Suitcrm.Tools/Crm.Link.Suitcrm.Tools.csproj", "Crm.Link.Suitcrm.Tools/"]
+COPY ["Crm.Link.UUID/Crm.Link.UUID.csproj", "Crm.Link.UUID/"]
+RUN dotnet restore "Crm.Link.Api/Crm.Link.Api.csproj"
 COPY . .
-WORKDIR "/src/Crm.LinkApi"
-RUN dotnet build "Crm.LinkApi.csproj" -c Release -o /app/build
+WORKDIR "/src/Crm.Link.Api"
+RUN dotnet build "Crm.Link.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Crm.LinkApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "Crm.Link.Api.csproj" -c Release -o /app/publish
+
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Crm.LinkApi.dll"]
+RUN apt update
+RUN apt install curl -y
+ENTRYPOINT ["dotnet", "Crm.Link.Api.dll"]
