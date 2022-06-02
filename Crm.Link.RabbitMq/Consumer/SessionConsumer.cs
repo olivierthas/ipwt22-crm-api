@@ -114,7 +114,7 @@ namespace Crm.Link.RabbitMq.Consumer
                             _logger.LogError("suiteCrm did not create entity: {entity}", sendObject.ToString());
                             throw new FieldAccessException();
                         }
-                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.UUID_Nr, 1);                    
+                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Account, resp.Data.Id, 1);                    
 
                         break;
                     case MethodEnum.UPDATE:                        
