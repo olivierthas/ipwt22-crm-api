@@ -94,7 +94,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     }
                 }
 
-                _logger.LogError("uuidNumber not valid session: {uuid}, user: {uuid2}", new[] { messageObject.SessionUUID, messageObject.AttendeeUUID });
+                _logger.LogError("uuidNumber not valid session: {uuid}, user: {uuid2}", messageObject.SessionUUID, messageObject.AttendeeUUID );
 
             }
             catch (Exception ex)
