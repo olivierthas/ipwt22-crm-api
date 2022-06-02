@@ -84,7 +84,6 @@ namespace Crm.Link.RabbitMq.Consumer
                     StartDate = messageObject.StartDateUTC,
                     DurationHours = ((int)(messageObject.EndDateUTC - messageObject.StartDateUTC).TotalHours) + Math.Abs(messageObject.EndDateUTC.Hour - messageObject.StartDateUTC.Hour),
                     DurationMinutes = Math.Abs(messageObject.EndDateUTC.Minute - messageObject.StartDateUTC.Minute),
-                    Description = "you suck",
                     ParentType = "Contacts",
                     ParentId = "a379f70c-faea-36b4-be02-62420b0c7046",
                     Status = null,
