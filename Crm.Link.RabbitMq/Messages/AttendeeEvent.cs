@@ -7,6 +7,8 @@
     [System.Xml.Serialization.XmlRootAttribute("AttendeeEvent", Namespace = "")]
     public class AttendeeEvent : IEvent
     {
+        public static string XmlElementName = "AttendeeEvent";
+
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(32)]
         [System.Xml.Serialization.XmlElementAttribute("UUID_Nr", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string UUID_Nr { get; set; }

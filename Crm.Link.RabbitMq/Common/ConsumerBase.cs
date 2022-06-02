@@ -33,7 +33,7 @@ namespace Crm.Link.RabbitMq.Common
             _logger?.LogInformation("hello Mrs T: {Name}", typeof(T).Name);
             try
             {
-                /*XmlReader reader = new XmlTextReader(@event.Body.AsStream());
+                XmlReader reader = new XmlTextReader(@event.Body.AsStream());
                 XmlDocument document = new();
                 document.Load(reader);
 
@@ -46,10 +46,10 @@ namespace Crm.Link.RabbitMq.Common
                 document.Schemas.Add(xmlSchemaSet);
                 ValidationEventHandler eventHandler = new(ValidationEventHandler);
 
-                document.Validate(eventHandler);*/
+                document.Validate(eventHandler);
 
                 XmlRootAttribute root = new();
-                root.ElementName = SessionEvent.XmlElementName;
+                root.ElementName = typeof(T).Name;
                 root.IsNullable = true;
 
                 var serializer = new XmlSerializer(typeof(T), root);
