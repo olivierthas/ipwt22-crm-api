@@ -26,9 +26,13 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
         protected HttpContent CreateContent(TSend moduleModel)
         {
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var jsonSettings = new JsonSerializerSettings
+            {
+                DateFormatString = "yyyy-MM-dd hh:mm:ss"
+            };
 
-            var json = JsonConvert.SerializeObject(moduleModel);
-            _logger.LogInformation(json);
+            ////string jsonSettings = JsonConvert.SerializeObject(moduleModel, jsonSettings);
+            var json = JsonConvert.SerializeObject(moduleModel, jsonSettings);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             _logger.LogInformation(stringContent.ReadAsStringAsync().GetAwaiter().GetResult());            
             return stringContent;
