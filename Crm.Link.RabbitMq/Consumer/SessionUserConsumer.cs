@@ -77,6 +77,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     if (session == null || contact == null)
                     {
                         _logger.LogError("uuid response was null session: {id1} - contact: {id2}", new[] { sId, aId });
+                        throw new FieldAccessException();
                     }
 
                     switch (messageObject.Method)
