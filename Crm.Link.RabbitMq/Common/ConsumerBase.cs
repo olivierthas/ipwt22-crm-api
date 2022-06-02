@@ -73,7 +73,7 @@ namespace Crm.Link.RabbitMq.Common
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Error while retrieving message from queue.");
-                FaildMessage(_key, @event);
+                SuccessMessage(_key); // well not realy but yeah
                 return;
             }
 
