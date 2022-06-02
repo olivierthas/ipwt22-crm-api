@@ -2,10 +2,10 @@
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public interface ISessionGateAway : IGateAwayBase
+    public interface ISessionGateAway : IGateAwayBase<MeetingBaseObject, MeetingBaseObject>
     {
         Task AddUserToSession(string module, string userId, string sessionId);
-        Task<MeetingContacts?> GetContacts(string meetingId);
+        Task<MeetingContacts?> GetContactsInMeeting(string meetingId);
         Task RemoveUserFromSession(string module, string userId, string sessionId);
     }
 }

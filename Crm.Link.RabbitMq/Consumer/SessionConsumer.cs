@@ -90,9 +90,9 @@ namespace Crm.Link.RabbitMq.Consumer
                     Status = null,
                 };
 
-                var sendObject = new ModuleModel
+                var sendObject = new MeetingBaseObject
                 {
-                    Data = new BaseModel
+                    Data = new MeetingData
                     {
                         Type = "Meetings",
                         Attributes = crmObject
@@ -158,7 +158,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
                 return;
             }
-            _logger.LogError("uuidNumber not falid: {uuid}", messageObject.UUID_Nr);
+            _logger.LogError("uuidNumber not valid: {uuid}", messageObject.UUID_Nr);
         }
     }
 }

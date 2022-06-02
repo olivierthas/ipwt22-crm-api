@@ -2,9 +2,9 @@
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public interface IGateAwayBase
+    public interface IGateAwayBase<TSend, TResponse>
     {
-        Task<ModuleModel?> CreateOrUpdate(ModuleModel moduleModel);
+        Task<TResponse?> CreateOrUpdate(TSend moduleModel);
         Task<HttpResponseMessage> Delete(string id);
     }
 }

@@ -56,9 +56,9 @@ namespace Crm.Link.Api.Controllers
                 Status = null,
             };
 
-            var sendObject = new ModuleModel
+            var sendObject = new MeetingBaseObject
             {
-                Data = new BaseModel
+                Data = new MeetingData
                 {
                     Type = "Meetings",
                     Attributes = crmObject
@@ -135,7 +135,7 @@ namespace Crm.Link.Api.Controllers
 
             _sessionPublisher.Publish(@event);
 
-            var contacts = await _sessionGateAway.GetContacts(meeting.Id);
+            var contacts = await _sessionGateAway.GetContactsInMeeting(meeting.Id);
             
             if (contacts != null)
             {

@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Crm.Link.Suitcrm.Tools.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public class AccountGateAway : GateAwayBase, IAccountGateAway
+    public class AccountGateAway : GateAwayBase<ModuleModel, ModuleModel>, IAccountGateAway
     {
         protected override string Module => "Accounts";
         public AccountGateAway(

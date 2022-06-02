@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public interface IContactGateAway : IGateAwayBase
+    public interface IContactGateAway : IGateAwayBase<ContactBaseObject, ContactBaseObject>
     {
+        Task<ContactBaseObject?> GetContact(string id);
     }
 }

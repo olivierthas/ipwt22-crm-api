@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Threading;
 
 namespace Crm.Link.RabbitMq.Consumer
 {
@@ -68,7 +67,7 @@ namespace Crm.Link.RabbitMq.Consumer
             try
             {
                 _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));
-                
+
                 ResourceDto? session = null;
                 ResourceDto? contact = null;
                 if (Guid.TryParse(messageObject.SessionUUID, out var sId) && Guid.TryParse(messageObject.AttendeeUUID, out var aId))
@@ -85,7 +84,7 @@ namespace Crm.Link.RabbitMq.Consumer
                         case MethodEnum.CREATE:
                         case MethodEnum.UPDATE:
                             await _sessionGateAway.AddUserToSession("Contacts", contact!.SourceEntityId, session!.SourceEntityId);
-                            break;                            
+                            break;
                         case MethodEnum.DELETE:
                             await _sessionGateAway.RemoveUserFromSession("Contact", contact!.SourceEntityId, session!.SourceEntityId);
                             break;
@@ -95,7 +94,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     }
                 }
 
-                _logger.LogError("uuidNumber not falid session: {uuid}, user: {uuid2}", new[] { messageObject.SessionUUID, messageObject.AttendeeUUID });
+                _logger.LogError("uuidNumber not valid session: {uuid}, user: {uuid2}", new[] { messageObject.SessionUUID, messageObject.AttendeeUUID });
 
             }
             catch (Exception ex)

@@ -82,9 +82,9 @@ namespace Crm.Link.RabbitMq.Consumer
                     Email = messageObject.Email,
                 };
 
-                var sendObject = new ModuleModel
+                var sendObject = new ContactBaseObject
                 {
-                    Data = new BaseModel
+                    Data = new ContactData
                     {
                         Type = "Contacts",
                         Attributes = crmObject
@@ -150,7 +150,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 return;
             }            
             
-            _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
+            _logger.LogError("uuiDNumber not valid: {uuid}", messageObject.UUID_Nr);
         }
     }
 }
