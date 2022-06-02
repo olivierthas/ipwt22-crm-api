@@ -132,7 +132,7 @@ namespace Crm.Link.RabbitMq.Consumer
                         return;
                     }
 
-                    _logger.LogError("uuiDNumber not falid: {uuid}", messageObject.UUID_Nr);
+                    _logger.LogError("uuiDNumber not valid: {uuid}", messageObject.UUID_Nr);
                     break;                
             }
         }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Crm.Link.Suitcrm.Tools.GateAway
 {
-    public class SessionGateAway : GateAwayBase, ISessionGateAway
+    public class SessionGateAway : GateAwayBase<MeetingBaseObject, MeetingBaseObject>, ISessionGateAway
     {
         protected override string Module => "Meetings";
 
@@ -38,7 +38,7 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             await HttpClient.PostAsync("/Api/V8/module/Meetings/relationships/", stringContent);
         }
 
-        public async Task<MeetingContacts?> GetContacts(string meetingId)
+        public async Task<MeetingContacts?> GetContactsInMeeting(string meetingId)
         {
             var response = await HttpClient.GetAsync("/Api/V8/module/Meetings/{meetingId/relationships/contacts}");
 
