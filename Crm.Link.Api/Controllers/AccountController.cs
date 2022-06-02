@@ -57,18 +57,18 @@ namespace Crm.Link.Api.Controllers
                 VatNumber = null
             };
 
-            var response = await _uUIDGateAway.GetGuid(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
+            var response = await _uUIDGateAway.GetGuid(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
 
             if (response == null)
             {
-                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account, account.Id.ToString(), 1);
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE, account.Id.ToString(), 1);
                 @event.EntityVersion = 1;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.CREATE;
             }
             else
             {
-                var resp = await _uUIDGateAway.UpdateEntity(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
+                var resp = await _uUIDGateAway.UpdateEntity(account.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
                 @event.EntityVersion = resp.EntityVersion;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.UPDATE;
@@ -82,7 +82,7 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Account);
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
             if (response != null)
             {
                 var @event = new AccountEvent
