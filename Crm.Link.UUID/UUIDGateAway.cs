@@ -94,7 +94,7 @@ namespace Crm.Link.UUID
 
             var json = JsonConvert.SerializeObject(body);
             var contentBody = new StringContent(json, Encoding.UTF8, Application.Json);
-            _logger.LogInformation("calling uuidMaster");
+            _logger.LogInformation("calling uuidMaster met body: {body}", contentBody.ReadAsStringAsync().GetAwaiter().GetResult());
             var response = await _httpClient.PostAsync($"api/resources/{uuid}", contentBody);
             if (response.IsSuccessStatusCode)
             {
