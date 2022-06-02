@@ -2,9 +2,9 @@
 {
     public enum EntityTypeEnum
     {
-        Account,
-        Attendee,
-        Session,
-        SessionAttendee
+        ATTENDEE,
+        ORGANISER,
+        SESSION,
+        SESSIONATTENDEE
     }
 }

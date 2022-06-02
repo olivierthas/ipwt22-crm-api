@@ -107,7 +107,7 @@ namespace Crm.Link.RabbitMq.Consumer
                             throw new FieldAccessException();
                         }
 
-                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, resp.Data.Id, 1);                    
+                        _ = await _uUIDGateAway.PublishEntity(id, SourceEnum.CRM.ToString(), EntityTypeEnum.ATTENDEE, resp.Data.Id, 1);                    
                         
                         break;
                     case MethodEnum.UPDATE:
@@ -130,7 +130,7 @@ namespace Crm.Link.RabbitMq.Consumer
                             throw new FieldAccessException();
                         }
                         
-                        await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee, messageObject.EntityVersion);
+                        await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.ATTENDEE, messageObject.EntityVersion);
                         
                         break;
                     case MethodEnum.DELETE:                        

@@ -42,12 +42,12 @@ namespace Crm.Link.Api.Controllers
                 return BadRequest();
             }
                         
-            var response = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Attendee);
+            var response = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
 
             var @event = new AttendeeEvent
             {
                 SourceEntityId = contact.Id,
-                EntityType = UUID.Model.EntityTypeEnum.Attendee.ToString(),
+                EntityType = UUID.Model.EntityTypeEnum.ATTENDEE.ToString(),
                 Method = MethodEnum.CREATE,
                 Name = contact.FirstName,
                 LastName = contact.LastName,
@@ -56,14 +56,14 @@ namespace Crm.Link.Api.Controllers
 
             if (response == null)
             {
-                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Attendee, contact.Id, 1);
+                var resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE, contact.Id, 1);
                 @event.EntityVersion = 1;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.CREATE;
             }
             else
             {
-                var resp = await _uUIDGateAway.UpdateEntity(contact.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Attendee);
+                var resp = await _uUIDGateAway.UpdateEntity(contact.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
                 @event.EntityVersion = resp.EntityVersion;
                 @event.UUID_Nr = resp.Uuid.ToString();
                 @event.Method = MethodEnum.UPDATE;
@@ -76,7 +76,7 @@ namespace Crm.Link.Api.Controllers
         [Route(nameof(Delete) + "{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Attendee);
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.ATTENDEE);
             if (response != null)
             {
                 var @event = new AttendeeEvent
