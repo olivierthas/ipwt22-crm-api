@@ -16,7 +16,7 @@ namespace Crm.Link.RabbitMq.Common
 
                 foreach (var queue in change.Value)
                 {
-                    model.QueueDeclare(queue: queue, durable: true, exclusive: false, autoDelete: false);
+                    model.QueueDeclare(queue: queue, durable: false, exclusive: false, autoDelete: false);
 
                     if (change.Key != "None")
                         model.QueueBind(queue: queue, exchange: change.Key, routingKey: "");

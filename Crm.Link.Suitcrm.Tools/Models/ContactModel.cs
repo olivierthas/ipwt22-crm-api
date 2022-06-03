@@ -14,10 +14,10 @@ namespace Crm.Link.Suitcrm.Tools.Models
         [JsonProperty("last_name", NullValueHandling = NullValueHandling.Ignore)]
         public string? LastName { get; set; }
 
-        [JsonProperty("email", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("email1", NullValueHandling = NullValueHandling.Ignore)]
         public string? Email { get; set; }
 
-        [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("phone_mobile", NullValueHandling = NullValueHandling.Ignore)]
         public string? Phone { get; set; }
     }
 }

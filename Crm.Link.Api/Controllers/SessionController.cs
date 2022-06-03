@@ -81,7 +81,7 @@ namespace Crm.Link.Api.Controllers
             }
             
             
-            var response = await _uUIDGateAway.GetGuid(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
+            var response = await _uUIDGateAway.GetGuid(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.SESSION);
             
             _logger.LogInformation($"{meeting.StartDate}, {meeting.EndDate}");
 
@@ -108,7 +108,7 @@ namespace Crm.Link.Api.Controllers
             ResourceDto? resp;
             if (response == null)
             {
-                resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session, meeting.Id, 1);
+                resp = await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.SESSION, meeting.Id, 1);
                 if (resp == null)
                 {
                     _logger.LogError("uuid response was null: {tostring}", meeting.ToString());
@@ -121,7 +121,7 @@ namespace Crm.Link.Api.Controllers
             }
             else
             {
-                resp = await _uUIDGateAway.UpdateEntity(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
+                resp = await _uUIDGateAway.UpdateEntity(meeting.Id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.SESSION);
                 if (resp == null)
                 {
                     _logger.LogError("uuid response was null: {tostring}", meeting.ToString());
@@ -141,7 +141,7 @@ namespace Crm.Link.Api.Controllers
             {
                 foreach(var contact in contacts.Data)
                 {
-                    var contactUuid = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), EntityTypeEnum.Attendee);
+                    var contactUuid = await _uUIDGateAway.GetGuid(contact.Id, SourceEnum.CRM.ToString(), EntityTypeEnum.ATTENDEE);
                     if (contactUuid == null)
                     {
                         _logger.LogError("response uuid was null for contact id: {id}", contact.Id);
@@ -150,7 +150,7 @@ namespace Crm.Link.Api.Controllers
 
                     var sessionContact = new SessionAttendeeEvent
                     {
-                        EntityType = EntityTypeEnum.SessionAttendee.ToString(),
+                        EntityType = EntityTypeEnum.SESSIONATTENDEE.ToString(),
                         AttendeeUUID = contactUuid.Uuid.ToString(),
                         InvitationStatus = InvitationStatusEnum.PENDING,
                         Method = MethodEnum.CREATE,
@@ -173,7 +173,7 @@ namespace Crm.Link.Api.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             // uuid
-            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.Session);
+            var response = await _uUIDGateAway.GetGuid(id, SourceEnum.CRM.ToString(), UUID.Model.EntityTypeEnum.SESSION);
             if (response != null)
             {
                 var @event = new SessionEvent
@@ -182,7 +182,7 @@ namespace Crm.Link.Api.Controllers
                     Method = MethodEnum.DELETE,
                     EndDateUTC = DateTime.UtcNow,
                     StartDateUTC = DateTime.UtcNow,
-                    EntityType = EntityTypeEnum.Session.ToString(),
+                    EntityType = EntityTypeEnum.SESSION.ToString(),
                     EntityVersion = response.EntityVersion,
                     OrganiserUUID = "",
                     Source = SourceEnum.CRM,
@@ -204,9 +204,9 @@ namespace Crm.Link.Api.Controllers
         {
             return type.ToLower() switch
             {
-                "contacts" => UUID.Model.EntityTypeEnum.Attendee,
-                "accounts" => UUID.Model.EntityTypeEnum.Account,
-                "meetings" => UUID.Model.EntityTypeEnum.Session,
+                "contacts" => UUID.Model.EntityTypeEnum.ATTENDEE,
+                "accounts" => UUID.Model.EntityTypeEnum.ATTENDEE,
+                "meetings" => UUID.Model.EntityTypeEnum.SESSION,
                 _ => null,
             };
         }

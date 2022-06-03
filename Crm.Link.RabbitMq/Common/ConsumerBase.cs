@@ -49,7 +49,7 @@ namespace Crm.Link.RabbitMq.Common
                 document.Validate(eventHandler);
 
                 XmlRootAttribute root = new();
-                root.ElementName = SessionEvent.XmlElementName;
+                root.ElementName = typeof(T).Name;
                 root.IsNullable = true;
 
                 var serializer = new XmlSerializer(typeof(T), root);
@@ -73,7 +73,7 @@ namespace Crm.Link.RabbitMq.Common
             catch (Exception ex)
             {
                 _logger.LogCritical(ex, "Error while retrieving message from queue.");
-                FaildMessage(_key, @event);
+                SuccessMessage(_key); // well not realy but yeah
                 return;
             }
 

@@ -63,7 +63,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandleMessage(SessionAttendeeEvent? messageObject)
         {
-            Thread.Sleep(2000);
+            Thread.Sleep(4000);
             try
             {
                 _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));
@@ -77,6 +77,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     if (session == null || contact == null)
                     {
                         _logger.LogError("uuid response was null session: {id1} - contact: {id2}", new[] { sId, aId });
+                        throw new FieldAccessException();
                     }
 
                     switch (messageObject.Method)
@@ -94,7 +95,7 @@ namespace Crm.Link.RabbitMq.Consumer
                     }
                 }
 
-                _logger.LogError("uuidNumber not valid session: {uuid}, user: {uuid2}", new[] { messageObject.SessionUUID, messageObject.AttendeeUUID });
+                _logger.LogError("uuidNumber not valid session: {uuid}, user: {uuid2}", messageObject.SessionUUID, messageObject.AttendeeUUID );
 
             }
             catch (Exception ex)

@@ -32,10 +32,10 @@ namespace Crm.Link.Suitcrm.Tools.GateAway
             HttpClient!.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var json = JsonConvert.SerializeObject(body);
-            var stringContent = new StringContent(json, Encoding.UTF8, "application/vnd.api+json");
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             stringContent.Headers.ContentType!.CharSet = "";
 
-            await HttpClient.PostAsync("/Api/V8/module/Meetings/relationships/", stringContent);
+            await HttpClient.PostAsync("/Api/V8/module/Meetings/relationships/contact", stringContent);
         }
 
         public async Task<MeetingContacts?> GetContactsInMeeting(string meetingId)

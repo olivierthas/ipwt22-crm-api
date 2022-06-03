@@ -91,7 +91,7 @@ namespace Crm.Link.RabbitMq.Consumer
                 case MethodEnum.CREATE:
                     var resp = await _accountGateAway.CreateOrUpdate(sendObject);                   
 
-                    await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.Account, "0000", 1);                        
+                    await _uUIDGateAway.PublishEntity(SourceEnum.CRM.ToString(), EntityTypeEnum.ATTENDEE, "0000", 1);                        
 
                     break;
                 case MethodEnum.UPDATE:
@@ -110,7 +110,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
                             if (result != null)
                             {
-                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.Account, messageObject.EntityVersion);
+                                await _uUIDGateAway.UpdateEntity(response.Uuid.ToString(), SourceEnum.CRM.ToString(), EntityTypeEnum.ATTENDEE, messageObject.EntityVersion);
                             }
                         }
 
