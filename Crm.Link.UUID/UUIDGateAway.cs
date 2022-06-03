@@ -114,11 +114,9 @@ namespace Crm.Link.UUID
 
             var body = new
             {
-                Uuid = response.Uuid,
-                Source = sourceType,
-                EntityType = entityType,
-                SourceEntityId = id,
-                EntityVersion = response!.EntityVersion++
+                Op = "replace",
+                Path = "/entityVersion",
+                Value = response!.EntityVersion++
             };
 
             var json = JsonConvert.SerializeObject(body);
