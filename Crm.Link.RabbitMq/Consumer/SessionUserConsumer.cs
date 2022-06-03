@@ -63,7 +63,7 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandleMessage(SessionAttendeeEvent? messageObject)
         {
-            Thread.Sleep(2000);
+            Thread.Sleep(4000);
             try
             {
                 _ = messageObject ?? throw new ArgumentNullException(nameof(messageObject));

@@ -74,18 +74,24 @@ namespace Crm.Link.RabbitMq.Consumer
 
         protected async override Task HandleMessage(SessionEvent messageObject)
         {
+            Thread.Sleep(1000);
             if (Guid.TryParse(messageObject.UUID_Nr, out Guid id))
             {
-                ResourceDto? response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
+                ResourceDto? contact = null;
 
+                ResourceDto? response = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
+                if (!string.IsNullOrWhiteSpace(messageObject.OrganiserUUID) && Guid.TryParse(messageObject.OrganiserUUID, out Guid contactId))
+                {
+                    contact = await _uUIDGateAway.GetResource(id, SourceEnum.CRM.ToString());
+                }
                 var crmObject = new MeetingModel
                 {
                     Name = messageObject.Title,
-                    StartDate = messageObject.StartDateUTC,
-                    DurationHours = ((int)(messageObject.EndDateUTC - messageObject.StartDateUTC).TotalHours) + Math.Abs(messageObject.EndDateUTC.Hour - messageObject.StartDateUTC.Hour),
+                    StartDate = messageObject.StartDateUTC.ToLocalTime(),
+                    DurationHours = (int)(messageObject.EndDateUTC - messageObject.StartDateUTC).TotalHours,
                     DurationMinutes = Math.Abs(messageObject.EndDateUTC.Minute - messageObject.StartDateUTC.Minute),
                     ParentType = "Contacts",
-                    ParentId = "a379f70c-faea-36b4-be02-62420b0c7046",
+                    ParentId = contact == null ? "a379f70c-faea-36b4-be02-62420b0c7046" : contact.SourceEntityId,
                     Status = null,
                 };
 
