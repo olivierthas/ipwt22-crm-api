@@ -114,6 +114,7 @@ namespace Crm.Link.UUID
 
             var body = new
             {
+                Uuid = response.Uuid,
                 Source = sourceType,
                 EntityType = entityType,
                 SourceEntityId = id,
